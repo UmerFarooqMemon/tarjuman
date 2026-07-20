@@ -20,6 +20,7 @@ return [
     'menu_pages' => 'Pages (CMS)',
     'menu_settings' => 'Settings',
     'menu_general' => 'General',
+    'my_profile' => 'My Profile',
     'menu_media_files' => 'Media (Images)',
     'welcome' => 'Welcome',
     'login_page_content' => 'Please sign-in to your account and manage the orders & services',

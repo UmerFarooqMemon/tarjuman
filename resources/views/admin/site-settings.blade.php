@@ -58,7 +58,7 @@
                         <input type="hidden" name="previous_logo" value="{{ $records->logo }}" />
                         <input type="file" name="logo" class="form-control">
                         @if ($records->logo != '' && file_exists(uploadsDir('front') . $records->logo))
-                            <div class="avatar mr-1 avatar-xl">
+                            <div class="mt-2">
                                 <img src="{!! asset(uploadsDir('front'). $records->logo) !!}" alt="" title="Logo" class="img-responsive" />
                             </div>
                         @endif

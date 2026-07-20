@@ -1,6 +1,6 @@
 <!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
-    <div class="app-brand demo text-center" style="margin: 0px; padding-left: 20px;height: fit-content !important;">
+    <div class="app-brand demo text-center" style="margin: 0px; padding-left: 20px;height: fit-content !important;min-height: 80px;">
         <a href="javascript:;" class="app-brand-link text-center">
             @if ($siteSettings?->logo && file_exists(uploadsDir('front') . $siteSettings->logo))
             <img src="{!! asset(uploadsDir('front') . $siteSettings->logo) !!}" class="img-fluid" style="width: 100%;">
@@ -40,7 +40,6 @@
         </li>
         @endcan
 
-        @can('site_settings.view')
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>
@@ -51,14 +50,25 @@
                 <div data-i18n="Settings">{!! __('general.menu_settings') !!}</div>
             </a>
             <ul class="menu-sub">
+                @can('site_settings.view')
                 <li class="menu-item {{ request()->segment(2) == 'site-settings' ? 'active' : '' }}">
                     <a href="{{ route('admin.site-settings.index') }}" class="menu-link">
                         <div data-i18n="Site Settings">{!! __('general.general_settings') !!}</div>
                     </a>
                 </li>
+                @endcan
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="sidebar">
+                        <div>Sidebar</div>
+                    </a>
+                </li>
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="dock">
+                        <div>Dock</div>
+                    </a>
+                </li>
             </ul>
         </li>
-        @endcan
     </ul>
 </aside>
 <!-- / Menu -->

@@ -63,6 +63,21 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{!! asset('assets/js/config.js') !!}"></script>
 
+    {{-- Apply nav layout (dock|sidebar) before paint to avoid FOUC --}}
+    <script>
+      (function () {
+        try {
+          var mode = localStorage.getItem('admin-nav-layout');
+          if (mode !== 'sidebar' && mode !== 'dock') {
+            mode = 'dock';
+          }
+          document.documentElement.setAttribute('data-admin-nav-layout', mode);
+        } catch (e) {
+          document.documentElement.setAttribute('data-admin-nav-layout', 'dock');
+        }
+      })();
+    </script>
+
     <!-- DataTables -->
     <link rel="stylesheet" href="{!! asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') !!}" />
     <link rel="stylesheet" href="{!! asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') !!}" />
@@ -152,6 +167,7 @@
         }
     </style>
     @include('admin.partials.branding-styles')
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}" />
     @yield('css')
 </head>
 <body>
@@ -175,6 +191,8 @@
         <!-- Drag Target Area To SlideIn Menu On Small Screens -->
         <div class="drag-target"></div>
     </div>
+
+    @include('admin.layouts.partials.dock-nav.index')
     <form id="logout-form" action="{{ route('admin.auth.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
@@ -264,6 +282,8 @@
         }
     </script>
     @include('admin.partials.errors')
+    <script src="{!! asset('assets/js/admin-nav-layout.js') !!}"></script>
+    <script src="{!! asset('assets/js/admin-dock-nav.js') !!}"></script>
     @stack('footer-js')
     @yield('footer-js')
 </body>

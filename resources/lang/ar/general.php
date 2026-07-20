@@ -148,6 +148,7 @@ return [
     'platform_sign_signature' => 'التوقيع',
     'agreement_has_been_signed_successfully' => 'تم توقيع الاتفاقية بنجاح',
     'register' => 'سجل',
+    'my_profile' => 'ملفي الشخصي',
     'create_an_account_to_manage_the_orders_and_services' => 'أنشئ حسابًا لإدارة الطلبات والخدمات',
     'lets_set_up_your_categories' => 'هيا نُعد فئاتك',
     'this_is_a_one_time_setup' => 'هذه إعداد لمرة واحدة فقط',

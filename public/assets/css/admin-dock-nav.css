@@ -1,0 +1,708 @@
+/* ==========================================================================
+   Admin Dock Nav — macOS-inspired bottom dock (Vuexy / Bootstrap)
+   Layout mode is selected via html[data-admin-nav-layout="dock|sidebar"]
+   (persisted in localStorage by admin-nav-layout.js).
+   ========================================================================== */
+
+html[data-admin-nav-layout="dock"] {
+  --dock-z: 1080;
+  --dock-bottom: 0.85rem;
+  --dock-inset-x: 0.85rem;
+  --dock-height: 5.25rem;
+}
+
+html[data-admin-nav-layout="dock"] body {
+  padding-bottom: calc(var(--dock-height) + var(--dock-bottom) + 0.75rem) !important;
+}
+
+/* Hide classic vertical sidebar / top navbar when dock mode is active */
+html[data-admin-nav-layout="dock"] .layout-menu,
+html[data-admin-nav-layout="dock"] .layout-overlay.layout-menu-toggle,
+html[data-admin-nav-layout="dock"] .layout-menu-toggle.navbar-nav,
+html[data-admin-nav-layout="dock"] .layout-navbar {
+  display: none !important;
+}
+
+html[data-admin-nav-layout="dock"] .layout-page {
+  padding-left: 0 !important;
+  padding-top: 0 !important;
+  width: 100% !important;
+}
+
+html[data-admin-nav-layout="dock"] body.dock-drawer-open {
+  overflow: hidden !important;
+}
+
+html[data-admin-nav-layout="dock"] .container-p-y,
+html[data-admin-nav-layout="dock"] .container-xxl {
+  max-width: 100%;
+}
+
+/* Hide dock chrome when sidebar mode is active */
+html[data-admin-nav-layout="sidebar"] #adminDock,
+html[data-admin-nav-layout="sidebar"] #adminDockDrawer,
+html:not([data-admin-nav-layout="dock"]) #adminDock,
+html:not([data-admin-nav-layout="dock"]) #adminDockDrawer {
+  display: none !important;
+}
+
+/* Settings submenu: only show the layout you can switch TO */
+html[data-admin-nav-layout="dock"] [data-set-admin-nav-layout="dock"],
+html[data-admin-nav-layout="dock"] .menu-item:has(> [data-set-admin-nav-layout="dock"]),
+html[data-admin-nav-layout="sidebar"] [data-set-admin-nav-layout="sidebar"],
+html[data-admin-nav-layout="sidebar"] .menu-item:has(> [data-set-admin-nav-layout="sidebar"]) {
+  display: none !important;
+}
+
+/* ---------- Desktop glass dock (near full width, inset + rounded) ---------- */
+.admin-dock {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--dock-bottom, 0.85rem);
+  z-index: var(--dock-z, 1080);
+  pointer-events: none;
+  display: flex;
+  justify-content: center;
+  padding: 0 var(--dock-inset-x, 0.85rem);
+}
+
+.admin-dock__desktop,
+.admin-dock__mobile {
+  pointer-events: auto;
+}
+
+.admin-dock__desktop {
+  width: 100%;
+  max-width: none;
+}
+
+.admin-dock__glass {
+  display: flex;
+  align-items: stretch;
+  justify-content: space-between;
+  gap: 0.5rem;
+  width: 100%;
+  padding: 0.55rem 0.75rem;
+  border-radius: 1.35rem;
+  overflow: visible;
+  background: rgba(255, 255, 255, 0.72);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow:
+    0 10px 30px rgba(34, 41, 47, 0.14),
+    inset 0 1px 0 rgba(255, 255, 255, 0.65);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+}
+
+html.dark-style .admin-dock__glass,
+[data-bs-theme="dark"] .admin-dock__glass {
+  background: rgba(47, 51, 73, 0.78);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+.admin-dock__scroller {
+  display: flex;
+  align-items: stretch;
+  gap: 0.25rem;
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: visible;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.admin-dock__scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.admin-dock__items {
+  display: flex;
+  align-items: stretch;
+  gap: 0.15rem;
+  margin: 0;
+  padding: 0;
+}
+
+.admin-dock__item {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.admin-dock__actions {
+  display: flex;
+  align-items: stretch;
+  flex: 0 0 auto;
+  gap: 0.25rem;
+  margin-left: auto;
+}
+
+.admin-dock__brand {
+  display: flex;
+  align-items: center;
+  flex: 0 0 auto;
+  padding: 0 0.35rem 0 0.15rem;
+}
+
+.admin-dock__brand-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.25rem 0.35rem;
+  border-radius: 0.75rem;
+  line-height: 0;
+  text-decoration: none;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.admin-dock__brand-link:hover,
+.admin-dock__brand-link:focus-visible {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 10%, transparent);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.admin-dock__brand-img {
+  display: block;
+  height: 2rem;
+  width: auto;
+  max-width: 7.5rem;
+  object-fit: contain;
+}
+
+.admin-dock__profile,
+.admin-dock__theme,
+.admin-dock__more {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.admin-dock__item.is-dock-overflowed {
+  display: none !important;
+}
+
+[data-dock-more-list] {
+  margin: 0;
+  padding: 0;
+  min-width: 12rem;
+  max-width: min(20rem, calc(100vw - 2rem));
+}
+
+[data-dock-more-list] > li {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+[data-dock-more-list] .admin-dock__dropdown-item {
+  white-space: normal;
+  word-break: break-word;
+  line-height: 1.35;
+}
+
+.admin-dock__btn {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.2rem;
+  min-width: 4.25rem;
+  max-width: 5.5rem;
+  min-height: 44px;
+  padding: 0.35rem 0.4rem 0.45rem;
+  border: 0;
+  border-radius: 0.9rem;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.18s ease, background-color 0.18s ease;
+}
+
+.admin-dock__btn:hover,
+.admin-dock__btn:focus-visible {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 10%, transparent);
+  color: var(--admin-primary, #7367f0);
+  outline: none;
+  transform: translateY(-2px);
+}
+
+.admin-dock__item.is-active .admin-dock__btn,
+.admin-dock__btn[aria-current="page"] {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 14%, transparent);
+  color: var(--admin-primary, #7367f0);
+}
+
+.admin-dock__icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 2rem;
+  font-size: 1.35rem;
+  line-height: 1;
+}
+
+.admin-dock__label {
+  display: block;
+  max-width: 100%;
+  padding: 0 0.15rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.15;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.admin-dock__divider {
+  width: 1px;
+  align-self: stretch;
+  margin: 0.35rem 0.15rem;
+  background: rgba(75, 70, 92, 0.16);
+}
+
+html.dark-style .admin-dock__divider,
+[data-bs-theme="dark"] .admin-dock__divider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.admin-dock__avatar,
+.admin-dock__avatar img {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.admin-dock__avatar {
+  display: inline-flex;
+  overflow: hidden;
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--admin-primary, #7367f0) 35%, transparent);
+}
+
+.admin-dock__theme {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.admin-dock__dropdown--theme {
+  min-width: 10rem;
+}
+
+/* ---------- Dropdown panels (fixed via JS; portaled to body) ---------- */
+.admin-dock__dropdown {
+  position: fixed;
+  left: 0;
+  top: 0;
+  min-width: 11.5rem;
+  max-width: min(18rem, calc(100vw - 1.5rem));
+  padding: 0.4rem;
+  border-radius: 0.85rem;
+  background: rgba(255, 255, 255, 0.96);
+  border: 1px solid rgba(75, 70, 92, 0.1);
+  box-shadow: 0 12px 28px rgba(34, 41, 47, 0.18);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transform: none;
+  z-index: calc(var(--dock-z, 1080) + 20);
+}
+
+html.dark-style .admin-dock__dropdown,
+[data-bs-theme="dark"] .admin-dock__dropdown {
+  background: rgba(47, 51, 73, 0.96);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-dock__dropdown-item {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 44px;
+  padding: 0.55rem 0.75rem;
+  border: 0;
+  border-radius: 0.55rem;
+  background: transparent;
+  color: inherit;
+  text-align: left;
+  text-decoration: none;
+  font-size: 0.875rem;
+  cursor: pointer;
+}
+
+.admin-dock__dropdown-item:hover,
+.admin-dock__dropdown-item:focus-visible,
+.admin-dock__dropdown-item.is-active {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, transparent);
+  color: var(--admin-primary, #7367f0);
+  outline: none;
+}
+
+.admin-dock__dropdown-divider {
+  height: 1px;
+  margin: 0.35rem 0.4rem;
+  background: rgba(75, 70, 92, 0.12);
+}
+
+/* ---------- macOS-style hover tooltip ---------- */
+.admin-dock-tip {
+  position: fixed;
+  left: 0;
+  top: 0;
+  z-index: calc(var(--dock-z, 1080) + 30);
+  padding: 0.35rem 0.7rem;
+  border-radius: 0.45rem;
+  background: rgba(34, 41, 47, 0.92);
+  color: #fff;
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2;
+  letter-spacing: 0.01em;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transform: translateY(4px) scale(0.96);
+  transition: opacity 0.12s ease, transform 0.12s ease;
+  box-shadow: 0 6px 18px rgba(34, 41, 47, 0.28);
+}
+
+.admin-dock-tip.is-visible {
+  opacity: 1;
+  transform: translateY(0) scale(1);
+}
+
+.admin-dock-tip::after {
+  content: '';
+  position: absolute;
+  left: 50%;
+  top: 100%;
+  width: 0;
+  height: 0;
+  margin-left: -5px;
+  border: 5px solid transparent;
+  border-top-color: rgba(34, 41, 47, 0.92);
+}
+
+html.dark-style .admin-dock-tip,
+[data-bs-theme="dark"] .admin-dock-tip {
+  background: rgba(255, 255, 255, 0.92);
+  color: #2f3349;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.35);
+}
+
+html.dark-style .admin-dock-tip::after,
+[data-bs-theme="dark"] .admin-dock-tip::after {
+  border-top-color: rgba(255, 255, 255, 0.92);
+}
+
+/* ---------- Mobile compact bar ---------- */
+.admin-dock__mobile {
+  position: relative;
+  width: 100%;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+  padding: 0.45rem 0.75rem;
+  border-radius: 1.15rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 10px 28px rgba(34, 41, 47, 0.16);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+}
+
+html.dark-style .admin-dock__mobile,
+[data-bs-theme="dark"] .admin-dock__mobile {
+  background: rgba(47, 51, 73, 0.82);
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+.admin-dock__mobile-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-left: auto;
+}
+
+.admin-dock__mobile-brand {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
+  padding: 0.2rem 0.35rem;
+  border-radius: 0.75rem;
+  line-height: 0;
+  text-decoration: none;
+}
+
+.admin-dock__mobile-brand img {
+  display: block;
+  height: 1.75rem;
+  width: auto;
+  max-width: 5.5rem;
+  object-fit: contain;
+}
+
+.admin-dock__mobile-menu {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  min-height: 44px;
+  min-width: 44px;
+  padding: 0.45rem 0.9rem;
+  border-radius: 0.85rem;
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, transparent);
+  color: var(--admin-primary, #7367f0);
+  font-weight: 600;
+}
+
+.admin-dock__mobile-theme-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 0.85rem;
+  color: inherit;
+}
+
+.admin-dock__mobile-profile {
+  min-width: 44px;
+  min-height: 44px;
+  padding: 0;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+.admin-dock__mobile-profile img {
+  width: 40px;
+  height: 40px;
+  object-fit: cover;
+}
+
+/* ---------- Mobile bottom sheet (iPhone-style grid) ---------- */
+.admin-dock-drawer {
+  position: fixed;
+  inset: 0;
+  z-index: calc(var(--dock-z, 1080) + 5);
+}
+
+.admin-dock-drawer[hidden] {
+  display: none !important;
+}
+
+.admin-dock-drawer__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(34, 41, 47, 0.45);
+}
+
+.admin-dock-drawer__sheet {
+  position: absolute;
+  left: 0.55rem;
+  right: 0.55rem;
+  bottom: calc(var(--dock-height, 4.25rem) + var(--dock-bottom, 0.85rem) + 0.45rem);
+  max-height: min(72vh, 560px);
+  padding: 0.35rem 0.75rem 1rem;
+  border-radius: 1.35rem;
+  background: rgba(255, 255, 255, 0.82);
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  box-shadow: 0 12px 32px rgba(34, 41, 47, 0.2);
+  backdrop-filter: blur(18px) saturate(1.35);
+  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  transform: translateY(0);
+  transition: transform 0.22s ease;
+  touch-action: pan-y;
+}
+
+html.dark-style .admin-dock-drawer__sheet,
+[data-bs-theme="dark"] .admin-dock-drawer__sheet {
+  background: rgba(47, 51, 73, 0.88);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+.admin-dock-drawer.is-dragging .admin-dock-drawer__sheet,
+.admin-dock-drawer.is-closing .admin-dock-drawer__sheet {
+  transition: none;
+}
+
+.admin-dock-drawer__handle {
+  width: 2.75rem;
+  height: 0.28rem;
+  margin: 0.35rem auto 0.65rem;
+  border-radius: 999px;
+  background: rgba(75, 70, 92, 0.25);
+}
+
+html.dark-style .admin-dock-drawer__handle,
+[data-bs-theme="dark"] .admin-dock-drawer__handle {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.admin-dock-drawer__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 0.65rem;
+  padding: 0 0.15rem;
+}
+
+.admin-dock-drawer__body {
+  position: relative;
+  overflow-y: auto;
+  max-height: calc(72vh - 5rem);
+  padding-bottom: 0.35rem;
+}
+
+.admin-dock-drawer__grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.55rem 0.35rem;
+  margin: 0;
+  padding: 0.15rem 0 0.35rem;
+}
+
+@media (max-width: 379.98px) {
+  .admin-dock-drawer__grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.admin-dock-drawer__item {
+  list-style: none;
+  margin: 0;
+  min-width: 0;
+}
+
+.admin-dock-drawer__tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 0.35rem;
+  width: 100%;
+  min-height: 4.75rem;
+  padding: 0.45rem 0.25rem 0.35rem;
+  border: 0;
+  border-radius: 0.95rem;
+  background: transparent;
+  color: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background-color 0.18s ease, transform 0.18s ease;
+}
+
+.admin-dock-drawer__tile:hover,
+.admin-dock-drawer__tile:focus-visible {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 10%, transparent);
+  color: var(--admin-primary, #7367f0);
+  outline: none;
+  transform: translateY(-1px);
+}
+
+.admin-dock-drawer__item.is-active > .admin-dock-drawer__tile,
+.admin-dock-drawer__tile.is-active,
+.admin-dock-drawer__tile[aria-current="page"] {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 14%, transparent);
+  color: var(--admin-primary, #7367f0);
+}
+
+.admin-dock-drawer__tile-icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 3rem;
+  height: 3rem;
+  border-radius: 0.9rem;
+  font-size: 1.45rem;
+  line-height: 1;
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, transparent);
+  color: var(--admin-primary, #7367f0);
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.35);
+}
+
+html.dark-style .admin-dock-drawer__tile-icon,
+[data-bs-theme="dark"] .admin-dock-drawer__tile-icon {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 22%, transparent);
+  box-shadow: none;
+}
+
+.admin-dock-drawer__tile-label {
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
+  max-width: 100%;
+  padding: 0 0.1rem;
+  font-size: 0.6875rem;
+  font-weight: 500;
+  line-height: 1.2;
+  text-align: center;
+  word-break: break-word;
+}
+
+/* Folder panel (submenu as nested grid) */
+.admin-dock-drawer__folder {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  padding: 0.15rem 0.1rem 0.5rem;
+  border-radius: 1rem;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+html.dark-style .admin-dock-drawer__folder,
+[data-bs-theme="dark"] .admin-dock-drawer__folder {
+  background: rgba(47, 51, 73, 0.98);
+}
+
+.admin-dock-drawer__folder[hidden] {
+  display: none !important;
+}
+
+.admin-dock-drawer__folder-head {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+  margin-bottom: 0.55rem;
+  padding: 0 0.15rem;
+}
+
+.admin-dock-drawer__folder-back {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 36px;
+  min-height: 36px;
+  padding: 0;
+  border-radius: 0.65rem;
+  color: var(--admin-primary, #7367f0);
+}
+
+.admin-dock-drawer__folder-title {
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.admin-dock-drawer.is-folder-open [data-dock-mobile-grid] > .admin-dock-drawer__item > .admin-dock-drawer__tile {
+  visibility: hidden;
+  pointer-events: none;
+}
+
+@media (max-width: 767.98px) {
+  html[data-admin-nav-layout="dock"] {
+    --dock-height: 4.25rem;
+  }
+}
