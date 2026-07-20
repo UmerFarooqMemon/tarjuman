@@ -1,0 +1,18 @@
+{
+    "Login": "تسجيل الدخول",
+    "E-Mail Address": "البريد الالكتروني",
+    "Password": "كلمة المرور",
+    "Remember Me": "تذكرني",
+    "Forgot Your Password?": "نسيت كلمة المرور",
+    "Register": "تسجيل جديد",
+    "Reset Password": "استعادة كلمة المرور",
+    "Send Password Reset Link": "ارسل رابط استعادة كلمة المرور",
+    "Name": "الاسم",
+    "Confirm Password": "تاكيد كلمة المرور",
+    "Laravel": "لارافل",
+    "Logout": "تسجيل الخروج",
+    "Verify Your Email Address": "تاكيد البريد الالكتروني",
+    "A fresh verification link has been sent to your email address.": "تم ارسال رابط جديد لبريدك الالكتروني",
+    "Before proceeding, please check your email for a verification link.": "قبل مانبدا، تاكد من وصول بريد التفعيل",
+    "click here to request another": "اطلب رابط تفعيل جديد"
+}
