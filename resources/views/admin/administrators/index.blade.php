@@ -10,7 +10,7 @@
         @endcan
     </div>
     <div class="card-datatable text-nowrap">
-      <table class="dt-scrollableTable table">
+      <table class="datatables-records table">
         <thead>
           <tr>
             <th>{!! __('general.name') !!}</th>
@@ -90,6 +90,19 @@
 
 @section('footer-js')
 <script>
+    var table = $('.datatables-records').DataTable({
+        language: {
+            url: langUrl
+        },
+        pageLength: 50,
+        order: [],
+        "columnDefs": [{
+                "orderable": false,
+                "targets": [4]
+            },
+        ],
+        scrollX: true
+    });
     $(document).on('click', '.changeStatus', function(event) {
         var $row = $(this);
         var id = $row.attr('data-id');

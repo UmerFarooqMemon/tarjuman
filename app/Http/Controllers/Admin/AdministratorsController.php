@@ -96,7 +96,7 @@ class AdministratorsController extends Controller
 
         return redirect()
             ->route('admin.administrators.index')
-            ->with('success', __('general.user_has_been_created_successfully'));
+            ->with('success', __('general.administrator_has_been_created_successfully'));
     }
 
     /**

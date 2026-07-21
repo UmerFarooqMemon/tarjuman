@@ -15,7 +15,20 @@ html[data-admin-nav-layout="dock"] body {
   padding-bottom: calc(var(--dock-height) + var(--dock-bottom) + 0.75rem) !important;
 }
 
-/* Hide classic vertical sidebar / top navbar when dock mode is active */
+/* Theme switcher hidden for now */
+.dropdown-style-switcher,
+.admin-dock__theme,
+.admin-dock__mobile-theme-btn,
+[data-dock-panel="theme"],
+[data-dock-panel="theme-mobile"] {
+  display: none !important;
+}
+
+html[data-admin-nav-layout="dock"] .admin-dock__actions > .admin-dock__divider:has(+ .admin-dock__theme),
+html[data-admin-nav-layout="dock"] .admin-dock__actions > .admin-dock__theme + .admin-dock__divider {
+  display: none !important;
+}
+
 html[data-admin-nav-layout="dock"] .layout-menu,
 html[data-admin-nav-layout="dock"] .layout-overlay.layout-menu-toggle,
 html[data-admin-nav-layout="dock"] .layout-menu-toggle.navbar-nav,
@@ -25,8 +38,21 @@ html[data-admin-nav-layout="dock"] .layout-navbar {
 
 html[data-admin-nav-layout="dock"] .layout-page {
   padding-left: 0 !important;
+  padding-right: 0 !important;
   padding-top: 0 !important;
   width: 100% !important;
+  max-width: 100% !important;
+}
+
+/* Vuexy reserves sidebar width on .layout-page; remove it in dock for LTR + RTL */
+@media (min-width: 1200px) {
+  html[data-admin-nav-layout="dock"].layout-menu-fixed .layout-page,
+  html[data-admin-nav-layout="dock"].layout-menu-fixed-offcanvas .layout-page,
+  html[data-admin-nav-layout="dock"][dir="rtl"].layout-menu-fixed .layout-page,
+  html[data-admin-nav-layout="dock"][dir="rtl"].layout-menu-fixed-offcanvas .layout-page {
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+  }
 }
 
 html[data-admin-nav-layout="dock"] body.dock-drawer-open {
@@ -175,6 +201,7 @@ html.dark-style .admin-dock__glass,
 
 .admin-dock__profile,
 .admin-dock__theme,
+.admin-dock__locale,
 .admin-dock__more {
   position: relative;
   flex: 0 0 auto;
@@ -286,13 +313,26 @@ html.dark-style .admin-dock__divider,
   box-shadow: 0 0 0 2px color-mix(in srgb, var(--admin-primary, #7367f0) 35%, transparent);
 }
 
-.admin-dock__theme {
+.admin-dock__theme,
+.admin-dock__locale {
   position: relative;
   flex: 0 0 auto;
 }
 
-.admin-dock__dropdown--theme {
+.admin-dock__dropdown--theme,
+.admin-dock__dropdown--locale {
   min-width: 10rem;
+}
+
+.admin-dock__icon--flag {
+  font-size: 1.15rem;
+}
+
+.admin-dock__icon--flag .fi {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-block;
+  background-size: cover;
 }
 
 /* ---------- Dropdown panels (fixed via JS; portaled to body) ---------- */
@@ -461,7 +501,8 @@ html.dark-style .admin-dock__mobile,
   font-weight: 600;
 }
 
-.admin-dock__mobile-theme-btn {
+.admin-dock__mobile-theme-btn,
+.admin-dock__mobile-locale-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -470,6 +511,13 @@ html.dark-style .admin-dock__mobile,
   padding: 0;
   border-radius: 0.85rem;
   color: inherit;
+}
+
+.admin-dock__mobile-locale-btn .fi {
+  width: 1.35rem;
+  height: 1.35rem;
+  display: inline-block;
+  background-size: cover;
 }
 
 .admin-dock__mobile-profile {

@@ -72,7 +72,7 @@
             </button>
             <div class="admin-dock-drawer__folder" hidden data-dock-folder-panel>
                 <div class="admin-dock-drawer__folder-head">
-                    <button type="button" class="admin-dock-drawer__folder-back btn btn-sm" data-dock-mobile-folder-back aria-label="{{ __('general.cancel') }}">
+                    <button type="button" class="admin-dock-drawer__folder-back btn btn-sm" data-dock-mobile-folder-back aria-label="{{ __('general.back') }}">
                         <i class="ti ti-chevron-left"></i>
                     </button>
                     <span class="admin-dock-drawer__folder-title">{{ $item['label'] }}</span>

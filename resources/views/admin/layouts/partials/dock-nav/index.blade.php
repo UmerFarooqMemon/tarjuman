@@ -13,12 +13,12 @@
             'label' => __('general.general_settings'),
             'icon' => 'ti ti-adjustments',
             'url' => route('admin.site-settings.index'),
-            'active' => request()->segment(2) === 'site-settings',
+            'active' => request()->routeIs('admin.site-settings.*'),
         ];
     }
     $settingsChildren[] = [
         'id' => 'layout-sidebar',
-        'label' => 'Sidebar',
+        'label' => __('general.nav_mode_sidebar'),
         'icon' => 'ti ti-layout-sidebar',
         'url' => null,
         'action' => 'set-layout',
@@ -27,7 +27,7 @@
     ];
     $settingsChildren[] = [
         'id' => 'layout-dock',
-        'label' => 'Dock',
+        'label' => __('general.nav_mode_dock'),
         'icon' => 'ti ti-layout-bottombar',
         'url' => null,
         'action' => 'set-layout',
@@ -42,7 +42,7 @@
             'icon' => 'ti ti-smart-home',
             'route' => 'admin.dashboard.index',
             'url' => route('admin.dashboard.index'),
-            'active' => request()->segment(2) === 'dashboard',
+            'active' => request()->routeIs('admin.dashboard.*'),
             'permission' => null,
             'priority' => 1,
             'children' => [],
@@ -53,7 +53,7 @@
             'icon' => 'ti ti-users',
             'route' => 'admin.administrators.index',
             'url' => route('admin.administrators.index'),
-            'active' => request()->segment(2) === 'administrators',
+            'active' => request()->routeIs('admin.administrators.*'),
             'permission' => 'administrators.view',
             'priority' => 2,
             'children' => [],
@@ -64,7 +64,7 @@
             'icon' => 'ti ti-shield-lock',
             'route' => 'admin.roles.index',
             'url' => route('admin.roles.index'),
-            'active' => request()->segment(2) === 'roles',
+            'active' => request()->routeIs('admin.roles.*'),
             'permission' => 'roles.view',
             'priority' => 3,
             'children' => [],
@@ -75,7 +75,7 @@
             'icon' => 'ti ti-settings',
             'route' => null,
             'url' => null,
-            'active' => in_array(request()->segment(2), ['site-settings'], true),
+            'active' => request()->routeIs('admin.site-settings.*'),
             'permission' => null,
             'priority' => 4,
             'children' => $settingsChildren,
@@ -99,7 +99,9 @@
     $dockTitle = $siteSettings->site_title ?? config('app.name', 'Laravel');
 @endphp
 
-<nav class="admin-dock" id="adminDock" role="navigation" aria-label="{{ __('general.menu_dashboard') }} navigation">
+@php($localeSwitcher = adminLocaleSwitcher())
+
+<nav class="admin-dock" id="adminDock" role="navigation" aria-label="{{ __('general.navigation_menu') }}">
     {{-- Desktop floating dock --}}
     <div class="admin-dock__desktop d-none d-md-flex" aria-hidden="false">
         <div class="admin-dock__glass">
@@ -128,13 +130,13 @@
                         type="button"
                         class="admin-dock__btn"
                         data-dock-toggle="more"
-                        data-dock-tip="More"
+                        data-dock-tip="{{ __('general.more') }}"
                         aria-haspopup="true"
                         aria-expanded="false"
                         aria-controls="dockMoreMenu"
-                        aria-label="More">
+                        aria-label="{{ __('general.more') }}">
                         <span class="admin-dock__icon"><i class="ti ti-dots"></i></span>
-                        <span class="admin-dock__label">More</span>
+                        <span class="admin-dock__label">{{ __('general.more') }}</span>
                     </button>
                     <div class="admin-dock__dropdown" id="dockMoreMenu" data-dock-panel="more" hidden role="menu">
                         <ul class="list-unstyled mb-0" data-dock-more-list></ul>
@@ -145,29 +147,62 @@
             <div class="admin-dock__actions">
                 <div class="admin-dock__divider" aria-hidden="true"></div>
 
+                {{-- Language switcher --}}
+                <div class="admin-dock__locale" data-dock-locale-wrap>
+                    <button
+                        type="button"
+                        class="admin-dock__btn"
+                        data-dock-toggle="locale"
+                        data-dock-tip="{{ __('general.language') }}"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-controls="dockLocaleMenu"
+                        aria-label="{{ __('general.language') }}">
+                        <span class="admin-dock__icon admin-dock__icon--flag">
+                            <i class="fi fi-{{ $localeSwitcher['currentLocaleFlag'] }} fis rounded-circle"></i>
+                        </span>
+                        <span class="admin-dock__label">{{ $localeSwitcher['currentLocaleNative'] }}</span>
+                    </button>
+                    <div class="admin-dock__dropdown admin-dock__dropdown--locale" id="dockLocaleMenu" data-dock-panel="locale" hidden role="menu">
+                        @foreach ($localeSwitcher['localeOptions'] as $localeOption)
+                            <a
+                                class="admin-dock__dropdown-item{{ $localeOption['active'] ? ' is-active' : '' }}"
+                                role="menuitem"
+                                href="{{ $localeOption['url'] }}"
+                                hreflang="{{ $localeOption['code'] }}"
+                                @if ($localeOption['active']) aria-current="true" @endif>
+                                <i class="fi fi-{{ $localeOption['flag'] }} fis rounded-circle me-2"></i>
+                                {{ $localeOption['native'] }}
+                            </a>
+                        @endforeach
+                    </div>
+                </div>
+
+                <div class="admin-dock__divider" aria-hidden="true"></div>
+
                 {{-- Theme switcher --}}
                 <div class="admin-dock__theme" data-dock-theme-wrap>
                     <button
                         type="button"
                         class="admin-dock__btn"
                         data-dock-toggle="theme"
-                        data-dock-tip="Theme"
+                        data-dock-tip="{{ __('general.theme') }}"
                         aria-haspopup="true"
                         aria-expanded="false"
                         aria-controls="dockThemeMenu"
-                        aria-label="Theme">
+                        aria-label="{{ __('general.theme') }}">
                         <span class="admin-dock__icon"><i class="ti ti-sun" data-dock-theme-icon></i></span>
-                        <span class="admin-dock__label">Theme</span>
+                        <span class="admin-dock__label">{{ __('general.theme') }}</span>
                     </button>
                     <div class="admin-dock__dropdown admin-dock__dropdown--theme" id="dockThemeMenu" data-dock-panel="theme" hidden role="menu">
                         <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="light">
-                            <i class="ti ti-sun me-2"></i>Light
+                            <i class="ti ti-sun me-2"></i>{{ __('general.light_mode') }}
                         </button>
                         <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="dark">
-                            <i class="ti ti-moon me-2"></i>Dark
+                            <i class="ti ti-moon me-2"></i>{{ __('general.dark_mode') }}
                         </button>
                         <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="system">
-                            <i class="ti ti-device-desktop me-2"></i>System
+                            <i class="ti ti-device-desktop me-2"></i>{{ __('general.system_mode') }}
                         </button>
                     </div>
                 </div>
@@ -226,10 +261,34 @@
             aria-controls="adminDockDrawer"
             aria-expanded="false">
             <i class="ti ti-menu-2"></i>
-            <span>Menu</span>
+            <span>{{ __('general.menu') }}</span>
         </button>
 
         <div class="admin-dock__mobile-actions">
+            <button
+                type="button"
+                class="admin-dock__mobile-locale-btn btn"
+                data-dock-toggle="locale-mobile"
+                aria-haspopup="true"
+                aria-expanded="false"
+                aria-controls="dockLocaleMenuMobile"
+                aria-label="{{ __('general.language') }}">
+                <i class="fi fi-{{ $localeSwitcher['currentLocaleFlag'] }} fis rounded-circle"></i>
+            </button>
+            <div class="admin-dock__dropdown admin-dock__dropdown--locale" id="dockLocaleMenuMobile" data-dock-panel="locale-mobile" hidden role="menu">
+                @foreach ($localeSwitcher['localeOptions'] as $localeOption)
+                    <a
+                        class="admin-dock__dropdown-item{{ $localeOption['active'] ? ' is-active' : '' }}"
+                        role="menuitem"
+                        href="{{ $localeOption['url'] }}"
+                        hreflang="{{ $localeOption['code'] }}"
+                        @if ($localeOption['active']) aria-current="true" @endif>
+                        <i class="fi fi-{{ $localeOption['flag'] }} fis rounded-circle me-2"></i>
+                        {{ $localeOption['native'] }}
+                    </a>
+                @endforeach
+            </div>
+
             <button
                 type="button"
                 class="admin-dock__mobile-theme-btn btn"
@@ -237,18 +296,18 @@
                 aria-haspopup="true"
                 aria-expanded="false"
                 aria-controls="dockThemeMenuMobile"
-                aria-label="Theme">
+                aria-label="{{ __('general.theme') }}">
                 <i class="ti ti-sun" data-dock-theme-icon></i>
             </button>
             <div class="admin-dock__dropdown admin-dock__dropdown--theme" id="dockThemeMenuMobile" data-dock-panel="theme-mobile" hidden role="menu">
                 <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="light">
-                    <i class="ti ti-sun me-2"></i>Light
+                    <i class="ti ti-sun me-2"></i>{{ __('general.light_mode') }}
                 </button>
                 <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="dark">
-                    <i class="ti ti-moon me-2"></i>Dark
+                    <i class="ti ti-moon me-2"></i>{{ __('general.dark_mode') }}
                 </button>
                 <button type="button" class="admin-dock__dropdown-item" role="menuitem" data-dock-theme="system">
-                    <i class="ti ti-device-desktop me-2"></i>System
+                    <i class="ti ti-device-desktop me-2"></i>{{ __('general.system_mode') }}
                 </button>
             </div>
 
@@ -277,12 +336,12 @@
 </nav>
 
 {{-- Mobile bottom sheet drawer --}}
-<div class="admin-dock-drawer" id="adminDockDrawer" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="Navigation menu">
+<div class="admin-dock-drawer" id="adminDockDrawer" hidden aria-hidden="true" role="dialog" aria-modal="true" aria-label="{{ __('general.navigation_menu') }}">
     <div class="admin-dock-drawer__backdrop" data-dock-close-drawer></div>
     <div class="admin-dock-drawer__sheet" data-dock-sheet>
         <div class="admin-dock-drawer__handle" data-dock-sheet-handle aria-hidden="true"></div>
         <div class="admin-dock-drawer__header">
-            <h6 class="mb-0">Menu</h6>
+            <h6 class="mb-0">{{ __('general.menu') }}</h6>
             <button type="button" class="btn btn-icon btn-sm" data-dock-close-drawer aria-label="{{ __('general.cancel') }}">
                 <i class="ti ti-x"></i>
             </button>

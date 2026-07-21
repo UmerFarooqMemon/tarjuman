@@ -15,7 +15,7 @@
     </div>
     <div class="menu-inner-shadow"></div>
     <ul class="menu-inner py-1">
-        <li class="menu-item {{ request()->segment(2) == 'dashboard' ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.dashboard.*') ? 'active' : '' }}">
             <a href="{{ route('admin.dashboard.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
                 <div data-i18n="Dashboard">{!! __('general.menu_dashboard') !!}</div>
@@ -23,7 +23,7 @@
         </li>
 
         @can('administrators.view')
-        <li class="menu-item {{ request()->segment(2) == 'administrators' ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.administrators.*') ? 'active' : '' }}">
             <a href="{{ route('admin.administrators.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
                 <div data-i18n="Administrators">{!! __('general.menu_administrators') !!}</div>
@@ -32,7 +32,7 @@
         @endcan
 
         @can('roles.view')
-        <li class="menu-item {{ request()->segment(2) == 'roles' ? 'active' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
             <a href="{{ route('admin.roles.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-shield-lock"></i>
                 <div data-i18n="{!! __('general.roles_and_permissions') !!}">{!! __('general.roles_and_permissions') !!}</div>
@@ -44,14 +44,14 @@
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>
 
-        <li class="menu-item {{ in_array(request()->segment(2), ['site-settings'], true) ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.site-settings.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Settings">{!! __('general.menu_settings') !!}</div>
             </a>
             <ul class="menu-sub">
                 @can('site_settings.view')
-                <li class="menu-item {{ request()->segment(2) == 'site-settings' ? 'active' : '' }}">
+                <li class="menu-item {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.site-settings.index') }}" class="menu-link">
                         <div data-i18n="Site Settings">{!! __('general.general_settings') !!}</div>
                     </a>
@@ -59,12 +59,12 @@
                 @endcan
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="sidebar">
-                        <div>Sidebar</div>
+                        <div>{!! __('general.nav_mode_sidebar') !!}</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="dock">
-                        <div>Dock</div>
+                        <div>{!! __('general.nav_mode_dock') !!}</div>
                     </a>
                 </li>
             </ul>

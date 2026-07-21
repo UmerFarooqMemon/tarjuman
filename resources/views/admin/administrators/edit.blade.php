@@ -5,14 +5,14 @@
     <div class="col-xl">
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0"> Edit Profile</h5>
+                <h5 class="mb-0">{!! __('general.edit_administrator') !!}</h5>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('admin.administrators.update', $data->id) }}" class="row number-tab-steps wizard-circle" enctype="multipart/form-data">
                 @csrf
                 @method('PUT')
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-fullname">First Name <span class="required-fl">*</span></label>
+                        <label class="form-label" for="basic-icon-default-fullname">{!! __('general.first_name') !!} <span class="required-fl">*</span></label>
                         <div class="input-group input-group-merge">
                             <span id="basic-icon-default-fullname2" class="input-group-text"
                                 ><i class="ti ti-user"></i
@@ -26,21 +26,21 @@
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-fullname">Last Name</label>
+                        <label class="form-label" for="basic-icon-default-lastname">{!! __('general.last_name') !!}</label>
                         <div class="input-group input-group-merge">
-                            <span id="basic-icon-default-fullname2" class="input-group-text"
+                            <span id="basic-icon-default-lastname2" class="input-group-text"
                                 ><i class="ti ti-user"></i
                                 ></span>
                             <input
                                 type="text"
                                 class="form-control"
-                                id="basic-icon-default-fullname"
+                                id="basic-icon-default-lastname"
                                 name="last_name" value="{{ old('last_name', $data->last_name) }}"
-                                aria-describedby="basic-icon-default-fullname2" />
+                                aria-describedby="basic-icon-default-lastname2" />
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-phone">Contact Number</label>
+                        <label class="form-label" for="basic-icon-default-phone">{!! __('general.contact_number') !!}</label>
                         <div class="input-group input-group-merge">
                             <span id="basic-icon-default-phone2" class="input-group-text"
                                 ><i class="ti ti-phone"></i
@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-email">Email</label>
+                        <label class="form-label" for="basic-icon-default-email">{!! __('general.email') !!}</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="ti ti-mail"></i></span>
                             <input
@@ -66,27 +66,27 @@
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-email">Password</label>
+                        <label class="form-label" for="basic-icon-default-password">{!! __('general.password') !!}</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="ti ti-key"></i></span>
                             <input
                                 type="password"
-                                id="basic-icon-default-email"
+                                id="basic-icon-default-password"
                                 class="form-control"
                                 name="password"
-                                aria-describedby="basic-icon-default-fullname2" />
+                                aria-describedby="basic-icon-default-password2" />
                         </div>
                     </div>
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-email">Confirm Password</label>
+                        <label class="form-label" for="basic-icon-default-password-confirm">{!! __('general.confirm_password') !!}</label>
                         <div class="input-group input-group-merge">
                             <span class="input-group-text"><i class="ti ti-key"></i></span>
                             <input
                                 type="password"
-                                id="basic-icon-default-email"
+                                id="basic-icon-default-password-confirm"
                                 class="form-control"
                                 name="password_confirmation"
-                                aria-describedby="basic-icon-default-fullname2" />
+                                aria-describedby="basic-icon-default-password-confirm2" />
                         </div>
                     </div>
                     @if (!$data->is_system_admin)
@@ -106,9 +106,9 @@
                     </div>
                     @endif
                     <div class="mb-3 col-6">
-                        <label class="form-label" for="basic-icon-default-company">Profile Picture</label>
+                        <label class="form-label" for="basic-icon-default-image">{!! __('general.profile_picture') !!}</label>
                         <div class="input-group input-group-merge">
-                            <input type="file" name="image" class="form-control">
+                            <input type="file" name="image" id="basic-icon-default-image" class="form-control">
                         </div>
                         @if ($data->image != '' && file_exists(uploadsDir('admin') . $data->image))
                         <input type="hidden" name="previous_image" value="{!! $data->image !!}" class="form-control">
@@ -117,7 +117,7 @@
                         @endif
                     </div>
                     <div class="mb-3 col-12">
-                        <button type="submit" class="btn btn-primary">Save</button>
+                        <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
                     </div>
                 </form>
             </div>

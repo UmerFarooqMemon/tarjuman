@@ -1,8 +1,8 @@
 <!doctype html>
 <html
-  lang="en"
+  lang="{{ str_replace('_', '-', app()->getLocale()) }}"
   class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
-  dir="ltr"
+  dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}"
   data-theme="theme-default"
   data-assets-path="{!! asset('assets') !!}/"
   data-template="vertical-menu-template">
@@ -54,6 +54,15 @@
 
     <!-- Page CSS -->
     <link rel="stylesheet" href="{!! asset('assets/vendor/css/pages/cards-advance.css') !!}" />
+
+    <script>
+        const currentLocale = "{{ app()->getLocale() }}";
+        let langUrl = '';
+
+        if (currentLocale === 'ar') {
+            langUrl = "{!! asset('assets/json/locales/ar.json') !!}";
+        }
+    </script>
 
     <!-- Helpers -->
     <script src="{!! asset('assets/vendor/js/helpers.js') !!}"></script>
@@ -247,11 +256,12 @@
         function deleteConfirmation(id) {
 
             Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
+                title: "{!! __('general.are_you_sure') !!}",
+                text: "{!! __('general.you_wont_be_able_to_revert_this') !!}",
                 icon: 'warning',
                 showCancelButton: true,
-                confirmButtonText: 'Yes, delete it!',
+                confirmButtonText: "{!! __('general.yes_delete_it') !!}",
+                cancelButtonText: "{!! __('general.cancel') !!}",
                 customClass: {
                     confirmButton: 'btn btn-primary me-3',
                     cancelButton: 'btn btn-label-secondary'
@@ -262,16 +272,16 @@
                     document.getElementById("deleteForm" + id + "").submit();
                     Swal.fire({
                         icon: 'success',
-                        title: 'Deleted!',
-                        text: 'Your file has been deleted.',
+                        title: "{!! __('general.deleted') !!}",
+                        text: "{!! __('general.record_has_been_deleted') !!}",
                         customClass: {
                             confirmButton: 'btn btn-success'
                         }
                     });
                 } else if (result.dismiss === Swal.DismissReason.cancel) {
                     Swal.fire({
-                        title: 'Cancelled',
-                        text: 'Your data is safe :)',
+                        title: "{!! __('general.cancelled') !!}",
+                        text: "{!! __('general.your_data_is_safe') !!}",
                         icon: 'error',
                         customClass: {
                             confirmButton: 'btn btn-success'

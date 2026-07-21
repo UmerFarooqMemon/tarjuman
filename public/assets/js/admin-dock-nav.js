@@ -92,10 +92,13 @@
       panel.classList.contains('admin-dock__dropdown--profile') ||
       panel.classList.contains('admin-dock__dropdown--mobile-profile') ||
       panel.classList.contains('admin-dock__dropdown--theme') ||
+      panel.classList.contains('admin-dock__dropdown--locale') ||
       panel.getAttribute('data-dock-panel') === 'profile' ||
       panel.getAttribute('data-dock-panel') === 'profile-mobile' ||
       panel.getAttribute('data-dock-panel') === 'theme' ||
-      panel.getAttribute('data-dock-panel') === 'theme-mobile';
+      panel.getAttribute('data-dock-panel') === 'theme-mobile' ||
+      panel.getAttribute('data-dock-panel') === 'locale' ||
+      panel.getAttribute('data-dock-panel') === 'locale-mobile';
 
     movePanelToBody(panel);
     panel.hidden = false;

@@ -13,12 +13,39 @@
             <div class="nav-item navbar-search-wrapper mb-0">
                 <a class="nav-item nav-link search-toggler d-flex align-items-center px-0" href="javascript:void(0);">
                 <i class="ti ti-search ti-md me-2"></i>
-                <span class="d-none d-md-inline-block text-muted">Search (Ctrl+/)</span>
+                <span class="d-none d-md-inline-block text-muted">{!! __('general.search_with_shortcut') !!}</span>
                 </a>
             </div>
         </div>
         <!-- /Search -->
         <ul class="navbar-nav flex-row align-items-center ms-auto">
+            @php($localeSwitcher = adminLocaleSwitcher())
+            {{-- Language switcher --}}
+            <li class="nav-item dropdown-locale dropdown me-2 me-xl-0">
+                <a
+                    class="nav-link dropdown-toggle hide-arrow"
+                    href="javascript:void(0);"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false"
+                    aria-label="{{ __('general.language') }}">
+                    <i class="fi fi-{{ $localeSwitcher['currentLocaleFlag'] }} fis rounded-circle fs-3 me-1"></i>
+                </a>
+                <ul class="dropdown-menu dropdown-menu-end">
+                    @foreach ($localeSwitcher['localeOptions'] as $localeOption)
+                        <li>
+                            <a
+                                class="dropdown-item{{ $localeOption['active'] ? ' active' : '' }}"
+                                href="{{ $localeOption['url'] }}"
+                                hreflang="{{ $localeOption['code'] }}"
+                                @if ($localeOption['active']) aria-current="true" @endif>
+                                <i class="fi fi-{{ $localeOption['flag'] }} fis rounded-circle me-2 fs-3"></i>
+                                <span class="align-middle">{{ $localeOption['native'] }}</span>
+                            </a>
+                        </li>
+                    @endforeach
+                </ul>
+            </li>
+            {{-- / Language switcher --}}
             <li class="nav-item dropdown-style-switcher dropdown me-2 me-xl-0">
                 <a class="nav-link dropdown-toggle hide-arrow" href="javascript:void(0);" data-bs-toggle="dropdown">
                 <i class="ti ti-md"></i>
@@ -26,17 +53,17 @@
                 <ul class="dropdown-menu dropdown-menu-end dropdown-styles">
                     <li>
                         <a class="dropdown-item" href="javascript:void(0);" data-theme="light">
-                        <span class="align-middle"><i class="ti ti-sun me-2"></i>Light</span>
+                        <span class="align-middle"><i class="ti ti-sun me-2"></i>{!! __('general.light_mode') !!}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="javascript:void(0);" data-theme="dark">
-                        <span class="align-middle"><i class="ti ti-moon me-2"></i>Dark</span>
+                        <span class="align-middle"><i class="ti ti-moon me-2"></i>{!! __('general.dark_mode') !!}</span>
                         </a>
                     </li>
                     <li>
                         <a class="dropdown-item" href="javascript:void(0);" data-theme="system">
-                        <span class="align-middle"><i class="ti ti-device-desktop me-2"></i>System</span>
+                        <span class="align-middle"><i class="ti ti-device-desktop me-2"></i>{!! __('general.system_mode') !!}</span>
                         </a>
                     </li>
                 </ul>
@@ -404,7 +431,7 @@
                                 </div>
                                 <div class="flex-grow-1">
                                     <span class="fw-medium d-block">{!! auth('admin')->user()->first_name . ' ' . auth('admin')->user()->last_name !!}</span>
-                                    <small class="text-muted">Admin</small>
+                                    <small class="text-muted">{!! __('general.admin') !!}</small>
                                 </div>
                             </div>
                         </a>
@@ -421,7 +448,7 @@
                     <li>
                         <a class="dropdown-item" href="javascript:;">
                         <i class="ti ti-settings me-2 ti-sm"></i>
-                        <span class="align-middle">Settings</span>
+                        <span class="align-middle">{!! __('general.menu_settings') !!}</span>
                         </a>
                     </li>
                     <!-- <li>
@@ -456,7 +483,7 @@
                     <li>
                         <a class="dropdown-item" href="javascript:;" onclick="logout()">
                         <i class="ti ti-logout me-2 ti-sm"></i>
-                        <span class="align-middle">Log Out</span>
+                        <span class="align-middle">{!! __('general.log_out') !!}</span>
                         </a>
                     </li>
                 </ul>
@@ -469,8 +496,8 @@
         <input
             type="text"
             class="form-control search-input container-xxl border-0"
-            placeholder="Search..."
-            aria-label="Search..." />
+            placeholder="{!! __('general.search_placeholder') !!}"
+            aria-label="{!! __('general.search_placeholder') !!}" />
         <i class="ti ti-x ti-sm search-toggler cursor-pointer"></i>
     </div>
 </nav>

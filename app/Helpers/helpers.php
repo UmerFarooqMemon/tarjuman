@@ -58,3 +58,44 @@ if (! function_exists('moduleLabel')) {
         return str_replace('_', ' ', ucfirst($module));
     }
 }
+
+if (! function_exists('adminLocaleSwitcher')) {
+    /**
+     * Data for the admin English/Arabic language switcher.
+     *
+     * @return array{
+     *     currentLocale: string,
+     *     currentLocaleNative: string,
+     *     currentLocaleFlag: string,
+     *     localeOptions: list<array{code: string, name: string, native: string, flag: string, url: string, active: bool}>
+     * }
+     */
+    function adminLocaleSwitcher(): array
+    {
+        $localeFlagMap = [
+            'en' => 'us',
+            'ar' => 'ae',
+        ];
+
+        $currentLocale = \LaravelLocalization::getCurrentLocale();
+
+        return [
+            'currentLocale' => $currentLocale,
+            'currentLocaleNative' => \LaravelLocalization::getCurrentLocaleNative(),
+            'currentLocaleFlag' => $localeFlagMap[$currentLocale] ?? 'us',
+            'localeOptions' => collect(\LaravelLocalization::getSupportedLocales())
+                ->map(function (array $properties, string $locale) use ($localeFlagMap, $currentLocale) {
+                    return [
+                        'code' => $locale,
+                        'name' => $properties['name'],
+                        'native' => $properties['native'],
+                        'flag' => $localeFlagMap[$locale] ?? 'us',
+                        'url' => \LaravelLocalization::getLocalizedURL($locale, null, [], true),
+                        'active' => $locale === $currentLocale,
+                    ];
+                })
+                ->values()
+                ->all(),
+        ];
+    }
+}
