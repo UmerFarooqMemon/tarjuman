@@ -17,21 +17,11 @@
         ];
     }
     $settingsChildren[] = [
-        'id' => 'layout-sidebar',
-        'label' => __('general.nav_mode_sidebar'),
-        'icon' => 'ti ti-layout-sidebar',
+        'id' => 'appearance',
+        'label' => __('general.menu_appearance'),
+        'icon' => 'ti ti-palette',
         'url' => null,
-        'action' => 'set-layout',
-        'layout' => 'sidebar',
-        'active' => false,
-    ];
-    $settingsChildren[] = [
-        'id' => 'layout-dock',
-        'label' => __('general.nav_mode_dock'),
-        'icon' => 'ti ti-layout-bottombar',
-        'url' => null,
-        'action' => 'set-layout',
-        'layout' => 'dock',
+        'action' => 'open-appearance',
         'active' => false,
     ];
 
@@ -70,6 +60,17 @@
             'children' => [],
         ],
         [
+            'id' => 'vendors',
+            'label' => __('general.menu_vendors'),
+            'icon' => 'ti ti-building-store',
+            'route' => 'admin.vendors.index',
+            'url' => route('admin.vendors.index'),
+            'active' => request()->routeIs('admin.vendors.*'),
+            'permission' => 'vendors.view',
+            'priority' => 4,
+            'children' => [],
+        ],
+        [
             'id' => 'settings',
             'label' => __('general.menu_settings'),
             'icon' => 'ti ti-settings',
@@ -77,7 +78,7 @@
             'url' => null,
             'active' => request()->routeIs('admin.site-settings.*'),
             'permission' => null,
-            'priority' => 4,
+            'priority' => 5,
             'children' => $settingsChildren,
         ],
     ])->filter(function (array $item) {

@@ -58,6 +58,8 @@ Route::group([
                 Route::put('update-profile', 'AdministratorsController@updateProfile')->name('update-profile.store');
                 Route::resource('administrators', 'AdministratorsController');
                 Route::post('change-status', 'AdministratorsController@changeStatus')->name('update-status');
+                Route::resource('vendors', 'VendorsController');
+                Route::post('vendors/change-status', 'VendorsController@changeStatus')->name('vendors.update-status');
                 Route::resource('roles', 'RolesController')->except(['show']);
                 Route::resource('site-settings', 'SiteSettingsController')->only(['index', 'update']);
             }

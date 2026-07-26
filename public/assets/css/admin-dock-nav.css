@@ -72,14 +72,6 @@ html:not([data-admin-nav-layout="dock"]) #adminDockDrawer {
   display: none !important;
 }
 
-/* Settings submenu: only show the layout you can switch TO */
-html[data-admin-nav-layout="dock"] [data-set-admin-nav-layout="dock"],
-html[data-admin-nav-layout="dock"] .menu-item:has(> [data-set-admin-nav-layout="dock"]),
-html[data-admin-nav-layout="sidebar"] [data-set-admin-nav-layout="sidebar"],
-html[data-admin-nav-layout="sidebar"] .menu-item:has(> [data-set-admin-nav-layout="sidebar"]) {
-  display: none !important;
-}
-
 /* ---------- Desktop glass dock (near full width, inset + rounded) ---------- */
 .admin-dock {
   position: fixed;
@@ -112,20 +104,55 @@ html[data-admin-nav-layout="sidebar"] .menu-item:has(> [data-set-admin-nav-layou
   padding: 0.55rem 0.75rem;
   border-radius: 1.35rem;
   overflow: visible;
-  background: rgba(255, 255, 255, 0.72);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  /* Classic: solid dock */
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(75, 70, 92, 0.14);
   box-shadow:
     0 10px 30px rgba(34, 41, 47, 0.14),
-    inset 0 1px 0 rgba(255, 255, 255, 0.65);
-  backdrop-filter: blur(18px) saturate(1.35);
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+    inset 0 1px 0 rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
 }
 
 html.dark-style .admin-dock__glass,
 [data-bs-theme="dark"] .admin-dock__glass {
-  background: rgba(47, 51, 73, 0.78);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(47, 51, 73, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
+}
+
+/* Glass appearance: macOS grey frosted dock */
+html[data-admin-card-style="glass"] .admin-dock__glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    rgba(170, 172, 178, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+}
+
+html.dark-style[data-admin-card-style="glass"] .admin-dock__glass,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .admin-dock__glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    ),
+    rgba(48, 48, 52, 0.32);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.32),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
 }
 
 .admin-dock__scroller {
@@ -449,17 +476,46 @@ html.dark-style .admin-dock-tip::after,
   gap: 0.5rem;
   padding: 0.45rem 0.75rem;
   border-radius: 1.15rem;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(75, 70, 92, 0.14);
   box-shadow: 0 10px 28px rgba(34, 41, 47, 0.16);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
 }
 
 html.dark-style .admin-dock__mobile,
 [data-bs-theme="dark"] .admin-dock__mobile {
-  background: rgba(47, 51, 73, 0.82);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(47, 51, 73, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
+}
+
+html[data-admin-card-style="glass"] .admin-dock__mobile {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    rgba(170, 172, 178, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+}
+
+html.dark-style[data-admin-card-style="glass"] .admin-dock__mobile,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .admin-dock__mobile {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    ),
+    rgba(48, 48, 52, 0.32);
+  border-color: rgba(255, 255, 255, 0.12);
 }
 
 .admin-dock__mobile-actions {
@@ -559,11 +615,11 @@ html.dark-style .admin-dock__mobile,
   max-height: min(72vh, 560px);
   padding: 0.35rem 0.75rem 1rem;
   border-radius: 1.35rem;
-  background: rgba(255, 255, 255, 0.82);
-  border: 1px solid rgba(255, 255, 255, 0.45);
+  background: rgba(255, 255, 255, 0.92);
+  border: 1px solid rgba(75, 70, 92, 0.14);
   box-shadow: 0 12px 32px rgba(34, 41, 47, 0.2);
-  backdrop-filter: blur(18px) saturate(1.35);
-  -webkit-backdrop-filter: blur(18px) saturate(1.35);
+  backdrop-filter: blur(12px) saturate(1.1);
+  -webkit-backdrop-filter: blur(12px) saturate(1.1);
   transform: translateY(0);
   transition: transform 0.22s ease;
   touch-action: pan-y;
@@ -571,9 +627,42 @@ html.dark-style .admin-dock__mobile,
 
 html.dark-style .admin-dock-drawer__sheet,
 [data-bs-theme="dark"] .admin-dock-drawer__sheet {
-  background: rgba(47, 51, 73, 0.88);
-  border-color: rgba(255, 255, 255, 0.08);
+  background: rgba(47, 51, 73, 0.94);
+  border-color: rgba(255, 255, 255, 0.12);
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.4);
+}
+
+html[data-admin-card-style="glass"] .admin-dock-drawer__sheet {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    rgba(170, 172, 178, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 12px 32px rgba(0, 0, 0, 0.16),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+}
+
+html.dark-style[data-admin-card-style="glass"] .admin-dock-drawer__sheet,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .admin-dock-drawer__sheet {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    ),
+    rgba(48, 48, 52, 0.32);
+  border-color: rgba(255, 255, 255, 0.12);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.32),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
 }
 
 .admin-dock-drawer.is-dragging .admin-dock-drawer__sheet,

@@ -72,7 +72,7 @@
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="{!! asset('assets/js/config.js') !!}"></script>
 
-    {{-- Apply nav layout (dock|sidebar) before paint to avoid FOUC --}}
+    {{-- Apply nav layout + card style before paint to avoid FOUC --}}
     <script>
       (function () {
         try {
@@ -81,8 +81,15 @@
             mode = 'dock';
           }
           document.documentElement.setAttribute('data-admin-nav-layout', mode);
+
+          var cardStyle = localStorage.getItem('admin-card-style');
+          if (cardStyle !== 'glass' && cardStyle !== 'classic') {
+            cardStyle = 'classic';
+          }
+          document.documentElement.setAttribute('data-admin-card-style', cardStyle);
         } catch (e) {
           document.documentElement.setAttribute('data-admin-nav-layout', 'dock');
+          document.documentElement.setAttribute('data-admin-card-style', 'classic');
         }
       })();
     </script>
@@ -177,6 +184,7 @@
     </style>
     @include('admin.partials.branding-styles')
     <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-appearance.css') !!}" />
     @yield('css')
 </head>
 <body>
@@ -202,6 +210,7 @@
     </div>
 
     @include('admin.layouts.partials.dock-nav.index')
+    @include('admin.layouts.partials.appearance-modal')
     <form id="logout-form" action="{{ route('admin.auth.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
@@ -293,6 +302,7 @@
     </script>
     @include('admin.partials.errors')
     <script src="{!! asset('assets/js/admin-nav-layout.js') !!}"></script>
+    <script src="{!! asset('assets/js/admin-appearance.js') !!}"></script>
     <script src="{!! asset('assets/js/admin-dock-nav.js') !!}"></script>
     @stack('footer-js')
     @yield('footer-js')

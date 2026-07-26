@@ -1,0 +1,367 @@
+/* ==========================================================================
+   Admin Appearance — card styles + modal option picker
+   Card style: html[data-admin-card-style="classic|glass"]
+   ========================================================================== */
+
+/* ---------- Glass tokens (match macOS dock grey glass) ---------- */
+html[data-admin-card-style="glass"] {
+  --admin-glass-bg: rgba(170, 172, 178, 0.28);
+  --admin-glass-bg-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.28) 0%,
+    rgba(255, 255, 255, 0.06) 100%
+  );
+  --admin-glass-border: rgba(255, 255, 255, 0.32);
+  --admin-glass-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 10px 28px rgba(0, 0, 0, 0.14);
+  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
+  --admin-glass-blur: blur(40px) saturate(1.8);
+  --admin-glass-divider: rgba(75, 70, 92, 0.08);
+  --admin-glass-radius: 0.75rem;
+}
+
+html.dark-style[data-admin-card-style="glass"],
+[data-bs-theme="dark"][data-admin-card-style="glass"] {
+  --admin-glass-bg: rgba(48, 48, 52, 0.32);
+  --admin-glass-bg-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.08) 0%,
+    rgba(255, 255, 255, 0.01) 100%
+  );
+  --admin-glass-border: rgba(255, 255, 255, 0.12);
+  --admin-glass-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.32);
+  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+  --admin-glass-divider: rgba(255, 255, 255, 0.08);
+}
+
+/* Shared frosted surface — blur on ::before so radius clips cleanly on iOS */
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card),
+html[data-admin-card-style="glass"] .modal-content,
+html[data-admin-card-style="glass"] .dropdown-menu,
+html[data-admin-card-style="glass"] .popover,
+html[data-admin-card-style="glass"] .offcanvas,
+html[data-admin-card-style="glass"] .toast,
+html[data-admin-card-style="glass"] .swal2-popup,
+html[data-admin-card-style="glass"] .flatpickr-calendar {
+  position: relative;
+  isolation: isolate;
+  border-radius: var(--admin-glass-radius) !important;
+  background-color: transparent !important;
+  background-image: none !important;
+  border: 1px solid var(--admin-glass-border) !important;
+  box-shadow: var(--admin-glass-shadow) !important;
+  transform: translateZ(0);
+  -webkit-transform: translateZ(0);
+}
+
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card)::before,
+html[data-admin-card-style="glass"] .modal-content::before,
+html[data-admin-card-style="glass"] .dropdown-menu::before,
+html[data-admin-card-style="glass"] .popover::before,
+html[data-admin-card-style="glass"] .offcanvas::before,
+html[data-admin-card-style="glass"] .toast::before,
+html[data-admin-card-style="glass"] .swal2-popup::before,
+html[data-admin-card-style="glass"] .flatpickr-calendar::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  border-radius: inherit;
+  background-color: var(--admin-glass-bg);
+  background-image: var(--admin-glass-bg-image);
+  box-shadow: var(--admin-glass-inset);
+  backdrop-filter: var(--admin-glass-blur);
+  -webkit-backdrop-filter: var(--admin-glass-blur);
+  pointer-events: none;
+  -webkit-mask-image: -webkit-radial-gradient(white, black);
+  mask-image: radial-gradient(white, black);
+}
+
+/* ---------- Glass page backdrop ---------- */
+html[data-admin-card-style="glass"] .content-wrapper {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(115, 103, 240, 0.1), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08), transparent 40%),
+    var(--bs-body-bg, #f8f7fa);
+}
+
+html.dark-style[data-admin-card-style="glass"] .content-wrapper,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .content-wrapper {
+  background:
+    radial-gradient(circle at 0% 0%, rgba(115, 103, 240, 0.14), transparent 42%),
+    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.1), transparent 40%),
+    var(--bs-body-bg, #25293c);
+}
+
+/* ---------- Glass cards ---------- */
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card) {
+  --bs-card-bg: var(--admin-glass-bg);
+  --bs-card-box-shadow: none;
+  box-shadow: none !important;
+}
+
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card)::before {
+  box-shadow: none;
+}
+
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card)::after {
+  box-shadow: none !important;
+}
+
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card) > .card-header,
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card) > .card-footer,
+html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card) > .card-body {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider);
+}
+
+/* ---------- Glass modals ---------- */
+html[data-admin-card-style="glass"] .modal-content {
+  --bs-modal-bg: var(--admin-glass-bg);
+  --bs-modal-border-color: var(--admin-glass-border);
+}
+
+html[data-admin-card-style="glass"] .modal-header,
+html[data-admin-card-style="glass"] .modal-footer {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider) !important;
+}
+
+html[data-admin-card-style="glass"] .modal-backdrop {
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* ---------- Glass dropdowns ---------- */
+html[data-admin-card-style="glass"] .dropdown-menu {
+  --bs-dropdown-bg: var(--admin-glass-bg);
+  --bs-dropdown-border-color: var(--admin-glass-border);
+}
+
+html[data-admin-card-style="glass"] .dropdown-menu .dropdown-menu-header,
+html[data-admin-card-style="glass"] .dropdown-menu .dropdown-menu-footer,
+html[data-admin-card-style="glass"] .dropdown-divider {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider) !important;
+}
+
+html[data-admin-card-style="glass"] .dropdown-item:hover,
+html[data-admin-card-style="glass"] .dropdown-item:focus,
+html[data-admin-card-style="glass"] .dropdown-item.active,
+html[data-admin-card-style="glass"] .dropdown-item:active {
+  background-color: rgba(115, 103, 240, 0.1) !important;
+}
+
+/* ---------- Glass popovers / offcanvas / toasts ---------- */
+html[data-admin-card-style="glass"] .popover {
+  --bs-popover-bg: var(--admin-glass-bg);
+  --bs-popover-border-color: var(--admin-glass-border);
+}
+
+html[data-admin-card-style="glass"] .popover .popover-header,
+html[data-admin-card-style="glass"] .popover .popover-body {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider);
+}
+
+html[data-admin-card-style="glass"] .offcanvas {
+  --bs-offcanvas-bg: var(--admin-glass-bg);
+  --bs-offcanvas-border-color: var(--admin-glass-border);
+}
+
+html[data-admin-card-style="glass"] .offcanvas-header,
+html[data-admin-card-style="glass"] .offcanvas-body {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider);
+}
+
+html[data-admin-card-style="glass"] .toast {
+  --bs-toast-bg: var(--admin-glass-bg);
+  --bs-toast-border-color: var(--admin-glass-border);
+}
+
+html[data-admin-card-style="glass"] .toast-header {
+  background-color: transparent !important;
+  border-color: var(--admin-glass-divider);
+}
+
+/* ---------- Glass SweetAlert ---------- */
+html[data-admin-card-style="glass"] .swal2-popup {
+  color: inherit;
+}
+
+html[data-admin-card-style="glass"] .swal2-popup .swal2-title,
+html[data-admin-card-style="glass"] .swal2-popup .swal2-html-container {
+  color: inherit;
+}
+
+/* ---------- Appearance modal layout ---------- */
+#adminAppearanceModal .modal-body {
+  overflow-x: hidden;
+}
+
+#adminAppearanceModal .admin-appearance-dock-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+#adminAppearanceModal .admin-appearance-dock-row__text {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+#adminAppearanceModal .admin-appearance-dock-toggle {
+  position: relative;
+  flex: 0 0 auto;
+  width: 2.5rem;
+  min-width: 2.5rem;
+  height: 1.35rem;
+}
+
+#adminAppearanceModal .admin-appearance-dock-toggle .switch {
+  position: absolute;
+  inset: 0 auto auto 0;
+  width: 2.5rem;
+  min-height: 1.35rem;
+  margin: 0 !important;
+}
+
+[dir="rtl"] #adminAppearanceModal .admin-appearance-dock-toggle .switch {
+  inset: 0 0 auto auto;
+}
+
+#adminAppearanceModal .admin-appearance-style-row {
+  align-items: stretch;
+}
+
+#adminAppearanceModal .admin-appearance-style-row > [class*="col-"] {
+  display: flex;
+}
+
+#adminAppearanceModal .admin-appearance-option {
+  position: relative;
+  display: flex;
+  flex: 1 1 auto;
+  width: 100%;
+  min-height: 100%;
+}
+
+/* ---------- Appearance modal option cards ---------- */
+.admin-appearance-option__input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.admin-appearance-option__card {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 0.65rem;
+  width: 100%;
+  height: 100%;
+  padding: 0.9rem;
+  border: 2px solid rgba(75, 70, 92, 0.12);
+  border-radius: 0.9rem;
+  background: var(--bs-body-bg, #fff);
+  cursor: pointer;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease;
+}
+
+.admin-appearance-option__input:checked + .admin-appearance-option__card,
+.admin-appearance-option__card:hover {
+  border-color: color-mix(in srgb, var(--admin-primary, #7367f0) 55%, transparent);
+  box-shadow: 0 8px 22px rgba(115, 103, 240, 0.12);
+}
+
+.admin-appearance-option__input:checked + .admin-appearance-option__card {
+  transform: translateY(-1px);
+}
+
+.admin-appearance-option__title {
+  font-weight: 600;
+  color: inherit;
+}
+
+.admin-appearance-option__desc {
+  flex: 1 1 auto;
+  font-size: 0.8125rem;
+  color: var(--bs-secondary-color, #6d6b77);
+}
+
+.admin-appearance-option__preview {
+  display: flex;
+  flex: 0 0 auto;
+  flex-direction: column;
+  gap: 0.45rem;
+  height: 5.5rem;
+  padding: 0.75rem;
+  border-radius: 0.75rem;
+}
+
+.admin-appearance-option__preview--classic {
+  background: #fff;
+  border: 1px solid rgba(75, 70, 92, 0.14);
+  box-shadow: 0 4px 14px rgba(34, 41, 47, 0.08);
+}
+
+.admin-appearance-option__preview--glass {
+  border-radius: 0.75rem;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    rgba(170, 172, 178, 0.28);
+  border: 1px solid rgba(255, 255, 255, 0.32);
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 8px 20px rgba(0, 0, 0, 0.12);
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+}
+
+.admin-appearance-option__preview-bar,
+.admin-appearance-option__preview-line {
+  display: block;
+  border-radius: 999px;
+  background: rgba(115, 103, 240, 0.18);
+}
+
+.admin-appearance-option__preview-bar {
+  width: 42%;
+  height: 0.55rem;
+}
+
+.admin-appearance-option__preview-line {
+  width: 78%;
+  height: 0.4rem;
+}
+
+.admin-appearance-option__preview-line--short {
+  width: 56%;
+}
+
+html.dark-style .admin-appearance-option__preview--classic,
+[data-bs-theme="dark"] .admin-appearance-option__preview--classic {
+  background: #2f3349;
+  border-color: rgba(255, 255, 255, 0.08);
+}
+
+html.dark-style .admin-appearance-option__preview--glass,
+[data-bs-theme="dark"] .admin-appearance-option__preview--glass {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    ),
+    rgba(48, 48, 52, 0.32);
+  border-color: rgba(255, 255, 255, 0.12);
+}

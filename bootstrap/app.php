@@ -28,6 +28,9 @@ return Application::configure(basePath: dirname(__DIR__))
                 // ->prefix('admin')
                 ->namespace('App\Http\Controllers\Admin')
                 ->group(base_path('routes/admin.php'));
+
+            Route::middleware('web')
+                ->group(base_path('routes/vendor.php'));
         }
     )
     ->withMiddleware(function (Middleware $middleware): void {
@@ -37,6 +40,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,
             'admin.guard' => \App\Http\Middleware\SetAdminGuard::class,
+            'vendor.guard' => \App\Http\Middleware\SetVendorGuard::class,
             'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
             'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
             'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,

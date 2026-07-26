@@ -25,12 +25,12 @@
         </button>
         <div class="admin-dock__dropdown" id="{{ $panelId }}" data-dock-panel="{{ $item['id'] }}" hidden role="menu">
             @foreach ($item['children'] as $child)
-                @if (($child['action'] ?? null) === 'set-layout')
+                @if (($child['action'] ?? null) === 'open-appearance')
                     <button
                         type="button"
                         class="admin-dock__dropdown-item"
                         role="menuitem"
-                        data-set-admin-nav-layout="{{ $child['layout'] }}">
+                        data-open-admin-appearance>
                         @if (! empty($child['icon']))<i class="{{ $child['icon'] }} me-2"></i>@endif
                         {{ $child['label'] }}
                     </button>
@@ -80,13 +80,14 @@
                 <ul class="admin-dock-drawer__grid list-unstyled mb-0">
                     @foreach ($item['children'] as $child)
                         <li class="admin-dock-drawer__item {{ ! empty($child['active']) ? 'is-active' : '' }}">
-                            @if (($child['action'] ?? null) === 'set-layout')
+                            @if (($child['action'] ?? null) === 'open-appearance')
                                 <button
                                     type="button"
                                     class="admin-dock-drawer__tile"
-                                    data-set-admin-nav-layout="{{ $child['layout'] }}">
+                                    data-open-admin-appearance
+                                    data-dock-close-drawer>
                                     <span class="admin-dock-drawer__tile-icon">
-                                        <i class="{{ $child['icon'] ?? 'ti ti-layout' }}"></i>
+                                        <i class="{{ $child['icon'] ?? 'ti ti-palette' }}"></i>
                                     </span>
                                     <span class="admin-dock-drawer__tile-label">{{ $child['label'] }}</span>
                                 </button>

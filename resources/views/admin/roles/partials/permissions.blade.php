@@ -4,7 +4,6 @@
         <div class="d-flex justify-content-between align-items-center mb-3">
             <h6 class="mb-0">{{ $permissions->first()?->module_label ?? moduleLabel($module) }}</h6>
             <div class="d-flex align-items-center gap-2">
-                <span class="small text-muted">{!! __('general.select_all') !!}</span>
                 <label class="switch switch-success mb-0 permission-switch" style="font-size: 15px !important">
                     <input type="checkbox" class="switch-input module-select-all" data-module="{{ $module }}" id="module_{{ $module }}">
                     <span class="switch-toggle-slider">
@@ -12,6 +11,7 @@
                         <span class="switch-off"><i class="ti ti-x"></i></span>
                     </span>
                 </label>
+                <span class="small text-muted">{!! __('general.select_all') !!}</span>
             </div>
         </div>
         <div class="row g-3">
@@ -21,8 +21,7 @@
                 $permId = 'perm_'.\Illuminate\Support\Str::slug($permission->name);
             @endphp
             <div class="col-md-6 col-lg-4">
-                <div class="permission-row d-flex align-items-center">
-                    <span class="permission-row-label flex-grow-1 pe-3">{{ $permission->label }}</span>
+                <div class="permission-row d-flex align-items-center gap-3">
                     <label class="switch switch-success mb-0 permission-switch flex-shrink-0" style="font-size: 15px !important" for="{{ $permId }}">
                         <input
                             class="switch-input permission-toggle"
@@ -38,6 +37,7 @@
                             <span class="switch-off"><i class="ti ti-x"></i></span>
                         </span>
                     </label>
+                    <span class="permission-row-label flex-grow-1">{{ $permission->label }}</span>
                 </div>
             </div>
             @endforeach

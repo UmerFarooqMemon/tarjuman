@@ -75,6 +75,28 @@ class RolesAndPermissionsSeeder extends Seeder
                     ],
                 ],
             ],
+            'vendors' => [
+                'module_en' => 'Vendors',
+                'module_ar' => 'موردو الخدمة',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Vendors',
+                        'name_ar' => 'عرض الموردين',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Vendors',
+                        'name_ar' => 'إنشاء موردين',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Vendors',
+                        'name_ar' => 'تعديل الموردين',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Vendors',
+                        'name_ar' => 'حذف الموردين',
+                    ],
+                ],
+            ],
         ];
     }
 

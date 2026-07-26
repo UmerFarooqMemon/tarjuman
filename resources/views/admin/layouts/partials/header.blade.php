@@ -40,6 +40,15 @@
         </li>
         @endcan
 
+        @can('vendors.view')
+        <li class="menu-item {{ request()->routeIs('admin.vendors.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.vendors.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building-store"></i>
+                <div>{!! __('general.menu_vendors') !!}</div>
+            </a>
+        </li>
+        @endcan
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>
@@ -58,13 +67,8 @@
                 </li>
                 @endcan
                 <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="sidebar">
-                        <div>{!! __('general.nav_mode_sidebar') !!}</div>
-                    </a>
-                </li>
-                <li class="menu-item">
-                    <a href="javascript:void(0);" class="menu-link" data-set-admin-nav-layout="dock">
-                        <div>{!! __('general.nav_mode_dock') !!}</div>
+                    <a href="javascript:void(0);" class="menu-link" data-open-admin-appearance>
+                        <div>{!! __('general.menu_appearance') !!}</div>
                     </a>
                 </li>
             </ul>

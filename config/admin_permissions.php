@@ -30,6 +30,12 @@ return [
             'view',
             'edit',
         ],
+        'vendors' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
     ],
 
     'guard' => 'admin',
