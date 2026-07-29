@@ -25,6 +25,7 @@ class SiteSettingsTableSeeder extends Seeder
             'contact_email' => 'support@admin.com',
             'contact_phone' => '',
             'address' => 'Dubai, UAE',
+            'currency' => 'AED',
             'logo' => '',
             'facebook' => '',
             'twitter' => '',

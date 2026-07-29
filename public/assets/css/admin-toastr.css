@@ -1,0 +1,178 @@
+/* ==========================================================================
+   Admin Toastr — solid white cards, colored title/icon, black message
+   Position defaults are set in JS (toast-bottom-center).
+   ========================================================================== */
+
+#toast-container > div,
+#toast-container > .toast {
+  position: relative !important;
+  background-color: #ffffff !important;
+  background-image: none !important;
+  color: #111827 !important;
+  /* Do not use opacity !important — it breaks hide animations */
+  opacity: 0.98;
+  border: 1px solid rgba(15, 23, 42, 0.08) !important;
+  border-radius: 0.75rem !important;
+  box-shadow:
+    0 10px 30px rgba(15, 23, 42, 0.12),
+    0 2px 8px rgba(15, 23, 42, 0.06) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  padding: 0.9rem 2.5rem 0.9rem 3rem !important;
+  width: 360px;
+  max-width: calc(100vw - 2rem);
+  overflow: hidden !important;
+}
+
+#toast-container > div:hover,
+#toast-container > .toast:hover {
+  box-shadow:
+    0 14px 36px rgba(15, 23, 42, 0.16),
+    0 4px 12px rgba(15, 23, 42, 0.08) !important;
+  opacity: 1;
+}
+
+#toast-container > .toast::before {
+  content: none !important;
+  display: none !important;
+}
+
+/* Icon sits beside the title (top), not mid/bottom of the toast */
+#toast-container > .toast::after {
+  font-family: "tabler-icons" !important;
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  position: absolute !important;
+  left: 0.95rem !important;
+  right: auto !important;
+  top: 0.95rem !important;
+  bottom: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  z-index: 2;
+  font-size: 1.25rem;
+  line-height: 1.25rem;
+  width: 1.25rem;
+  height: 1.25rem;
+  display: block !important;
+  text-align: center;
+  border-radius: 0;
+  pointer-events: none;
+  background: none !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  box-shadow: none !important;
+}
+
+#toast-container > .toast.rtl::after,
+html[dir="rtl"] #toast-container > .toast::after {
+  left: auto !important;
+  right: 0.95rem !important;
+}
+
+html[dir="rtl"] #toast-container > div,
+html[dir="rtl"] #toast-container > .toast {
+  padding: 0.9rem 3rem 0.9rem 2.5rem !important;
+}
+
+#toast-container > .toast-success::after {
+  content: "\ea67" !important; /* ti-circle-check */
+  color: #28c76f;
+}
+
+#toast-container > .toast-error::after {
+  content: "\ea6a" !important; /* ti-circle-x */
+  color: #ea5455;
+}
+
+#toast-container > .toast-info::after {
+  content: "\eac5" !important; /* ti-info-circle */
+  color: #00cfe8;
+}
+
+#toast-container > .toast-warning::after {
+  content: "\ea05" !important; /* ti-alert-circle */
+  color: #ff9f43;
+}
+
+#toast-container .toast-title {
+  font-weight: 700;
+  margin-bottom: 0.15rem;
+  line-height: 1.25rem;
+  color: inherit;
+}
+
+#toast-container .toast-message {
+  color: #111827 !important;
+  font-weight: 400;
+}
+
+#toast-container .toast-message a,
+#toast-container .toast-message label {
+  color: #111827 !important;
+}
+
+#toast-container > .toast-success .toast-title {
+  color: #28c76f !important;
+}
+
+#toast-container > .toast-error .toast-title {
+  color: #ea5455 !important;
+}
+
+#toast-container > .toast-info .toast-title {
+  color: #00cfe8 !important;
+}
+
+#toast-container > .toast-warning .toast-title {
+  color: #ff9f43 !important;
+}
+
+#toast-container .toast-close-button {
+  position: absolute !important;
+  top: 0.55rem !important;
+  right: 0.65rem !important;
+  left: auto !important;
+  color: #6b7280 !important;
+  text-shadow: none !important;
+  opacity: 0.7;
+}
+
+html[dir="rtl"] #toast-container .toast-close-button {
+  right: auto !important;
+  left: 0.65rem !important;
+}
+
+#toast-container .toast-close-button:hover,
+#toast-container .toast-close-button:focus {
+  color: #111827 !important;
+  opacity: 1;
+}
+
+#toast-container .toast-progress {
+  background-color: rgba(15, 23, 42, 0.2);
+  opacity: 1;
+}
+
+#toast-container.toast-bottom-center {
+  bottom: 1.25rem;
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  width: auto;
+}
+
+html[data-admin-nav-layout="dock"] #toast-container.toast-bottom-center {
+  bottom: calc(var(--dock-height, 5.25rem) + var(--dock-bottom, 0.85rem) + 0.75rem);
+}
+
+#toast-container.toast-bottom-center > div {
+  margin-left: auto;
+  margin-right: auto;
+}

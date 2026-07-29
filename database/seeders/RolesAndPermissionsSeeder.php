@@ -97,6 +97,50 @@ class RolesAndPermissionsSeeder extends Seeder
                     ],
                 ],
             ],
+            'languages' => [
+                'module_en' => 'Languages',
+                'module_ar' => 'اللغات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Languages',
+                        'name_ar' => 'عرض اللغات',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Languages',
+                        'name_ar' => 'إنشاء لغات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Languages',
+                        'name_ar' => 'تعديل اللغات',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Languages',
+                        'name_ar' => 'حذف اللغات',
+                    ],
+                ],
+            ],
+            'currencies' => [
+                'module_en' => 'Currencies',
+                'module_ar' => 'العملات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Currencies',
+                        'name_ar' => 'عرض العملات',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Currencies',
+                        'name_ar' => 'إنشاء عملات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Currencies',
+                        'name_ar' => 'تعديل العملات',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Currencies',
+                        'name_ar' => 'حذف العملات',
+                    ],
+                ],
+            ],
         ];
     }
 

@@ -99,3 +99,212 @@ if (! function_exists('adminLocaleSwitcher')) {
         ];
     }
 }
+
+if (! function_exists('crudLocales')) {
+    /**
+     * Fixed CRUD locales (en/ar) for bilingual admin translation forms.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection<int, \App\Models\Language>
+     */
+    function crudLocales(): \Illuminate\Database\Eloquent\Collection
+    {
+        return \App\Models\Language::crudLocaleList();
+    }
+}
+
+if (! function_exists('crudLocaleCodes')) {
+    /**
+     * Fixed CRUD locale codes: en, ar (must match resources/lang).
+     *
+     * @return list<string>
+     */
+    function crudLocaleCodes(): array
+    {
+        return \App\Models\Language::crudLocaleCodes();
+    }
+}
+
+if (! function_exists('gccCurrencies')) {
+    /**
+     * Active currency catalog (DB-backed, config fallback when empty).
+     *
+     * @return array<string, array{code: string, name_en: string, name_ar: string, symbol: string, symbol_native: string, icon?: string|null, decimals: int, country: string|null}>
+     */
+    function gccCurrencies(): array
+    {
+        return \App\Models\Currency::cachedCatalog();
+    }
+}
+
+if (! function_exists('gccCurrencyCodes')) {
+    /**
+     * @return list<string>
+     */
+    function gccCurrencyCodes(): array
+    {
+        return array_keys(gccCurrencies());
+    }
+}
+
+if (! function_exists('platformCurrency')) {
+    /**
+     * Active platform currency code from site settings.
+     */
+    function platformCurrency(): string
+    {
+        $codes = gccCurrencyCodes();
+        $default = (string) config('currencies.default', 'AED');
+        $code = strtoupper((string) (
+            siteSettings()?->currency
+            ?: $default
+        ));
+
+        if (in_array($code, $codes, true)) {
+            return $code;
+        }
+
+        return in_array($default, $codes, true)
+            ? $default
+            : ($codes[0] ?? $default);
+    }
+}
+
+if (! function_exists('platformCurrencyMeta')) {
+    /**
+     * Metadata for the active platform currency.
+     *
+     * @return array{code: string, name_en: string, name_ar: string, symbol: string, symbol_native: string, decimals: int, country: string, name: string}
+     */
+    function platformCurrencyMeta(): array
+    {
+        $code = platformCurrency();
+        $meta = gccCurrencies()[$code] ?? gccCurrencies()[config('currencies.default', 'AED')];
+        $locale = app()->getLocale();
+
+        $meta['name'] = $locale === 'ar'
+            ? ($meta['name_ar'] ?? $meta['name_en'])
+            : ($meta['name_en'] ?? $code);
+
+        return $meta;
+    }
+}
+
+if (! function_exists('currencyMeta')) {
+    /**
+     * Metadata for a GCC currency code.
+     *
+     * @return array{code: string, name_en: string, name_ar: string, symbol: string, symbol_native: string, icon?: string, decimals: int, country: string, name: string}|null
+     */
+    function currencyMeta(?string $code = null): ?array
+    {
+        $code = strtoupper((string) ($code ?: platformCurrency()));
+        $meta = gccCurrencies()[$code] ?? null;
+
+        if (! $meta) {
+            return null;
+        }
+
+        $locale = app()->getLocale();
+        $meta['name'] = $locale === 'ar'
+            ? ($meta['name_ar'] ?? $meta['name_en'])
+            : ($meta['name_en'] ?? $code);
+
+        return $meta;
+    }
+}
+
+if (! function_exists('currencySymbol')) {
+    /**
+     * Text/Unicode symbol for a currency (may not render on all devices yet).
+     */
+    function currencySymbol(?string $code = null): string
+    {
+        $meta = currencyMeta($code) ?? platformCurrencyMeta();
+
+        return (string) ($meta['symbol'] ?: $meta['symbol_native'] ?: $meta['code']);
+    }
+}
+
+if (! function_exists('currencyIconUrl')) {
+    /**
+     * Public URL for a currency SVG icon, if configured.
+     */
+    function currencyIconUrl(?string $code = null): ?string
+    {
+        $meta = currencyMeta($code) ?? platformCurrencyMeta();
+        $file = $meta['icon'] ?? null;
+
+        if (! $file) {
+            return null;
+        }
+
+        $path = public_path('assets/img/currencies/'.$file);
+
+        return is_file($path) ? asset('assets/img/currencies/'.$file) : null;
+    }
+}
+
+if (! function_exists('currencyIconHtml')) {
+    /**
+     * Inline SVG icon HTML (inherits text color via currentColor).
+     * Falls back to Unicode/native symbol text when no SVG exists.
+     */
+    function currencyIconHtml(?string $code = null, string $class = 'currency-icon'): string
+    {
+        $meta = currencyMeta($code) ?? platformCurrencyMeta();
+        $file = $meta['icon'] ?? null;
+        $path = $file ? public_path('assets/img/currencies/'.$file) : null;
+
+        if ($path && is_file($path)) {
+            $svg = (string) file_get_contents($path);
+            $safeClass = e($class);
+            $label = e($meta['name'] ?? $meta['code']);
+
+            if (preg_match('/<svg\b[^>]*>/i', $svg, $match)) {
+                $opening = $match[0];
+                if (str_contains($opening, 'class=')) {
+                    $opening = preg_replace('/class=(["\'])(.*?)\1/', 'class=$1'.$safeClass.' $2$1', $opening, 1);
+                } else {
+                    $opening = rtrim(substr($opening, 0, -1)).' class="'.$safeClass.'" role="img" aria-label="'.$label.'">';
+                }
+                $svg = substr_replace($svg, $opening, strpos($svg, $match[0]), strlen($match[0]));
+            }
+
+            return $svg;
+        }
+
+        return '<span class="'.e($class).' currency-icon--text" aria-label="'.e($meta['name'] ?? $meta['code']).'">'
+            .e(currencySymbol($code))
+            .'</span>';
+    }
+}
+
+if (! function_exists('formatMoney')) {
+    /**
+     * Format an amount using a GCC currency (defaults to platform currency).
+     *
+     * @param  string  $suffix  code|symbol|none
+     */
+    function formatMoney(float|int|string $amount, ?string $currency = null, string $suffix = 'code'): string
+    {
+        $meta = currencyMeta($currency) ?? platformCurrencyMeta();
+        $decimals = (int) ($meta['decimals'] ?? 2);
+        $formatted = number_format((float) $amount, $decimals, '.', ',');
+
+        return match ($suffix) {
+            'symbol' => $formatted.' '.currencySymbol($currency),
+            'none' => $formatted,
+            default => $formatted.' '.($meta['code'] ?? platformCurrency()),
+        };
+    }
+}
+
+if (! function_exists('siteSettings')) {
+    /**
+     * Cached singleton site settings row (invalidated on create/update/delete).
+     */
+    function siteSettings(): ?\App\Models\SiteSetting
+    {
+        return once(fn () => \App\Support\CatalogCache::siteSettings());
+    }
+}

@@ -32,6 +32,7 @@ class UpdateSiteSettingRequest extends FormRequest
             'footer_sentence' => 'max:65535',
             'contact_phone' => 'max:190',
             'address' => 'max:190',
+            'currency' => ['required', 'string', 'size:3', 'in:'.implode(',', gccCurrencyCodes())],
             'facebook' => 'max:190',
             'twitter' => 'max:190',
             'pinterest' => 'max:190',
@@ -58,6 +59,12 @@ class UpdateSiteSettingRequest extends FormRequest
 
     protected function prepareForValidation(): void
     {
+        if ($this->filled('currency')) {
+            $this->merge([
+                'currency' => strtoupper((string) $this->input('currency')),
+            ]);
+        }
+
         foreach ([
             'primary_color_end',
             'secondary_color_end',

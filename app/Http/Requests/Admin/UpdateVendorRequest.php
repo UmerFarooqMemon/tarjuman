@@ -21,7 +21,7 @@ class UpdateVendorRequest extends FormRequest
         $vendorId = $vendor instanceof \App\Models\Vendor ? $vendor->id : $vendor;
         $ownerId = $this->input('owner.id');
 
-        return [
+        $rules = [
             'trn' => [
                 'required',
                 'string',
@@ -35,12 +35,6 @@ class UpdateVendorRequest extends FormRequest
             'phone' => ['nullable', 'string', 'max:24'],
             'logo' => ['nullable', 'file', 'mimes:jpeg,jpg,png', 'max:5000'],
             'previous_logo' => ['nullable', 'string', 'max:65'],
-            'translations.en.legal_name' => ['required', 'string', 'max:191'],
-            'translations.en.business_name' => ['nullable', 'string', 'max:191'],
-            'translations.en.address' => ['nullable', 'string', 'max:1000'],
-            'translations.ar.legal_name' => ['required', 'string', 'max:191'],
-            'translations.ar.business_name' => ['nullable', 'string', 'max:191'],
-            'translations.ar.address' => ['nullable', 'string', 'max:1000'],
             'owner.id' => ['required', 'integer', Rule::exists('vendor_users', 'id')->where('vendor_id', $vendorId)],
             'owner.first_name' => ['required', 'string', 'max:32'],
             'owner.last_name' => ['nullable', 'string', 'max:32'],
@@ -53,5 +47,13 @@ class UpdateVendorRequest extends FormRequest
             ],
             'owner.password' => ['nullable', 'string', 'min:6', 'confirmed'],
         ];
+
+        foreach (crudLocaleCodes() as $locale) {
+            $rules["translations.{$locale}.legal_name"] = ['required', 'string', 'max:191'];
+            $rules["translations.{$locale}.business_name"] = ['nullable', 'string', 'max:191'];
+            $rules["translations.{$locale}.address"] = ['nullable', 'string', 'max:1000'];
+        }
+
+        return $rules;
     }
 }

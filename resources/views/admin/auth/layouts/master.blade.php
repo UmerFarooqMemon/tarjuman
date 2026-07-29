@@ -65,6 +65,7 @@
     <!-- BEGIN: Toastr CSS-->
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/admin/app-assets/vendors/css/extensions/toastr.css') !!}">
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/admin/app-assets/css/plugins/extensions/toastr.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-toastr.css') !!}" />
     <!-- END: Toastr CSS-->
 
     @include('admin.partials.branding-styles')
@@ -110,6 +111,21 @@
     <!-- Toastr -->
     <script src="{!! asset('assets/admin/app-assets/vendors/js/extensions/toastr.min.js') !!}"></script>
     <script src="{!! asset('assets/admin/app-assets/js/scripts/extensions/toastr.js') !!}"></script>
+    <script>
+        if (typeof toastr !== 'undefined') {
+            toastr.options = Object.assign({}, toastr.options || {}, {
+                positionClass: 'toast-bottom-center',
+                closeButton: true,
+                progressBar: false,
+                newestOnTop: true,
+                showMethod: 'fadeIn',
+                hideMethod: 'fadeOut',
+                showDuration: 300,
+                hideDuration: 300,
+                timeOut: 2000
+            });
+        }
+    </script>
     <!-- END: Page JS-->
     @include('admin.partials.errors')
 </body>

@@ -36,6 +36,18 @@ return [
             'edit',
             'delete',
         ],
+        'languages' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'currencies' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
     ],
 
     'guard' => 'admin',

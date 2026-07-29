@@ -108,6 +108,8 @@
     <!-- BEGIN: Toastr CSS-->
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/admin/app-assets/vendors/css/extensions/toastr.css') !!}">
     <link rel="stylesheet" type="text/css" href="{!! asset('assets/admin/app-assets/css/plugins/extensions/toastr.css') !!}">
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-toastr.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/currency-icons.css') !!}" />
     <!-- END: Toastr CSS-->
 
     <!-- BEGIN: DataTables CSS-->
@@ -257,6 +259,22 @@
     <!-- Toastr -->
     <script src="{!! asset('assets/admin/app-assets/vendors/js/extensions/toastr.min.js') !!}"></script>
     <script src="{!! asset('assets/admin/app-assets/js/scripts/extensions/toastr.js') !!}"></script>
+    <script>
+        if (typeof toastr !== 'undefined') {
+            toastr.options = Object.assign({}, toastr.options || {}, {
+                positionClass: 'toast-bottom-center',
+                closeButton: true,
+                progressBar: false,
+                newestOnTop: true,
+                preventDuplicates: false,
+                showMethod: 'fadeIn',
+                hideMethod: 'fadeOut',
+                showDuration: 300,
+                hideDuration: 300,
+                timeOut: 2000
+            });
+        }
+    </script>
     <script>
         function logout() {
             document.getElementById("logout-form").submit();

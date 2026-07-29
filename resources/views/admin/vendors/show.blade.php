@@ -9,14 +9,12 @@
             </div>
             <div class="card-body">
                 <div class="row">
+                    @foreach (crudLocales() as $locale)
                     <div class="col-md-6 mb-3">
-                        <label class="form-label">{!! __('general.legal_name') !!} ({!! __('general.language_english') !!})</label>
-                        <div>{{ $vendor->translate('en', false)?->legal_name ?? '—' }}</div>
+                        <label class="form-label">{!! __('general.legal_name') !!} ({{ $locale->native_name ?: $locale->displayName() }})</label>
+                        <div @if($locale->isRtl()) dir="rtl" @endif>{{ $vendor->translate($locale->code, false)?->legal_name ?? '—' }}</div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label class="form-label">{!! __('general.legal_name') !!} ({!! __('general.language_arabic') !!})</label>
-                        <div dir="rtl">{{ $vendor->translate('ar', false)?->legal_name ?? '—' }}</div>
-                    </div>
+                    @endforeach
                     <div class="col-md-6 mb-3">
                         <label class="form-label">{!! __('general.trn') !!}</label>
                         <div>{{ $vendor->trn }}</div>

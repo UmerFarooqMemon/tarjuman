@@ -2,11 +2,20 @@
 
 namespace App\Models;
 
+use App\Support\CatalogCache;
 use Illuminate\Database\Eloquent\Model;
 
 class SiteSetting extends Model
 {
     protected $guarded = [];
+
+    protected static function booted(): void
+    {
+        $flush = fn () => CatalogCache::flushSiteSettings();
+
+        static::saved($flush);
+        static::deleted($flush);
+    }
 
     /**
      * Resolve a branding color key into CSS (solid or linear-gradient).
@@ -34,5 +43,21 @@ class SiteSetting extends Model
     public function brandingSolid(string $key, string $fallback = '#7367F0'): string
     {
         return $this->{$key} ?: $fallback;
+    }
+
+    /**
+     * Active platform currency code (must exist in the currencies catalog).
+     */
+    public function currencyCode(): string
+    {
+        return platformCurrency();
+    }
+
+    /**
+     * @return array{code: string, name_en: string, name_ar: string, symbol: string, symbol_native: string, decimals: int, country: string, name: string}
+     */
+    public function currencyMeta(): array
+    {
+        return currencyMeta($this->currencyCode()) ?? platformCurrencyMeta();
     }
 }

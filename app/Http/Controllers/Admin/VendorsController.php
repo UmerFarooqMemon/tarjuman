@@ -37,7 +37,8 @@ class VendorsController extends Controller
     {
         DB::transaction(function () use ($request) {
             $admin = auth('admin')->user();
-            $legalNameEn = $request->input('translations.en.legal_name');
+            $legalNameEn = $request->input('translations.en.legal_name')
+                ?: $request->input('translations.'.(crudLocaleCodes()[0] ?? 'en').'.legal_name');
 
             $vendor = Vendor::create([
                 'slug' => $this->uniqueSlug($legalNameEn),
@@ -176,7 +177,7 @@ class VendorsController extends Controller
      */
     protected function syncTranslations(Vendor $vendor, array $translations): void
     {
-        foreach (['en', 'ar'] as $locale) {
+        foreach (crudLocaleCodes() as $locale) {
             $vendor->translateOrNew($locale)->fill([
                 'legal_name' => data_get($translations, "{$locale}.legal_name"),
                 'business_name' => data_get($translations, "{$locale}.business_name"),

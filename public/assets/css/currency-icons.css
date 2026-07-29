@@ -1,0 +1,36 @@
+/* Currency symbol icons (SVG inline via currencyIconHtml) */
+.currency-icon {
+  display: inline-block;
+  width: 1.1em;
+  height: 1.1em;
+  vertical-align: -0.15em;
+  flex-shrink: 0;
+}
+
+.currency-icon--text {
+  font-weight: 700;
+  line-height: 1;
+}
+
+.currency-icon--lg {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+
+.input-group-text .currency-icon {
+  width: 1.15rem;
+  height: 1.15rem;
+  margin-inline-end: 0.35rem;
+}
+
+.currency-option {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.select2-results__option .currency-option .currency-icon,
+.select2-selection__rendered .currency-option .currency-icon {
+  width: 1rem;
+  height: 1rem;
+}

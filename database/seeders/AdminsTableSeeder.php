@@ -17,7 +17,8 @@ class AdminsTableSeeder extends Seeder
          * Reset the admins table
          */
         if (\App::environment('local')) {
-            \DB::table('admins')->truncate();
+            \DB::table('vendors')->update(['approved_by' => null]);
+            \DB::table('admins')->delete();
         }
 
         \DB::table('admins')->insert([

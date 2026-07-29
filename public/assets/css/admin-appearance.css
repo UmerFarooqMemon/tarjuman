@@ -43,7 +43,6 @@ html[data-admin-card-style="glass"] .modal-content,
 html[data-admin-card-style="glass"] .dropdown-menu,
 html[data-admin-card-style="glass"] .popover,
 html[data-admin-card-style="glass"] .offcanvas,
-html[data-admin-card-style="glass"] .toast,
 html[data-admin-card-style="glass"] .swal2-popup,
 html[data-admin-card-style="glass"] .flatpickr-calendar {
   position: relative;
@@ -62,7 +61,6 @@ html[data-admin-card-style="glass"] .modal-content::before,
 html[data-admin-card-style="glass"] .dropdown-menu::before,
 html[data-admin-card-style="glass"] .popover::before,
 html[data-admin-card-style="glass"] .offcanvas::before,
-html[data-admin-card-style="glass"] .toast::before,
 html[data-admin-card-style="glass"] .swal2-popup::before,
 html[data-admin-card-style="glass"] .flatpickr-calendar::before {
   content: "";
@@ -80,20 +78,28 @@ html[data-admin-card-style="glass"] .flatpickr-calendar::before {
   mask-image: radial-gradient(white, black);
 }
 
-/* ---------- Glass page backdrop ---------- */
+/* ---------- Glass page backdrop (solid behind frosted containers) ---------- */
+html[data-admin-card-style="glass"] body,
+html[data-admin-card-style="glass"] .layout-wrapper,
+html[data-admin-card-style="glass"] .layout-container,
+html[data-admin-card-style="glass"] .layout-page,
 html[data-admin-card-style="glass"] .content-wrapper {
-  background:
-    radial-gradient(circle at 0% 0%, rgba(115, 103, 240, 0.1), transparent 42%),
-    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.08), transparent 40%),
-    var(--bs-body-bg, #f8f7fa);
+  background: #ffffff !important;
+  background-image: none !important;
 }
 
+html.dark-style[data-admin-card-style="glass"] body,
+html.dark-style[data-admin-card-style="glass"] .layout-wrapper,
+html.dark-style[data-admin-card-style="glass"] .layout-container,
+html.dark-style[data-admin-card-style="glass"] .layout-page,
 html.dark-style[data-admin-card-style="glass"] .content-wrapper,
+[data-bs-theme="dark"][data-admin-card-style="glass"] body,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .layout-wrapper,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .layout-container,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .layout-page,
 [data-bs-theme="dark"][data-admin-card-style="glass"] .content-wrapper {
-  background:
-    radial-gradient(circle at 0% 0%, rgba(115, 103, 240, 0.14), transparent 42%),
-    radial-gradient(circle at 100% 100%, rgba(56, 189, 248, 0.1), transparent 40%),
-    var(--bs-body-bg, #25293c);
+  background: #25293c !important;
+  background-image: none !important;
 }
 
 /* ---------- Glass cards ---------- */
@@ -178,12 +184,12 @@ html[data-admin-card-style="glass"] .offcanvas-body {
   border-color: var(--admin-glass-divider);
 }
 
-html[data-admin-card-style="glass"] .toast {
+html[data-admin-card-style="glass"] .toast:not(.toast-success):not(.toast-error):not(.toast-info):not(.toast-warning) {
   --bs-toast-bg: var(--admin-glass-bg);
   --bs-toast-border-color: var(--admin-glass-border);
 }
 
-html[data-admin-card-style="glass"] .toast-header {
+html[data-admin-card-style="glass"] .toast:not(.toast-success):not(.toast-error):not(.toast-info):not(.toast-warning) .toast-header {
   background-color: transparent !important;
   border-color: var(--admin-glass-divider);
 }

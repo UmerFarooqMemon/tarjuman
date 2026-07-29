@@ -16,6 +16,24 @@
             'active' => request()->routeIs('admin.site-settings.*'),
         ];
     }
+    if (auth('admin')->user()?->can('languages.view')) {
+        $settingsChildren[] = [
+            'id' => 'languages',
+            'label' => __('general.menu_languages'),
+            'icon' => 'ti ti-language',
+            'url' => route('admin.languages.index'),
+            'active' => request()->routeIs('admin.languages.*'),
+        ];
+    }
+    if (auth('admin')->user()?->can('currencies.view')) {
+        $settingsChildren[] = [
+            'id' => 'currencies',
+            'label' => __('general.menu_currencies'),
+            'icon' => 'ti ti-coin',
+            'url' => route('admin.currencies.index'),
+            'active' => request()->routeIs('admin.currencies.*'),
+        ];
+    }
     $settingsChildren[] = [
         'id' => 'appearance',
         'label' => __('general.menu_appearance'),
@@ -76,7 +94,7 @@
             'icon' => 'ti ti-settings',
             'route' => null,
             'url' => null,
-            'active' => request()->routeIs('admin.site-settings.*'),
+            'active' => request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*'),
             'permission' => null,
             'priority' => 5,
             'children' => $settingsChildren,

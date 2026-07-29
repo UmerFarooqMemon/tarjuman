@@ -1,54 +1,54 @@
 @php
-    $translationValues = $translationValues ?? ['en' => [], 'ar' => []];
+    $crudLocales = $crudLocales ?? crudLocales();
+    $translationValues = $translationValues ?? [];
 @endphp
 
 <div class="col-12">
     <h6 class="mb-3">{!! __('general.company_information') !!}</h6>
 </div>
 
+@foreach ($crudLocales as $locale)
 <div class="col-md-6">
     <div class="card border mb-4">
         <div class="card-header py-2">
-            <strong>{!! __('general.language_english') !!}</strong>
+            <strong>{{ $locale->native_name ?: $locale->displayName() }}</strong>
+            <small class="text-muted">({{ strtoupper($locale->code) }})</small>
         </div>
         <div class="card-body">
             <div class="mb-3">
-                <label class="form-label" for="legal_name_en">{!! __('general.legal_name') !!} <span class="required-fl">*</span></label>
-                <input type="text" class="form-control" id="legal_name_en" name="translations[en][legal_name]" value="{{ old('translations.en.legal_name', $translationValues['en']['legal_name'] ?? '') }}" required>
+                <label class="form-label" for="legal_name_{{ $locale->code }}">{!! __('general.legal_name') !!} <span class="required-fl">*</span></label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="legal_name_{{ $locale->code }}"
+                    name="translations[{{ $locale->code }}][legal_name]"
+                    value="{{ old("translations.{$locale->code}.legal_name", $translationValues[$locale->code]['legal_name'] ?? '') }}"
+                    required
+                    @if($locale->isRtl()) dir="rtl" @endif>
             </div>
             <div class="mb-3">
-                <label class="form-label" for="business_name_en">{!! __('general.business_name') !!}</label>
-                <input type="text" class="form-control" id="business_name_en" name="translations[en][business_name]" value="{{ old('translations.en.business_name', $translationValues['en']['business_name'] ?? '') }}">
+                <label class="form-label" for="business_name_{{ $locale->code }}">{!! __('general.business_name') !!}</label>
+                <input
+                    type="text"
+                    class="form-control"
+                    id="business_name_{{ $locale->code }}"
+                    name="translations[{{ $locale->code }}][business_name]"
+                    value="{{ old("translations.{$locale->code}.business_name", $translationValues[$locale->code]['business_name'] ?? '') }}"
+                    @if($locale->isRtl()) dir="rtl" @endif>
             </div>
             <div class="mb-0">
-                <label class="form-label" for="address_en">{!! __('general.vendor_address') !!}</label>
-                <textarea class="form-control" id="address_en" name="translations[en][address]" rows="3">{{ old('translations.en.address', $translationValues['en']['address'] ?? '') }}</textarea>
+                <label class="form-label" for="address_{{ $locale->code }}">{!! __('general.vendor_address') !!}</label>
+                <textarea
+                    class="form-control"
+                    id="address_{{ $locale->code }}"
+                    name="translations[{{ $locale->code }}][address]"
+                    rows="3"
+                    @if($locale->isRtl()) dir="rtl" @endif>{{ old("translations.{$locale->code}.address", $translationValues[$locale->code]['address'] ?? '') }}</textarea>
             </div>
         </div>
     </div>
 </div>
-
-<div class="col-md-6">
-    <div class="card border mb-4">
-        <div class="card-header py-2">
-            <strong>{!! __('general.language_arabic') !!}</strong>
-        </div>
-        <div class="card-body">
-            <div class="mb-3">
-                <label class="form-label" for="legal_name_ar">{!! __('general.legal_name') !!} <span class="required-fl">*</span></label>
-                <input type="text" class="form-control" id="legal_name_ar" name="translations[ar][legal_name]" value="{{ old('translations.ar.legal_name', $translationValues['ar']['legal_name'] ?? '') }}" required dir="rtl">
-            </div>
-            <div class="mb-3">
-                <label class="form-label" for="business_name_ar">{!! __('general.business_name') !!}</label>
-                <input type="text" class="form-control" id="business_name_ar" name="translations[ar][business_name]" value="{{ old('translations.ar.business_name', $translationValues['ar']['business_name'] ?? '') }}" dir="rtl">
-            </div>
-            <div class="mb-0">
-                <label class="form-label" for="address_ar">{!! __('general.vendor_address') !!}</label>
-                <textarea class="form-control" id="address_ar" name="translations[ar][address]" rows="3" dir="rtl">{{ old('translations.ar.address', $translationValues['ar']['address'] ?? '') }}</textarea>
-            </div>
-        </div>
-    </div>
-</div>
+@endforeach
 
 <div class="mb-3 col-md-6">
     <label class="form-label" for="trn">{!! __('general.trn') !!} <span class="required-fl">*</span></label>

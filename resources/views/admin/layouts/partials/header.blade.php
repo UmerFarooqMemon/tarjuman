@@ -53,7 +53,7 @@
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.site-settings.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
                 <div data-i18n="Settings">{!! __('general.menu_settings') !!}</div>
@@ -63,6 +63,20 @@
                 <li class="menu-item {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.site-settings.index') }}" class="menu-link">
                         <div data-i18n="Site Settings">{!! __('general.general_settings') !!}</div>
+                    </a>
+                </li>
+                @endcan
+                @can('languages.view')
+                <li class="menu-item {{ request()->routeIs('admin.languages.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.languages.index') }}" class="menu-link">
+                        <div>{!! __('general.menu_languages') !!}</div>
+                    </a>
+                </li>
+                @endcan
+                @can('currencies.view')
+                <li class="menu-item {{ request()->routeIs('admin.currencies.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.currencies.index') }}" class="menu-link">
+                        <div>{!! __('general.menu_currencies') !!}</div>
                     </a>
                 </li>
                 @endcan

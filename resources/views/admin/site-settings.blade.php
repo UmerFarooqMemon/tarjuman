@@ -38,6 +38,27 @@
                         </div>
                     </div>
                     <div class="mb-3 col-6">
+                        <label class="form-label" for="platform_currency">{!! __('general.platform_currency') !!} <span class="required-fl">*</span></label>
+                        <select class="form-select select2" id="platform_currency" name="currency" required data-currency-select>
+                            @foreach (gccCurrencies() as $code => $currency)
+                                <option
+                                    value="{{ $code }}"
+                                    data-icon="{{ currencyIconUrl($code) }}"
+                                    data-native="{{ $currency['symbol_native'] }}"
+                                    @selected(old('currency', $records->currency ?? platformCurrency()) === $code)>
+                                    {{ $code }} — {{ app()->getLocale() === 'ar' ? $currency['name_ar'] : $currency['name_en'] }}
+                                </option>
+                            @endforeach
+                        </select>
+                        <div class="form-text d-flex align-items-center gap-2 mt-2">
+                            <span>{!! __('general.platform_currency_help') !!}</span>
+                            <span class="currency-option ms-auto" id="platform-currency-preview">
+                                {!! currencyIconHtml(old('currency', $records->currency ?? platformCurrency()), 'currency-icon currency-icon--lg') !!}
+                                <strong>{{ old('currency', $records->currency ?? platformCurrency()) }}</strong>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="mb-3 col-6">
                         <label class="form-label" for="basic-default-phone">{!! __('general.instagram_url') !!}</label>
                         <input type="text" class="form-control" name="instagram" maxlength="190" value="{{ old('instagram', $records->instagram) }}" />
                     </div>
@@ -171,4 +192,70 @@
 @section('footer-js')
 <script src="https://cdn.jsdelivr.net/npm/@jaames/iro@5"></script>
 <script src="{!! asset('assets/js/admin-branding-color-picker.js') !!}"></script>
+<script>
+(function ($) {
+    var $select = $('#platform_currency');
+    if (!$select.length || !$.fn.select2) {
+        return;
+    }
+
+    function currencyOption(option) {
+        if (!option.id) {
+            return option.text;
+        }
+        var icon = $(option.element).data('icon');
+        var $wrap = $('<span class="currency-option"></span>');
+        if (icon) {
+            $wrap.append($('<img>', {
+                src: icon,
+                class: 'currency-icon',
+                alt: option.id,
+                width: 16,
+                height: 16
+            }));
+        }
+        $wrap.append($('<span></span>').text(option.text));
+        return $wrap;
+    }
+
+    // Re-init select2 with icon templates (forms-selects may have already initialized it)
+    if ($select.hasClass('select2-hidden-accessible')) {
+        $select.select2('destroy');
+        if ($select.parent().hasClass('position-relative')) {
+            $select.unwrap();
+        }
+    }
+
+    $select.wrap('<div class="position-relative"></div>').select2({
+        placeholder: "{!! __('general.select') !!}",
+        width: '100%',
+        dropdownParent: $select.parent(),
+        templateResult: currencyOption,
+        templateSelection: currencyOption,
+        escapeMarkup: function (markup) { return markup; }
+    });
+
+    var icons = @json(collect(gccCurrencies())->mapWithKeys(fn ($c, $code) => [$code => currencyIconUrl($code)]));
+
+    $select.on('change', function () {
+        var code = $(this).val();
+        var $preview = $('#platform-currency-preview');
+        if (!$preview.length || !code) {
+            return;
+        }
+        var icon = icons[code];
+        $preview.empty();
+        if (icon) {
+            $preview.append($('<img>', {
+                src: icon,
+                class: 'currency-icon currency-icon--lg',
+                alt: code,
+                width: 24,
+                height: 24
+            }));
+        }
+        $preview.append($('<strong></strong>').text(code));
+    });
+})(jQuery);
+</script>
 @endsection

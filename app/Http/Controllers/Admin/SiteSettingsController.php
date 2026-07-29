@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Requests\Admin\UpdateSiteSettingRequest;
 use App\Models\SiteSetting;
+use App\Support\CatalogCache;
 
 class SiteSettingsController extends Controller
 {
@@ -31,6 +32,7 @@ class SiteSettingsController extends Controller
             [
                 'site_title' => config('app.name', 'Admin'),
                 'contact_email' => 'support@admin.com',
+                'currency' => 'AED',
             ]
         );
 
@@ -121,6 +123,7 @@ class SiteSettingsController extends Controller
         // $data['small_logo'] = $smlogo;
 
         SiteSetting::where('id', $id)->update($data);
+        CatalogCache::flushSiteSettings();
 
         return redirect()
             ->route('admin.site-settings.index')

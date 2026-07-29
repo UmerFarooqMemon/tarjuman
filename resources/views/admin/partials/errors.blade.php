@@ -1,25 +1,25 @@
 @if (isset($errors) && count($errors) > 0)
     @foreach ($errors->all() as $error)
         <script>
-            toastr.error('{{ $error }}', 'Error!', { "showMethod": "slideDown", "hideMethod": "slideUp", timeOut: 2000 });
+            toastr.error(@json($error), @json(__('general.error')));
         </script>
     @endforeach
 @endif
 
 @if (Session::get('error'))
 <script>
-    toastr.error("{!! Session::get('error') !!}", 'Error!', { "showMethod": "slideDown", "hideMethod": "slideUp", timeOut: 2000 });
+    toastr.error(@json(Session::get('error')), @json(__('general.error')));
 </script>
 @endif
 
 @if (Session::get('success'))
 <script>
-    toastr.success("{!! Session::get('success') !!}", 'Success', { "showMethod": "slideDown", "hideMethod": "slideUp", timeOut: 2000 });
+    toastr.success(@json(Session::get('success')), @json(__('general.success')));
 </script>
 @endif
 
 @if (session('status'))
 <script>
-    toastr.success("{!! session('status') !!}", 'Success', { "showMethod": "slideDown", "hideMethod": "slideUp", timeOut: 2000 });
+    toastr.success(@json(session('status')), @json(__('general.success')));
 </script>
 @endif

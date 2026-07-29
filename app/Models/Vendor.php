@@ -2,8 +2,10 @@
 
 namespace App\Models;
 
+use App\Support\CatalogCache;
 use Astrotomic\Translatable\Contracts\Translatable as TranslatableContract;
 use Astrotomic\Translatable\Translatable;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -50,6 +52,17 @@ class Vendor extends Model implements TranslatableContract
         'approved_at' => 'datetime',
     ];
 
+    protected static function booted(): void
+    {
+        static::saved(function (Vendor $vendor) {
+            CatalogCache::flushVendors($vendor->id);
+        });
+
+        static::deleted(function (Vendor $vendor) {
+            CatalogCache::flushVendors($vendor->id);
+        });
+    }
+
     public function users(): HasMany
     {
         return $this->hasMany(VendorUser::class);
@@ -63,6 +76,45 @@ class Vendor extends Model implements TranslatableContract
     public function approvedBy(): BelongsTo
     {
         return $this->belongsTo(Admin::class, 'approved_by');
+    }
+
+    public function languagePairs(): HasMany
+    {
+        return $this->hasMany(VendorLanguagePair::class);
+    }
+
+    public function pricingRules(): HasMany
+    {
+        return $this->hasMany(VendorPricingRule::class);
+    }
+
+    /**
+     * @return Collection<int, VendorLanguagePair>
+     */
+    public function cachedLanguagePairs(bool $activeOnly = false): Collection
+    {
+        return CatalogCache::vendorLanguagePairs($this->id, $activeOnly);
+    }
+
+    /**
+     * @return Collection<int, VendorPricingRule>
+     */
+    public function cachedPricingRules(bool $activeOnly = false): Collection
+    {
+        return CatalogCache::vendorPricingRules($this->id, $activeOnly);
+    }
+
+    /**
+     * @return Collection<int, static>
+     */
+    public static function cachedActive(): Collection
+    {
+        return CatalogCache::activeVendors();
+    }
+
+    public static function cachedFind(int $vendorId): ?self
+    {
+        return CatalogCache::vendor($vendorId);
     }
 
     public function displayName(?string $locale = null): string

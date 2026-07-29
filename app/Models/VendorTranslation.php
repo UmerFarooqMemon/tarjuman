@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Support\CatalogCache;
 use Illuminate\Database\Eloquent\Model;
 
 class VendorTranslation extends Model
@@ -16,4 +17,16 @@ class VendorTranslation extends Model
         'business_name',
         'address',
     ];
+
+    protected static function booted(): void
+    {
+        $flush = function (VendorTranslation $translation) {
+            CatalogCache::flushVendors(
+                $translation->vendor_id ? (int) $translation->vendor_id : null
+            );
+        };
+
+        static::saved($flush);
+        static::deleted($flush);
+    }
 }

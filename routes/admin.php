@@ -60,6 +60,21 @@ Route::group([
                 Route::post('change-status', 'AdministratorsController@changeStatus')->name('update-status');
                 Route::resource('vendors', 'VendorsController');
                 Route::post('vendors/change-status', 'VendorsController@changeStatus')->name('vendors.update-status');
+
+                Route::resource('languages', 'LanguagesController')->except(['show', 'create', 'edit']);
+                Route::post('languages/change-status', 'LanguagesController@changeStatus')->name('languages.update-status');
+
+                Route::resource('currencies', 'CurrenciesController')->except(['show', 'create', 'edit']);
+                Route::post('currencies/change-status', 'CurrenciesController@changeStatus')->name('currencies.update-status');
+
+                Route::resource('vendors.language-pairs', 'VendorLanguagePairsController')->except(['show', 'create', 'edit']);
+                Route::post('vendors/{vendor}/language-pairs/change-status', 'VendorLanguagePairsController@changeStatus')
+                    ->name('vendors.language-pairs.update-status');
+
+                Route::resource('vendors.pricing-rules', 'VendorPricingRulesController')->except(['show']);
+                Route::post('vendors/{vendor}/pricing-rules/change-status', 'VendorPricingRulesController@changeStatus')
+                    ->name('vendors.pricing-rules.update-status');
+
                 Route::resource('roles', 'RolesController')->except(['show']);
                 Route::resource('site-settings', 'SiteSettingsController')->only(['index', 'update']);
             }
