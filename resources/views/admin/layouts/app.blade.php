@@ -10,9 +10,9 @@
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=0, minimal-ui">
-    <meta name="description" content="Vuexy admin is super flexible, powerful, clean &amp; modern responsive bootstrap 4 admin template with unlimited possibilities.">
-    <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
-    <meta name="author" content="PIXINVENT">
+    <meta name="description" content="{{ ($siteSettings->site_title ?? config('app.name', 'Tarjuman')) }} admin — manage estimates, vendors, pricing, and translation operations.">
+    <meta name="keywords" content="Tarjuman, translation, admin, estimates, vendors, pricing, document translation, UAE">
+    <meta name="author" content="{{ $siteSettings->site_title ?? config('app.name', 'Tarjuman') }}">
     <title>{{ $siteSettings->site_title ?? config('app.name', 'Laravel') }}</title>
     @if ($siteSettings?->favicon && file_exists(uploadsDir('front') . $siteSettings->favicon))
     <link rel="apple-touch-icon" href="{!! asset(uploadsDir('front') . $siteSettings->favicon) !!}">
