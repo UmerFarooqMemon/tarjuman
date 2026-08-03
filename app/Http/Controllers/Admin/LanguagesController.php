@@ -68,12 +68,6 @@ class LanguagesController extends Controller
                 ->with('error', __('general.language_system_locale_cannot_delete'));
         }
 
-        if ($language->sourcePairs()->exists() || $language->targetPairs()->exists()) {
-            return redirect()
-                ->route('admin.languages.index')
-                ->with('error', __('general.language_in_use_cannot_delete'));
-        }
-
         $language->delete();
 
         return redirect()

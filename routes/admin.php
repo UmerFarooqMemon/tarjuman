@@ -67,13 +67,20 @@ Route::group([
                 Route::resource('currencies', 'CurrenciesController')->except(['show', 'create', 'edit']);
                 Route::post('currencies/change-status', 'CurrenciesController@changeStatus')->name('currencies.update-status');
 
-                Route::resource('vendors.language-pairs', 'VendorLanguagePairsController')->except(['show', 'create', 'edit']);
-                Route::post('vendors/{vendor}/language-pairs/change-status', 'VendorLanguagePairsController@changeStatus')
-                    ->name('vendors.language-pairs.update-status');
+                Route::resource('document-types', 'DocumentTypesController')->except(['show', 'create', 'edit']);
+                Route::post('document-types/change-status', 'DocumentTypesController@changeStatus')->name('document-types.update-status');
 
-                Route::resource('vendors.pricing-rules', 'VendorPricingRulesController')->except(['show']);
-                Route::post('vendors/{vendor}/pricing-rules/change-status', 'VendorPricingRulesController@changeStatus')
-                    ->name('vendors.pricing-rules.update-status');
+                Route::resource('authorities', 'AuthoritiesController')->except(['show', 'create', 'edit']);
+                Route::post('authorities/change-status', 'AuthoritiesController@changeStatus')->name('authorities.update-status');
+
+                Route::resource('add-ons', 'AddOnsController')->except(['show', 'create', 'edit']);
+                Route::post('add-ons/change-status', 'AddOnsController@changeStatus')->name('add-ons.update-status');
+
+                Route::resource('delivery-speeds', 'DeliverySpeedsController')->except(['show', 'create', 'edit']);
+                Route::post('delivery-speeds/change-status', 'DeliverySpeedsController@changeStatus')->name('delivery-speeds.update-status');
+
+                Route::resource('pricing-rules', 'PricingRulesController')->except(['show']);
+                Route::post('pricing-rules/change-status', 'PricingRulesController@changeStatus')->name('pricing-rules.update-status');
 
                 Route::resource('roles', 'RolesController')->except(['show']);
                 Route::resource('site-settings', 'SiteSettingsController')->only(['index', 'update']);

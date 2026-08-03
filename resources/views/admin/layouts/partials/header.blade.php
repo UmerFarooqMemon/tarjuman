@@ -18,7 +18,7 @@
         <li class="menu-item {{ request()->routeIs('admin.dashboard.*') ? 'active' : '' }}">
             <a href="{{ route('admin.dashboard.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-smart-home"></i>
-                <div data-i18n="Dashboard">{!! __('general.menu_dashboard') !!}</div>
+                <div>{!! __('general.menu_dashboard') !!}</div>
             </a>
         </li>
 
@@ -26,7 +26,16 @@
         <li class="menu-item {{ request()->routeIs('admin.administrators.*') ? 'active' : '' }}">
             <a href="{{ route('admin.administrators.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-users"></i>
-                <div data-i18n="Administrators">{!! __('general.menu_administrators') !!}</div>
+                <div>{!! __('general.menu_administrators') !!}</div>
+            </a>
+        </li>
+        @endcan
+
+        @can('authorities.view')
+        <li class="menu-item {{ request()->routeIs('admin.authorities.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.authorities.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-building-bank"></i>
+                <div>{!! __('general.menu_authorities') !!}</div>
             </a>
         </li>
         @endcan
@@ -35,7 +44,16 @@
         <li class="menu-item {{ request()->routeIs('admin.roles.*') ? 'active' : '' }}">
             <a href="{{ route('admin.roles.index') }}" class="menu-link">
                 <i class="menu-icon tf-icons ti ti-shield-lock"></i>
-                <div data-i18n="{!! __('general.roles_and_permissions') !!}">{!! __('general.roles_and_permissions') !!}</div>
+                <div>{!! __('general.roles_and_permissions') !!}</div>
+            </a>
+        </li>
+        @endcan
+
+        @can('pricing_rules.view')
+        <li class="menu-item {{ request()->routeIs('admin.pricing-rules.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.pricing-rules.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-coin"></i>
+                <div>{!! __('general.menu_pricing_rules') !!}</div>
             </a>
         </li>
         @endcan
@@ -53,16 +71,16 @@
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>
 
-        <li class="menu-item {{ request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*') ? 'active open' : '' }}">
+        <li class="menu-item {{ request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*', 'admin.document-types.*', 'admin.add-ons.*', 'admin.delivery-speeds.*') ? 'active open' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons ti ti-settings"></i>
-                <div data-i18n="Settings">{!! __('general.menu_settings') !!}</div>
+                <div>{!! __('general.menu_settings') !!}</div>
             </a>
             <ul class="menu-sub">
                 @can('site_settings.view')
                 <li class="menu-item {{ request()->routeIs('admin.site-settings.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.site-settings.index') }}" class="menu-link">
-                        <div data-i18n="Site Settings">{!! __('general.general_settings') !!}</div>
+                        <div>{!! __('general.general_settings') !!}</div>
                     </a>
                 </li>
                 @endcan
@@ -77,6 +95,27 @@
                 <li class="menu-item {{ request()->routeIs('admin.currencies.*') ? 'active' : '' }}">
                     <a href="{{ route('admin.currencies.index') }}" class="menu-link">
                         <div>{!! __('general.menu_currencies') !!}</div>
+                    </a>
+                </li>
+                @endcan
+                @can('document_types.view')
+                <li class="menu-item {{ request()->routeIs('admin.document-types.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.document-types.index') }}" class="menu-link">
+                        <div>{!! __('general.menu_document_types') !!}</div>
+                    </a>
+                </li>
+                @endcan
+                @can('add_ons.view')
+                <li class="menu-item {{ request()->routeIs('admin.add-ons.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.add-ons.index') }}" class="menu-link">
+                        <div>{!! __('general.menu_add_ons') !!}</div>
+                    </a>
+                </li>
+                @endcan
+                @can('delivery_speeds.view')
+                <li class="menu-item {{ request()->routeIs('admin.delivery-speeds.*') ? 'active' : '' }}">
+                    <a href="{{ route('admin.delivery-speeds.index') }}" class="menu-link">
+                        <div>{!! __('general.menu_delivery_speeds') !!}</div>
                     </a>
                 </li>
                 @endcan

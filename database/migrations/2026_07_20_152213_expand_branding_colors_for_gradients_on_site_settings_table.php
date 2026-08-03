@@ -28,10 +28,10 @@ return new class extends Migration
 
         // Seed sensible gradient ends from existing solid colors when empty.
         DB::table('site_settings')->where('id', 1)->update([
-            'primary_color_end' => DB::raw("COALESCE(primary_color_end, '#9E95F5')"),
-            'secondary_color_end' => DB::raw("COALESCE(secondary_color_end, '#D2D2D6')"),
-            'primary_button_color_end' => DB::raw("COALESCE(primary_button_color_end, '#9E95F5')"),
-            'secondary_button_color_end' => DB::raw("COALESCE(secondary_button_color_end, '#D2D2D6')"),
+            'primary_color_end' => DB::raw("COALESCE(primary_color_end, '#000000')"),
+            'secondary_color_end' => DB::raw("COALESCE(secondary_color_end, '#FFFFFF')"),
+            'primary_button_color_end' => DB::raw("COALESCE(primary_button_color_end, '#000000')"),
+            'secondary_button_color_end' => DB::raw("COALESCE(secondary_button_color_end, '#FFFFFF')"),
             'primary_color_angle' => DB::raw('COALESCE(primary_color_angle, 135)'),
             'secondary_color_angle' => DB::raw('COALESCE(secondary_color_angle, 135)'),
             'primary_button_color_angle' => DB::raw('COALESCE(primary_button_color_angle, 135)'),

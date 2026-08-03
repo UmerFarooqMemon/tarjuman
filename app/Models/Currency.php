@@ -54,7 +54,7 @@ class Currency extends Model implements TranslatableContract
 
     public function pricingRules(): HasMany
     {
-        return $this->hasMany(VendorPricingRule::class, 'currency', 'code');
+        return $this->hasMany(PricingRule::class, 'currency', 'code');
     }
 
     public function scopeActive(Builder $query): Builder
@@ -138,7 +138,7 @@ class Currency extends Model implements TranslatableContract
             return true;
         }
 
-        return VendorPricingRule::query()
+        return PricingRule::query()
             ->where('currency', strtoupper($this->code))
             ->exists();
     }

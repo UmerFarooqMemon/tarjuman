@@ -12,10 +12,10 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('site_settings', function (Blueprint $table) {
-            $table->string('primary_color', 20)->nullable()->default('#7367F0')->after('favicon');
-            $table->string('secondary_color', 20)->nullable()->default('#A8AAAE')->after('primary_color');
-            $table->string('primary_button_color', 20)->nullable()->default('#7367F0')->after('secondary_color');
-            $table->string('secondary_button_color', 20)->nullable()->default('#A8AAAE')->after('primary_button_color');
+            $table->string('primary_color', 20)->nullable()->default('#000000')->after('favicon');
+            $table->string('secondary_color', 20)->nullable()->default('#FFFFFF')->after('primary_color');
+            $table->string('primary_button_color', 20)->nullable()->default('#000000')->after('secondary_color');
+            $table->string('secondary_button_color', 20)->nullable()->default('#FFFFFF')->after('primary_button_color');
         });
     }
 

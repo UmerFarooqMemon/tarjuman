@@ -34,7 +34,7 @@
                        value="{{ $startValue }}"
                        maxlength="7"
                        data-swatch-target="{{ $startName }}_swatch"
-                       placeholder="#7367F0">
+                       placeholder="#000000">
             </div>
         </div>
 

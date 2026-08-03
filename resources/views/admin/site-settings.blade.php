@@ -105,8 +105,8 @@
                         'startName' => 'primary_color',
                         'endName' => 'primary_color_end',
                         'angleName' => 'primary_color_angle',
-                        'defaultStart' => '#7367F0',
-                        'defaultEnd' => '#9E95F5',
+                        'defaultStart' => '#000000',
+                        'defaultEnd' => '#000000',
                         'records' => $records,
                     ])
 
@@ -115,8 +115,8 @@
                         'startName' => 'secondary_color',
                         'endName' => 'secondary_color_end',
                         'angleName' => 'secondary_color_angle',
-                        'defaultStart' => '#A8AAAE',
-                        'defaultEnd' => '#D2D2D6',
+                        'defaultStart' => '#FFFFFF',
+                        'defaultEnd' => '#FFFFFF',
                         'records' => $records,
                     ])
 
@@ -125,8 +125,8 @@
                         'startName' => 'primary_button_color',
                         'endName' => 'primary_button_color_end',
                         'angleName' => 'primary_button_color_angle',
-                        'defaultStart' => '#7367F0',
-                        'defaultEnd' => '#9E95F5',
+                        'defaultStart' => '#000000',
+                        'defaultEnd' => '#000000',
                         'records' => $records,
                     ])
 
@@ -135,8 +135,8 @@
                         'startName' => 'secondary_button_color',
                         'endName' => 'secondary_button_color_end',
                         'angleName' => 'secondary_button_color_angle',
-                        'defaultStart' => '#A8AAAE',
-                        'defaultEnd' => '#D2D2D6',
+                        'defaultStart' => '#FFFFFF',
+                        'defaultEnd' => '#FFFFFF',
                         'records' => $records,
                     ])
 
@@ -155,21 +155,21 @@
                     @include('admin.partials.solid-color-field', [
                         'label' => __('general.secondary_button_text_color'),
                         'name' => 'secondary_button_text_color',
-                        'default' => '#FFFFFF',
+                        'default' => '#000000',
                         'records' => $records,
                     ])
 
                     @include('admin.partials.solid-color-field', [
                         'label' => __('general.primary_button_border_color'),
                         'name' => 'primary_button_border_color',
-                        'default' => '#7367F0',
+                        'default' => '#000000',
                         'records' => $records,
                     ])
 
                     @include('admin.partials.solid-color-field', [
                         'label' => __('general.secondary_button_border_color'),
                         'name' => 'secondary_button_border_color',
-                        'default' => '#A8AAAE',
+                        'default' => '#000000',
                         'records' => $records,
                     ])
 

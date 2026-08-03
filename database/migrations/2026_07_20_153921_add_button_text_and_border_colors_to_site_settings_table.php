@@ -13,9 +13,9 @@ return new class extends Migration
     {
         Schema::table('site_settings', function (Blueprint $table) {
             $table->string('primary_button_text_color', 20)->nullable()->default('#FFFFFF')->after('primary_button_color_angle');
-            $table->string('secondary_button_text_color', 20)->nullable()->default('#FFFFFF')->after('secondary_button_color_angle');
-            $table->string('primary_button_border_color', 20)->nullable()->default('#7367F0')->after('primary_button_text_color');
-            $table->string('secondary_button_border_color', 20)->nullable()->default('#A8AAAE')->after('secondary_button_text_color');
+            $table->string('secondary_button_text_color', 20)->nullable()->default('#000000')->after('secondary_button_color_angle');
+            $table->string('primary_button_border_color', 20)->nullable()->default('#000000')->after('primary_button_text_color');
+            $table->string('secondary_button_border_color', 20)->nullable()->default('#000000')->after('secondary_button_text_color');
         });
     }
 

@@ -48,6 +48,36 @@ return [
             'edit',
             'delete',
         ],
+        'document_types' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'authorities' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'add_ons' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'delivery_speeds' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'pricing_rules' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
     ],
 
     'guard' => 'admin',

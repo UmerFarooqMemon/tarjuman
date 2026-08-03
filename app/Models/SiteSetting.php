@@ -22,7 +22,7 @@ class SiteSetting extends Model
      *
      * Keys: primary_color, secondary_color, primary_button_color, secondary_button_color
      */
-    public function brandingBackground(string $key, string $fallback = '#7367F0'): string
+    public function brandingBackground(string $key, string $fallback = '#000000'): string
     {
         $start = $this->{$key} ?: $fallback;
         $end = $this->{$key.'_end'} ?? null;
@@ -40,7 +40,7 @@ class SiteSetting extends Model
     /**
      * Solid start color for text / accents that cannot use gradients.
      */
-    public function brandingSolid(string $key, string $fallback = '#7367F0'): string
+    public function brandingSolid(string $key, string $fallback = '#000000'): string
     {
         return $this->{$key} ?: $fallback;
     }

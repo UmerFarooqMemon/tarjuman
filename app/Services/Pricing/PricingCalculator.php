@@ -2,35 +2,24 @@
 
 namespace App\Services\Pricing;
 
-use App\Models\Vendor;
-use App\Models\VendorLanguagePair;
-use App\Models\VendorPricingRule;
+use App\Models\PricingRule;
 use App\Support\CatalogCache;
 use InvalidArgumentException;
 
 class PricingCalculator
 {
     /**
-     * Resolve the best matching pricing rule and compute the quote.
+     * Resolve the best matching platform pricing rule and compute the quote.
      *
      * Matching order:
-     * 1. Active rules for the vendor + language pair
-     * 2. Optional document_type_id filter (null rules match any document type)
-     * 3. Rules whose page range covers $pageCount
-     * 4. Highest priority first, then newest id
+     * 1. Active platform rules
+     * 2. Rules whose page range covers $pageCount
+     * 3. Highest priority first, then newest id
      *
      * @throws InvalidArgumentException when no rule matches
      */
-    public function quote(
-        Vendor|int $vendor,
-        VendorLanguagePair|int $languagePair,
-        int $pageCount,
-        int $wordCount,
-        ?int $documentTypeId = null,
-    ): PricingQuote {
-        $vendorId = $vendor instanceof Vendor ? $vendor->id : $vendor;
-        $pairId = $languagePair instanceof VendorLanguagePair ? $languagePair->id : $languagePair;
-
+    public function quote(int $pageCount, int $wordCount): PricingQuote
+    {
         if ($pageCount < 1) {
             throw new InvalidArgumentException('Page count must be at least 1.');
         }
@@ -39,24 +28,8 @@ class PricingCalculator
             throw new InvalidArgumentException('Word count cannot be negative.');
         }
 
-        $rules = CatalogCache::vendorPricingRules($vendorId, activeOnly: true)
-            ->filter(fn (VendorPricingRule $rule) => (int) $rule->vendor_language_pair_id === (int) $pairId)
-            ->filter(function (VendorPricingRule $rule) use ($documentTypeId) {
-                if ($rule->document_type_id === null) {
-                    return true;
-                }
-
-                return $documentTypeId !== null
-                    && (int) $rule->document_type_id === (int) $documentTypeId;
-            })
-            ->sort(function (VendorPricingRule $a, VendorPricingRule $b) {
-                $aSpecific = $a->document_type_id === null ? 1 : 0;
-                $bSpecific = $b->document_type_id === null ? 1 : 0;
-
-                if ($aSpecific !== $bSpecific) {
-                    return $aSpecific <=> $bSpecific;
-                }
-
+        $rules = CatalogCache::activePricingRules()
+            ->sort(function (PricingRule $a, PricingRule $b) {
                 if ((int) $a->priority !== (int) $b->priority) {
                     return (int) $b->priority <=> (int) $a->priority;
                 }
@@ -66,14 +39,14 @@ class PricingCalculator
             ->values();
 
         $matched = $rules->first(
-            fn (VendorPricingRule $rule) => $rule->matchesPageCount($pageCount)
+            fn (PricingRule $rule) => $rule->matchesPageCount($pageCount)
         );
 
         if (! $matched) {
             throw new InvalidArgumentException('No pricing rule matches the given page count.');
         }
 
-        $quantity = $matched->billing_unit === VendorPricingRule::BILLING_UNIT_PAGE
+        $quantity = $matched->billing_unit === PricingRule::BILLING_UNIT_PAGE
             ? $pageCount
             : $wordCount;
 

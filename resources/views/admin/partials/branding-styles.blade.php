@@ -59,12 +59,32 @@
 
     .bg-primary,
     .badge.bg-primary,
-    .menu-item.active > .menu-link:not(.menu-toggle),
     .page-item.active .page-link {
         background-image: var(--admin-primary-gradient) !important;
         background-color: var(--admin-primary) !important;
         border-color: var(--admin-primary) !important;
         background-size: 100% 100% !important;
+    }
+
+    /*
+     * Vuexy RTL theme sets a hardcoded gradient with !important on active menu
+     * items; match that specificity so branding wins in Arabic/RTL too.
+     */
+    .menu-item.active > .menu-link:not(.menu-toggle),
+    .bg-menu-theme.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle),
+    .menu.bg-primary.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle),
+    [dir="rtl"] .bg-menu-theme.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle),
+    [dir="rtl"] .menu.bg-primary.menu-vertical .menu-item.active > .menu-link:not(.menu-toggle),
+    .bg-menu-theme.menu-horizontal .menu-inner > .menu-item.active > .menu-link.menu-toggle,
+    .menu.bg-primary.menu-horizontal .menu-inner > .menu-item.active > .menu-link.menu-toggle,
+    [dir="rtl"] .bg-menu-theme.menu-horizontal .menu-inner > .menu-item.active > .menu-link.menu-toggle,
+    [dir="rtl"] .menu.bg-primary.menu-horizontal .menu-inner > .menu-item.active > .menu-link.menu-toggle {
+        background: var(--admin-primary-gradient) !important;
+        background-color: var(--admin-primary) !important;
+        border-color: var(--admin-primary) !important;
+        background-size: 100% 100% !important;
+        color: #fff !important;
+        box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--admin-primary) 48%, transparent);
     }
 
     .text-primary,
@@ -94,7 +114,7 @@
     }
 
     a:not(.btn):not(.menu-link):not(.dropdown-item) {
-        color: var(--admin-primary);
+        /*color: var(--admin-primary);*/
     }
 
     a:not(.btn):not(.menu-link):not(.dropdown-item):hover {

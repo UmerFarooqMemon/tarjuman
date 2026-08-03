@@ -2,14 +2,21 @@
 
 namespace App\Support;
 
+use App\Models\AddOn;
+use App\Models\AddOnTranslation;
+use App\Models\Authority;
+use App\Models\AuthorityTranslation;
 use App\Models\Currency;
 use App\Models\CurrencyTranslation;
+use App\Models\DeliverySpeed;
+use App\Models\DeliverySpeedTranslation;
+use App\Models\DocumentType;
+use App\Models\DocumentTypeTranslation;
 use App\Models\Language;
 use App\Models\LanguageTranslation;
+use App\Models\PricingRule;
 use App\Models\SiteSetting;
 use App\Models\Vendor;
-use App\Models\VendorLanguagePair;
-use App\Models\VendorPricingRule;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Support\Facades\Cache;
 
@@ -32,6 +39,26 @@ class CatalogCache
 
     public const CURRENCIES_CATALOG = 'catalog.currencies.catalog';
 
+    public const DOCUMENT_TYPES_ACTIVE = 'catalog.document_types.active';
+
+    public const DOCUMENT_TYPES_ALL = 'catalog.document_types.all';
+
+    public const AUTHORITIES_ACTIVE = 'catalog.authorities.active';
+
+    public const AUTHORITIES_ALL = 'catalog.authorities.all';
+
+    public const ADD_ONS_ACTIVE = 'catalog.add_ons.active';
+
+    public const ADD_ONS_ALL = 'catalog.add_ons.all';
+
+    public const DELIVERY_SPEEDS_ACTIVE = 'catalog.delivery_speeds.active';
+
+    public const DELIVERY_SPEEDS_ALL = 'catalog.delivery_speeds.all';
+
+    public const PRICING_RULES_ACTIVE = 'catalog.pricing_rules.active';
+
+    public const PRICING_RULES_ALL = 'catalog.pricing_rules.all';
+
     public const VENDORS_ACTIVE = 'catalog.vendors.active';
 
     public const SITE_SETTINGS = 'catalog.site_settings';
@@ -39,16 +66,6 @@ class CatalogCache
     public static function vendorKey(int $vendorId): string
     {
         return "catalog.vendor.{$vendorId}";
-    }
-
-    public static function vendorPairsKey(int $vendorId): string
-    {
-        return "catalog.pairs.vendor.{$vendorId}";
-    }
-
-    public static function vendorPricingKey(int $vendorId): string
-    {
-        return "catalog.pricing.vendor.{$vendorId}";
     }
 
     /**
@@ -177,6 +194,154 @@ class CatalogCache
     }
 
     /**
+     * @return Collection<int, DocumentType>
+     */
+    public static function activeDocumentTypes(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::DOCUMENT_TYPES_ACTIVE, function () {
+            return DocumentType::query()
+                ->active()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (DocumentType $type) => self::serializeDocumentType($type))
+                ->all();
+        });
+
+        return self::hydrateDocumentTypes($rows);
+    }
+
+    /**
+     * @return Collection<int, DocumentType>
+     */
+    public static function allDocumentTypes(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::DOCUMENT_TYPES_ALL, function () {
+            return DocumentType::query()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (DocumentType $type) => self::serializeDocumentType($type))
+                ->all();
+        });
+
+        return self::hydrateDocumentTypes($rows);
+    }
+
+    /**
+     * @return Collection<int, Authority>
+     */
+    public static function activeAuthorities(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::AUTHORITIES_ACTIVE, function () {
+            return Authority::query()
+                ->active()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (Authority $authority) => self::serializeAuthority($authority))
+                ->all();
+        });
+
+        return self::hydrateAuthorities($rows);
+    }
+
+    /**
+     * @return Collection<int, Authority>
+     */
+    public static function allAuthorities(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::AUTHORITIES_ALL, function () {
+            return Authority::query()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (Authority $authority) => self::serializeAuthority($authority))
+                ->all();
+        });
+
+        return self::hydrateAuthorities($rows);
+    }
+
+    /**
+     * @return Collection<int, AddOn>
+     */
+    public static function activeAddOns(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::ADD_ONS_ACTIVE, function () {
+            return AddOn::query()
+                ->active()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (AddOn $addOn) => self::serializeAddOn($addOn))
+                ->all();
+        });
+
+        return self::hydrateAddOns($rows);
+    }
+
+    /**
+     * @return Collection<int, AddOn>
+     */
+    public static function allAddOns(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::ADD_ONS_ALL, function () {
+            return AddOn::query()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (AddOn $addOn) => self::serializeAddOn($addOn))
+                ->all();
+        });
+
+        return self::hydrateAddOns($rows);
+    }
+
+    /**
+     * @return Collection<int, DeliverySpeed>
+     */
+    public static function activeDeliverySpeeds(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::DELIVERY_SPEEDS_ACTIVE, function () {
+            return DeliverySpeed::query()
+                ->active()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (DeliverySpeed $speed) => self::serializeDeliverySpeed($speed))
+                ->all();
+        });
+
+        return self::hydrateDeliverySpeeds($rows);
+    }
+
+    /**
+     * @return Collection<int, DeliverySpeed>
+     */
+    public static function allDeliverySpeeds(): Collection
+    {
+        /** @var list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}> $rows */
+        $rows = Cache::rememberForever(self::DELIVERY_SPEEDS_ALL, function () {
+            return DeliverySpeed::query()
+                ->with('translations')
+                ->ordered()
+                ->get()
+                ->map(fn (DeliverySpeed $speed) => self::serializeDeliverySpeed($speed))
+                ->all();
+        });
+
+        return self::hydrateDeliverySpeeds($rows);
+    }
+
+    /**
      * @return Collection<int, Vendor>
      */
     public static function activeVendors(): Collection
@@ -215,52 +380,40 @@ class CatalogCache
     }
 
     /**
-     * @return Collection<int, VendorLanguagePair>
+     * @return Collection<int, PricingRule>
      */
-    public static function vendorLanguagePairs(int $vendorId, bool $activeOnly = false): Collection
+    public static function activePricingRules(): Collection
     {
         /** @var list<array<string, mixed>> $rows */
-        $rows = Cache::rememberForever(self::vendorPairsKey($vendorId), function () use ($vendorId) {
-            return VendorLanguagePair::query()
-                ->where('vendor_id', $vendorId)
-                ->orderByDesc('id')
-                ->get()
-                ->map(fn (VendorLanguagePair $pair) => $pair->getAttributes())
-                ->all();
-        });
-
-        $pairs = VendorLanguagePair::hydrate($rows);
-
-        if ($activeOnly) {
-            $pairs = $pairs->where('is_active', true)->values();
-        }
-
-        return $pairs;
-    }
-
-    /**
-     * @return Collection<int, VendorPricingRule>
-     */
-    public static function vendorPricingRules(int $vendorId, bool $activeOnly = false): Collection
-    {
-        /** @var list<array<string, mixed>> $rows */
-        $rows = Cache::rememberForever(self::vendorPricingKey($vendorId), function () use ($vendorId) {
-            return VendorPricingRule::query()
-                ->where('vendor_id', $vendorId)
+        $rows = Cache::rememberForever(self::PRICING_RULES_ACTIVE, function () {
+            return PricingRule::query()
+                ->active()
                 ->orderByDesc('priority')
                 ->orderByDesc('id')
                 ->get()
-                ->map(fn (VendorPricingRule $rule) => $rule->getAttributes())
+                ->map(fn (PricingRule $rule) => $rule->getAttributes())
                 ->all();
         });
 
-        $rules = VendorPricingRule::hydrate($rows);
+        return PricingRule::hydrate($rows);
+    }
 
-        if ($activeOnly) {
-            $rules = $rules->where('is_active', true)->values();
-        }
+    /**
+     * @return Collection<int, PricingRule>
+     */
+    public static function allPricingRules(): Collection
+    {
+        /** @var list<array<string, mixed>> $rows */
+        $rows = Cache::rememberForever(self::PRICING_RULES_ALL, function () {
+            return PricingRule::query()
+                ->orderByDesc('priority')
+                ->orderByDesc('id')
+                ->get()
+                ->map(fn (PricingRule $rule) => $rule->getAttributes())
+                ->all();
+        });
 
-        return $rules;
+        return PricingRule::hydrate($rows);
     }
 
     public static function siteSettings(): ?SiteSetting
@@ -301,25 +454,43 @@ class CatalogCache
         Cache::forget(self::CURRENCIES_CATALOG);
     }
 
+    public static function flushDocumentTypes(): void
+    {
+        Cache::forget(self::DOCUMENT_TYPES_ACTIVE);
+        Cache::forget(self::DOCUMENT_TYPES_ALL);
+    }
+
+    public static function flushAuthorities(): void
+    {
+        Cache::forget(self::AUTHORITIES_ACTIVE);
+        Cache::forget(self::AUTHORITIES_ALL);
+    }
+
+    public static function flushAddOns(): void
+    {
+        Cache::forget(self::ADD_ONS_ACTIVE);
+        Cache::forget(self::ADD_ONS_ALL);
+    }
+
+    public static function flushDeliverySpeeds(): void
+    {
+        Cache::forget(self::DELIVERY_SPEEDS_ACTIVE);
+        Cache::forget(self::DELIVERY_SPEEDS_ALL);
+    }
+
+    public static function flushPricingRules(): void
+    {
+        Cache::forget(self::PRICING_RULES_ACTIVE);
+        Cache::forget(self::PRICING_RULES_ALL);
+    }
+
     public static function flushVendors(?int $vendorId = null): void
     {
         Cache::forget(self::VENDORS_ACTIVE);
 
         if ($vendorId !== null) {
             Cache::forget(self::vendorKey($vendorId));
-            Cache::forget(self::vendorPairsKey($vendorId));
-            Cache::forget(self::vendorPricingKey($vendorId));
         }
-    }
-
-    public static function flushVendorPairs(int $vendorId): void
-    {
-        Cache::forget(self::vendorPairsKey($vendorId));
-    }
-
-    public static function flushVendorPricing(int $vendorId): void
-    {
-        Cache::forget(self::vendorPricingKey($vendorId));
     }
 
     public static function flushSiteSettings(): void
@@ -335,6 +506,62 @@ class CatalogCache
         return [
             'attributes' => $currency->getAttributes(),
             'translations' => $currency->translations
+                ->map(fn ($translation) => $translation->getAttributes())
+                ->values()
+                ->all(),
+        ];
+    }
+
+    /**
+     * @return array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}
+     */
+    protected static function serializeDocumentType(DocumentType $type): array
+    {
+        return [
+            'attributes' => $type->getAttributes(),
+            'translations' => $type->translations
+                ->map(fn ($translation) => $translation->getAttributes())
+                ->values()
+                ->all(),
+        ];
+    }
+
+    /**
+     * @return array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}
+     */
+    protected static function serializeAuthority(Authority $authority): array
+    {
+        return [
+            'attributes' => $authority->getAttributes(),
+            'translations' => $authority->translations
+                ->map(fn ($translation) => $translation->getAttributes())
+                ->values()
+                ->all(),
+        ];
+    }
+
+    /**
+     * @return array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}
+     */
+    protected static function serializeAddOn(AddOn $addOn): array
+    {
+        return [
+            'attributes' => $addOn->getAttributes(),
+            'translations' => $addOn->translations
+                ->map(fn ($translation) => $translation->getAttributes())
+                ->values()
+                ->all(),
+        ];
+    }
+
+    /**
+     * @return array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}
+     */
+    protected static function serializeDeliverySpeed(DeliverySpeed $speed): array
+    {
+        return [
+            'attributes' => $speed->getAttributes(),
+            'translations' => $speed->translations
                 ->map(fn ($translation) => $translation->getAttributes())
                 ->values()
                 ->all(),
@@ -393,6 +620,90 @@ class CatalogCache
                 CurrencyTranslation::hydrate($row['translations'])
             );
             $collection->push($currency);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param  list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}>  $rows
+     * @return Collection<int, DocumentType>
+     */
+    protected static function hydrateDocumentTypes(array $rows): Collection
+    {
+        $collection = new Collection;
+
+        foreach ($rows as $row) {
+            /** @var DocumentType $type */
+            $type = (new DocumentType)->newFromBuilder($row['attributes']);
+            $type->setRelation(
+                'translations',
+                DocumentTypeTranslation::hydrate($row['translations'])
+            );
+            $collection->push($type);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param  list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}>  $rows
+     * @return Collection<int, Authority>
+     */
+    protected static function hydrateAuthorities(array $rows): Collection
+    {
+        $collection = new Collection;
+
+        foreach ($rows as $row) {
+            /** @var Authority $authority */
+            $authority = (new Authority)->newFromBuilder($row['attributes']);
+            $authority->setRelation(
+                'translations',
+                AuthorityTranslation::hydrate($row['translations'])
+            );
+            $collection->push($authority);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param  list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}>  $rows
+     * @return Collection<int, AddOn>
+     */
+    protected static function hydrateAddOns(array $rows): Collection
+    {
+        $collection = new Collection;
+
+        foreach ($rows as $row) {
+            /** @var AddOn $addOn */
+            $addOn = (new AddOn)->newFromBuilder($row['attributes']);
+            $addOn->setRelation(
+                'translations',
+                AddOnTranslation::hydrate($row['translations'])
+            );
+            $collection->push($addOn);
+        }
+
+        return $collection;
+    }
+
+    /**
+     * @param  list<array{attributes: array<string, mixed>, translations: list<array<string, mixed>>}>  $rows
+     * @return Collection<int, DeliverySpeed>
+     */
+    protected static function hydrateDeliverySpeeds(array $rows): Collection
+    {
+        $collection = new Collection;
+
+        foreach ($rows as $row) {
+            /** @var DeliverySpeed $speed */
+            $speed = (new DeliverySpeed)->newFromBuilder($row['attributes']);
+            $speed->setRelation(
+                'translations',
+                DeliverySpeedTranslation::hydrate($row['translations'])
+            );
+            $collection->push($speed);
         }
 
         return $collection;

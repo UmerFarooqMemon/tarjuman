@@ -124,6 +124,25 @@ if (! function_exists('crudLocaleCodes')) {
     }
 }
 
+if (! function_exists('syncModelTranslations')) {
+    /**
+     * Persist Astrotomic translations without relying on model "saved" events.
+     * Required when seeding under WithoutModelEvents (or any muted-event context).
+     *
+     * @param  \Illuminate\Database\Eloquent\Model&\Astrotomic\Translatable\Contracts\Translatable  $model
+     * @param  array<string, array<string, mixed>>  $translations  locale => attributes
+     */
+    function syncModelTranslations($model, array $translations): void
+    {
+        foreach ($translations as $locale => $attributes) {
+            $model->translations()->updateOrCreate(
+                ['locale' => $locale],
+                $attributes
+            );
+        }
+    }
+}
+
 if (! function_exists('gccCurrencies')) {
     /**
      * Active currency catalog (DB-backed, config fallback when empty).
@@ -283,9 +302,9 @@ if (! function_exists('formatMoney')) {
     /**
      * Format an amount using a GCC currency (defaults to platform currency).
      *
-     * @param  string  $suffix  code|symbol|none
+     * @param  string  $suffix  icon|symbol|code|none
      */
-    function formatMoney(float|int|string $amount, ?string $currency = null, string $suffix = 'code'): string
+    function formatMoney(float|int|string $amount, ?string $currency = null, string $suffix = 'icon'): string
     {
         $meta = currencyMeta($currency) ?? platformCurrencyMeta();
         $decimals = (int) ($meta['decimals'] ?? 2);
@@ -293,8 +312,12 @@ if (! function_exists('formatMoney')) {
 
         return match ($suffix) {
             'symbol' => $formatted.' '.currencySymbol($currency),
+            'code' => $formatted.' '.($meta['code'] ?? platformCurrency()),
             'none' => $formatted,
-            default => $formatted.' '.($meta['code'] ?? platformCurrency()),
+            default => '<span class="d-inline-flex align-items-center gap-1">'
+                .currencyIconHtml($currency)
+                .'<span>'.$formatted.'</span>'
+                .'</span>',
         };
     }
 }

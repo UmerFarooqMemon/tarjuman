@@ -17,10 +17,6 @@
         <div class="card mb-4">
             <div class="card-header d-flex justify-content-between align-items-center flex-wrap gap-2">
                 <h5 class="mb-0">{!! __('general.edit_vendor') !!}</h5>
-                <div class="d-flex gap-2">
-                    <a href="{{ route('admin.vendors.language-pairs.index', $vendor) }}" class="btn btn-sm btn-label-info">{!! __('general.language_pairs') !!}</a>
-                    <a href="{{ route('admin.vendors.pricing-rules.index', $vendor) }}" class="btn btn-sm btn-label-warning">{!! __('general.pricing_rules') !!}</a>
-                </div>
             </div>
             <div class="card-body">
                 <form method="POST" action="{{ route('admin.vendors.update', $vendor) }}" class="row" enctype="multipart/form-data">

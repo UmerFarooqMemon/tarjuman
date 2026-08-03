@@ -72,6 +72,32 @@ html:not([data-admin-nav-layout="dock"]) #adminDockDrawer {
   display: none !important;
 }
 
+/* ---------- Sidebar shell: floating inset + inner-edge curves ---------- */
+html[data-admin-nav-layout="sidebar"] {
+  --admin-sidebar-inset-y: 0.85rem;
+  --admin-sidebar-radius: 1.35rem;
+}
+
+@media (min-width: 1200px) {
+  html[data-admin-nav-layout="sidebar"] #layout-menu.layout-menu {
+    top: var(--admin-sidebar-inset-y) !important;
+    bottom: var(--admin-sidebar-inset-y) !important;
+    height: auto !important;
+    max-height: calc(100dvh - (var(--admin-sidebar-inset-y) * 2)) !important;
+    border-radius: 0 var(--admin-sidebar-radius) var(--admin-sidebar-radius) 0 !important;
+    overflow: hidden;
+  }
+
+  html[data-admin-nav-layout="sidebar"][dir="rtl"] #layout-menu.layout-menu {
+    border-radius: var(--admin-sidebar-radius) 0 0 var(--admin-sidebar-radius) !important;
+  }
+
+  html[data-admin-nav-layout="sidebar"] #layout-menu.layout-menu .menu-inner {
+    height: 100%;
+    max-height: 100%;
+  }
+}
+
 /* ---------- Desktop glass dock (near full width, inset + rounded) ---------- */
 .admin-dock {
   position: fixed;

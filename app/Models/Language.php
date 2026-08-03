@@ -8,7 +8,6 @@ use Astrotomic\Translatable\Translatable;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Language extends Model implements TranslatableContract
 {
@@ -48,16 +47,6 @@ class Language extends Model implements TranslatableContract
 
         static::saved($flush);
         static::deleted($flush);
-    }
-
-    public function sourcePairs(): HasMany
-    {
-        return $this->hasMany(VendorLanguagePair::class, 'source_language_id');
-    }
-
-    public function targetPairs(): HasMany
-    {
-        return $this->hasMany(VendorLanguagePair::class, 'target_language_id');
     }
 
     public function scopeActive(Builder $query): Builder

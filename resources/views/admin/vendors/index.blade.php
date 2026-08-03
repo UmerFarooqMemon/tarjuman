@@ -53,10 +53,6 @@
                         </td>
                         <td>
                             <div class="d-inline-block">
-                                @can('vendors.view')
-                                <a href="{{ route('admin.vendors.language-pairs.index', $vendor) }}" class="text-body me-1" title="{!! __('general.language_pairs') !!}"><i class="text-info ti ti-arrows-exchange"></i></a>
-                                <a href="{{ route('admin.vendors.pricing-rules.index', $vendor) }}" class="text-body me-1" title="{!! __('general.pricing_rules') !!}"><i class="text-warning ti ti-coin"></i></a>
-                                @endcan
                                 @can('vendors.edit')
                                 <a href="{{ route('admin.vendors.edit', $vendor) }}" class="text-body"><i class="text-primary ti ti-pencil"></i></a>
                                 @endcan

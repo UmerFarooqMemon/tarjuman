@@ -26,9 +26,10 @@ class CurrenciesTableSeeder extends Seeder
                 ]
             );
 
-            $currency->translateOrNew('en')->name = $meta['name_en'] ?? $code;
-            $currency->translateOrNew('ar')->name = $meta['name_ar'] ?? $code;
-            $currency->save();
+            syncModelTranslations($currency, [
+                'en' => ['name' => $meta['name_en'] ?? $code],
+                'ar' => ['name' => $meta['name_ar'] ?? $code],
+            ]);
         }
 
         CatalogCache::flushCurrencies();

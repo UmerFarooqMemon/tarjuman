@@ -2,15 +2,15 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class DatabaseSeeder extends Seeder
 {
-    use WithoutModelEvents;
-
     /**
      * Seed the application's database.
+     *
+     * Note: do not use WithoutModelEvents here — Astrotomic Translatable
+     * persists translation rows on the parent model's "saved" event.
      */
     public function run(): void
     {
@@ -19,5 +19,10 @@ class DatabaseSeeder extends Seeder
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(CurrenciesTableSeeder::class);
+        $this->call(DocumentTypesSeeder::class);
+        $this->call(AuthoritiesSeeder::class);
+        $this->call(AddOnsSeeder::class);
+        $this->call(DeliverySpeedsSeeder::class);
+        $this->call(PricingRulesSeeder::class);
     }
 }

@@ -161,6 +161,51 @@ html[data-admin-card-style="glass"] .dropdown-item:active {
   background-color: rgba(115, 103, 240, 0.1) !important;
 }
 
+/* Sidebar locale switcher: solid panel like dock (readable over glass navbar) */
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu {
+  --bs-dropdown-bg: rgba(255, 255, 255, 0.96);
+  --bs-dropdown-border-color: rgba(75, 70, 92, 0.1);
+  --bs-dropdown-link-color: #5d596c;
+  background-color: rgba(255, 255, 255, 0.96) !important;
+  background-image: none !important;
+  border: 1px solid rgba(75, 70, 92, 0.1) !important;
+  box-shadow: 0 12px 28px rgba(34, 41, 47, 0.18) !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+}
+
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu::before {
+  content: none !important;
+  display: none !important;
+}
+
+html.dark-style[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu,
+[data-bs-theme="dark"][data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu {
+  --bs-dropdown-bg: rgba(47, 51, 73, 0.96);
+  --bs-dropdown-border-color: rgba(255, 255, 255, 0.08);
+  --bs-dropdown-link-color: #cfd3ec;
+  background-color: rgba(47, 51, 73, 0.96) !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
+}
+
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item {
+  color: var(--bs-dropdown-link-color, #5d596c) !important;
+}
+
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:hover,
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:focus {
+  color: var(--admin-primary, #7367f0) !important;
+  background-color: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, transparent) !important;
+}
+
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item.active,
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:active {
+  color: #fff !important;
+  background-color: var(--admin-primary, #7367f0) !important;
+  background-image: var(--admin-primary-gradient, none) !important;
+  background-size: 100% 100% !important;
+}
+
 /* ---------- Glass popovers / offcanvas / toasts ---------- */
 html[data-admin-card-style="glass"] .popover {
   --bs-popover-bg: var(--admin-glass-bg);
@@ -370,4 +415,95 @@ html.dark-style .admin-appearance-option__preview--glass,
     ),
     rgba(48, 48, 52, 0.32);
   border-color: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Glass sidebar + top navbar (sidebar nav layout) ---------- */
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.28) 0%,
+      rgba(255, 255, 255, 0.06) 100%
+    ),
+    rgba(170, 172, 178, 0.28) !important;
+  background-color: transparent !important;
+  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.1),
+    0 10px 28px rgba(0, 0, 0, 0.14),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.4) !important;
+  backdrop-filter: blur(40px) saturate(1.8);
+  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+}
+
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar {
+  background:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.08) 0%,
+      rgba(255, 255, 255, 0.01) 100%
+    ),
+    rgba(48, 48, 52, 0.32) !important;
+  border-color: rgba(255, 255, 255, 0.12) !important;
+  box-shadow:
+    0 0 0 0.5px rgba(0, 0, 0, 0.35),
+    0 12px 32px rgba(0, 0, 0, 0.32),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+/* Theme utility classes force opaque fills; clear them for glass */
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .bg-menu-theme,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .bg-navbar-theme {
+  background-color: transparent !important;
+}
+
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .app-brand,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .menu-inner,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .menu-sub,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar .navbar-nav-right,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar .search-input-wrapper,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar .search-input {
+  background-color: transparent !important;
+  background-image: none !important;
+}
+
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .menu-inner-shadow {
+  display: none;
+}
+
+/* Detached top bar: keep rounded glass shell */
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.navbar-detached {
+  border-radius: var(--admin-glass-radius) !important;
+}
+
+/* Soft page wash so frosted sidebar/navbar can read against the canvas */
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] body,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-wrapper,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-container,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-page,
+html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .content-wrapper {
+  background:
+    radial-gradient(1200px 600px at 10% -10%, rgba(255, 255, 255, 0.9), transparent 55%),
+    radial-gradient(900px 500px at 90% 0%, rgba(180, 184, 196, 0.28), transparent 50%),
+    linear-gradient(160deg, #f3f4f7 0%, #e7e9ef 48%, #f6f7f9 100%) !important;
+}
+
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] body,
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-wrapper,
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-container,
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-page,
+html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .content-wrapper,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] body,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-wrapper,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-container,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-page,
+[data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .content-wrapper {
+  background:
+    radial-gradient(1000px 520px at 8% -8%, rgba(255, 255, 255, 0.06), transparent 50%),
+    radial-gradient(800px 480px at 92% 0%, rgba(90, 96, 130, 0.28), transparent 48%),
+    linear-gradient(160deg, #232738 0%, #1f2333 50%, #25293c 100%) !important;
 }

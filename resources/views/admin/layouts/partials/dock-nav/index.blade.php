@@ -34,6 +34,33 @@
             'active' => request()->routeIs('admin.currencies.*'),
         ];
     }
+    if (auth('admin')->user()?->can('document_types.view')) {
+        $settingsChildren[] = [
+            'id' => 'document-types',
+            'label' => __('general.menu_document_types'),
+            'icon' => 'ti ti-file-text',
+            'url' => route('admin.document-types.index'),
+            'active' => request()->routeIs('admin.document-types.*'),
+        ];
+    }
+    if (auth('admin')->user()?->can('add_ons.view')) {
+        $settingsChildren[] = [
+            'id' => 'add-ons',
+            'label' => __('general.menu_add_ons'),
+            'icon' => 'ti ti-puzzle',
+            'url' => route('admin.add-ons.index'),
+            'active' => request()->routeIs('admin.add-ons.*'),
+        ];
+    }
+    if (auth('admin')->user()?->can('delivery_speeds.view')) {
+        $settingsChildren[] = [
+            'id' => 'delivery-speeds',
+            'label' => __('general.menu_delivery_speeds'),
+            'icon' => 'ti ti-truck-delivery',
+            'url' => route('admin.delivery-speeds.index'),
+            'active' => request()->routeIs('admin.delivery-speeds.*'),
+        ];
+    }
     $settingsChildren[] = [
         'id' => 'appearance',
         'label' => __('general.menu_appearance'),
@@ -67,6 +94,17 @@
             'children' => [],
         ],
         [
+            'id' => 'authorities',
+            'label' => __('general.menu_authorities'),
+            'icon' => 'ti ti-building-bank',
+            'route' => 'admin.authorities.index',
+            'url' => route('admin.authorities.index'),
+            'active' => request()->routeIs('admin.authorities.*'),
+            'permission' => 'authorities.view',
+            'priority' => 3,
+            'children' => [],
+        ],
+        [
             'id' => 'roles',
             'label' => __('general.roles_and_permissions'),
             'icon' => 'ti ti-shield-lock',
@@ -74,7 +112,18 @@
             'url' => route('admin.roles.index'),
             'active' => request()->routeIs('admin.roles.*'),
             'permission' => 'roles.view',
-            'priority' => 3,
+            'priority' => 4,
+            'children' => [],
+        ],
+        [
+            'id' => 'pricing-rules',
+            'label' => __('general.menu_pricing_rules'),
+            'icon' => 'ti ti-coin',
+            'route' => 'admin.pricing-rules.index',
+            'url' => route('admin.pricing-rules.index'),
+            'active' => request()->routeIs('admin.pricing-rules.*'),
+            'permission' => 'pricing_rules.view',
+            'priority' => 5,
             'children' => [],
         ],
         [
@@ -85,7 +134,7 @@
             'url' => route('admin.vendors.index'),
             'active' => request()->routeIs('admin.vendors.*'),
             'permission' => 'vendors.view',
-            'priority' => 4,
+            'priority' => 6,
             'children' => [],
         ],
         [
@@ -94,9 +143,9 @@
             'icon' => 'ti ti-settings',
             'route' => null,
             'url' => null,
-            'active' => request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*'),
+            'active' => request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*', 'admin.document-types.*', 'admin.add-ons.*', 'admin.delivery-speeds.*'),
             'permission' => null,
-            'priority' => 5,
+            'priority' => 7,
             'children' => $settingsChildren,
         ],
     ])->filter(function (array $item) {

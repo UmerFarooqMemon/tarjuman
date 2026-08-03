@@ -78,32 +78,6 @@ class Vendor extends Model implements TranslatableContract
         return $this->belongsTo(Admin::class, 'approved_by');
     }
 
-    public function languagePairs(): HasMany
-    {
-        return $this->hasMany(VendorLanguagePair::class);
-    }
-
-    public function pricingRules(): HasMany
-    {
-        return $this->hasMany(VendorPricingRule::class);
-    }
-
-    /**
-     * @return Collection<int, VendorLanguagePair>
-     */
-    public function cachedLanguagePairs(bool $activeOnly = false): Collection
-    {
-        return CatalogCache::vendorLanguagePairs($this->id, $activeOnly);
-    }
-
-    /**
-     * @return Collection<int, VendorPricingRule>
-     */
-    public function cachedPricingRules(bool $activeOnly = false): Collection
-    {
-        return CatalogCache::vendorPricingRules($this->id, $activeOnly);
-    }
-
     /**
      * @return Collection<int, static>
      */

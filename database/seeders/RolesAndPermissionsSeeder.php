@@ -141,6 +141,116 @@ class RolesAndPermissionsSeeder extends Seeder
                     ],
                 ],
             ],
+            'document_types' => [
+                'module_en' => 'Document Types',
+                'module_ar' => 'أنواع المستندات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Document Types',
+                        'name_ar' => 'عرض أنواع المستندات',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Document Types',
+                        'name_ar' => 'إنشاء أنواع مستندات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Document Types',
+                        'name_ar' => 'تعديل أنواع المستندات',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Document Types',
+                        'name_ar' => 'حذف أنواع المستندات',
+                    ],
+                ],
+            ],
+            'authorities' => [
+                'module_en' => 'Authorities',
+                'module_ar' => 'الجهات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Authorities',
+                        'name_ar' => 'عرض الجهات',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Authorities',
+                        'name_ar' => 'إنشاء جهات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Authorities',
+                        'name_ar' => 'تعديل الجهات',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Authorities',
+                        'name_ar' => 'حذف الجهات',
+                    ],
+                ],
+            ],
+            'add_ons' => [
+                'module_en' => 'Add-Ons',
+                'module_ar' => 'الإضافات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Add-Ons',
+                        'name_ar' => 'عرض الإضافات',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Add-Ons',
+                        'name_ar' => 'إنشاء إضافات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Add-Ons',
+                        'name_ar' => 'تعديل الإضافات',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Add-Ons',
+                        'name_ar' => 'حذف الإضافات',
+                    ],
+                ],
+            ],
+            'delivery_speeds' => [
+                'module_en' => 'Delivery Speeds',
+                'module_ar' => 'سرعات التسليم',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Delivery Speeds',
+                        'name_ar' => 'عرض سرعات التسليم',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Delivery Speeds',
+                        'name_ar' => 'إنشاء سرعات تسليم',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Delivery Speeds',
+                        'name_ar' => 'تعديل سرعات التسليم',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Delivery Speeds',
+                        'name_ar' => 'حذف سرعات التسليم',
+                    ],
+                ],
+            ],
+            'pricing_rules' => [
+                'module_en' => 'Pricing Rules',
+                'module_ar' => 'قواعد التسعير',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Pricing Rules',
+                        'name_ar' => 'عرض قواعد التسعير',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Pricing Rules',
+                        'name_ar' => 'إنشاء قواعد تسعير',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Pricing Rules',
+                        'name_ar' => 'تعديل قواعد التسعير',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Pricing Rules',
+                        'name_ar' => 'حذف قواعد التسعير',
+                    ],
+                ],
+            ],
         ];
     }
 

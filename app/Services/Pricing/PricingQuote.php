@@ -2,12 +2,12 @@
 
 namespace App\Services\Pricing;
 
-use App\Models\VendorPricingRule;
+use App\Models\PricingRule;
 
 readonly class PricingQuote
 {
     public function __construct(
-        public VendorPricingRule $rule,
+        public PricingRule $rule,
         public string $billingUnit,
         public int $quantity,
         public string $unitRate,
@@ -24,10 +24,11 @@ readonly class PricingQuote
     {
         return [
             'rule_id' => $this->rule->id,
+            'rule_name' => $this->rule->name,
             'billing_unit' => $this->billingUnit,
             'quantity' => $this->quantity,
             'unit_rate' => $this->unitRate,
-            'total_amount' => $this->totalAmount,
+            'amount' => $this->totalAmount,
             'currency' => $this->currency,
             'page_count' => $this->pageCount,
             'word_count' => $this->wordCount,

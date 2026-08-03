@@ -249,9 +249,10 @@ class LanguagesTableSeeder extends Seeder
                 ]
             );
 
-            $language->translateOrNew('en')->name = $data['name_en'];
-            $language->translateOrNew('ar')->name = $data['name_ar'];
-            $language->save();
+            syncModelTranslations($language, [
+                'en' => ['name' => $data['name_en']],
+                'ar' => ['name' => $data['name_ar']],
+            ]);
         }
 
         Language::forgetCrudLocaleCache();
