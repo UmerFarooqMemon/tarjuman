@@ -5,6 +5,7 @@ namespace Tests\Feature\Api;
 use App\Models\AddOn;
 use App\Models\DeliverySpeed;
 use App\Models\DocumentType;
+use App\Models\Estimate;
 use App\Models\Language;
 use App\Models\PricingRule;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -79,7 +80,19 @@ class EstimateApiTest extends TestCase
             $this->assertCount(2, $response->json('add_ons'));
             $this->assertNotNull($response->json('translation'));
             $this->assertNotNull($response->json('total_amount'));
+            $this->assertNotNull($response->json('estimate_id'));
+            $this->assertNotNull($response->json('request_id'));
+            $this->assertSame($response->json('request_id'), $response->json('session_id'));
             $this->assertFalse(File::exists($docxPath) && str_contains(dirname($docxPath), 'tmp'.DIRECTORY_SEPARATOR.'estimates'));
+
+            $estimate = Estimate::query()->with(['documents', 'addOns'])->findOrFail($response->json('estimate_id'));
+            $this->assertSame(Estimate::STATUS_QUOTED, $estimate->status);
+            $this->assertSame($response->json('request_id'), $estimate->uuid);
+            $this->assertSame($response->json('session_id'), $estimate->session_uuid);
+            $this->assertSame($documentType->id, $estimate->document_type_id);
+            $this->assertSame($response->json('total_amount'), number_format((float) $estimate->total_amount, 4, '.', ''));
+            $this->assertCount(1, $estimate->documents);
+            $this->assertCount(2, $estimate->addOns);
         } finally {
             if (is_file($docxPath)) {
                 @unlink($docxPath);
@@ -140,6 +153,13 @@ class EstimateApiTest extends TestCase
                 bcadd(bcadd($response->json('translation.amount'), '50.0000', 4), '25.0000', 4),
                 $response->json('total_amount')
             );
+
+            $estimate = Estimate::query()->findOrFail($response->json('estimate_id'));
+            $this->assertSame('word', $estimate->billing_unit);
+            $this->assertSame($wordCount, $estimate->billing_quantity);
+            $this->assertSame($deliverySpeed->id, $estimate->delivery_speed_id);
+            $this->assertSame('25.0000', number_format((float) $estimate->delivery_speed_amount, 4, '.', ''));
+            $this->assertSame($response->json('translation.rule_id'), $estimate->pricing_rule_id);
         } finally {
             if (is_file($docxPath)) {
                 @unlink($docxPath);
@@ -175,6 +195,67 @@ class EstimateApiTest extends TestCase
         } finally {
             if (is_file($docxPath)) {
                 @unlink($docxPath);
+            }
+        }
+    }
+
+    #[Test]
+    public function it_supersedes_previous_estimate_when_customer_recalculates(): void
+    {
+        [$source, $target] = $this->createLanguages();
+        $documentType = $this->createDocumentType();
+        $this->createDefaultPricingRule();
+
+        $firstDoc = $this->makeTempDocx('First estimate document text');
+        $secondPassFirstDoc = $this->makeTempDocx('First estimate document text');
+        $secondPassExtraDoc = $this->makeTempDocx('Second estimate document with extra pages words');
+
+        try {
+            $first = $this->withHeader('X-API-Token', 'test-api-token')
+                ->post('/api/estimate', [
+                    'documents' => [
+                        new UploadedFile($firstDoc, 'first.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', null, true),
+                    ],
+                    'document_type_id' => $documentType->id,
+                    'source_language_id' => $source->id,
+                    'target_language_id' => $target->id,
+                ])
+                ->assertOk();
+
+            $second = $this->withHeader('X-API-Token', 'test-api-token')
+                ->post('/api/estimate', [
+                    'documents' => [
+                        new UploadedFile($secondPassFirstDoc, 'first.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', null, true),
+                        new UploadedFile($secondPassExtraDoc, 'second.docx', 'application/vnd.openxmlformats-officedocument.wordprocessingml.document', null, true),
+                    ],
+                    'document_type_id' => $documentType->id,
+                    'source_language_id' => $source->id,
+                    'target_language_id' => $target->id,
+                    'previous_request_id' => $first->json('request_id'),
+                ])
+                ->assertOk();
+
+            $this->assertSame($first->json('session_id'), $second->json('session_id'));
+            $this->assertNotSame($first->json('request_id'), $second->json('request_id'));
+
+            $original = Estimate::query()->findOrFail($first->json('estimate_id'));
+            $latest = Estimate::query()->findOrFail($second->json('estimate_id'));
+
+            $this->assertSame(Estimate::STATUS_SUPERSEDED, $original->status);
+            $this->assertSame(Estimate::STATUS_QUOTED, $latest->status);
+            $this->assertSame($original->id, $latest->previous_estimate_id);
+            $this->assertSame(1, Estimate::query()->current()->count());
+            $this->assertSame(2, Estimate::query()->count());
+
+            $latest->markConverted(101);
+            $this->assertSame(1, Estimate::query()->converted()->count());
+            $this->assertSame(1, Estimate::query()->current()->count());
+            $this->assertSame(1, Estimate::query()->current()->converted()->count());
+        } finally {
+            foreach ([$firstDoc, $secondPassFirstDoc, $secondPassExtraDoc] as $path) {
+                if (is_file($path)) {
+                    @unlink($path);
+                }
             }
         }
     }

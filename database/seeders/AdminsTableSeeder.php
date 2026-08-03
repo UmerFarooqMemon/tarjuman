@@ -26,7 +26,7 @@ class AdminsTableSeeder extends Seeder
             'last_name' => 'User',
             'phone' => '',
             'image' => '',
-            'email' => 'admin@admin.com',
+            'email' => 'admin@tarjuman.ae',
             'password' => bcrypt('admin@dmin123'),
             'is_active' => 1,
             'is_system_admin' => 1,

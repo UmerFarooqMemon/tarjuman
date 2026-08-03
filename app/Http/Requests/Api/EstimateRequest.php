@@ -72,6 +72,10 @@ class EstimateRequest extends FormRequest
                 'integer',
                 Rule::exists('delivery_speeds', 'id')->where(fn ($q) => $q->where('is_active', true)),
             ],
+            // Pass the last estimate's request_id (or session_id) when recalculating
+            // so prior quotes in the same checkout flow are superseded.
+            'previous_request_id' => ['sometimes', 'nullable', 'uuid'],
+            'session_id' => ['sometimes', 'nullable', 'uuid'],
         ];
     }
 
@@ -89,6 +93,8 @@ class EstimateRequest extends FormRequest
             'add_on_ids' => 'add-ons',
             'add_on_ids.*' => 'add-on',
             'delivery_speed_id' => 'delivery speed',
+            'previous_request_id' => 'previous estimate',
+            'session_id' => 'estimate session',
         ];
     }
 

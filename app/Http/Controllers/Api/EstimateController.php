@@ -6,11 +6,13 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Api\EstimateRequest;
 use App\Models\DeliverySpeed;
 use App\Models\DocumentType;
+use App\Models\Estimate;
 use App\Models\Language;
 use App\Services\Estimation\AddOnEstimator;
 use App\Services\Estimation\DocumentAnalyzer;
 use App\Services\Estimation\DocumentMetrics;
 use App\Services\Estimation\EstimatePricingService;
+use App\Services\Estimation\EstimateRecorder;
 use App\Services\Estimation\TesseractLanguageMapper;
 use App\Services\Estimation\TesseractOcrService;
 use Illuminate\Http\JsonResponse;
@@ -25,6 +27,7 @@ class EstimateController extends Controller
         TesseractLanguageMapper $languageMapper,
         TesseractOcrService $ocrService,
         EstimatePricingService $estimatePricingService,
+        EstimateRecorder $estimateRecorder,
     ): JsonResponse {
         /** @var list<\Illuminate\Http\UploadedFile> $files */
         $files = $request->file('documents', []);
@@ -69,8 +72,24 @@ class EstimateController extends Controller
             ], 422);
         }
 
+        $estimate = $estimateRecorder->record(
+            uuid: $analysis['request_id'],
+            documentType: $documentType,
+            sourceLanguage: $sourceLanguage,
+            targetLanguage: $targetLanguage,
+            documents: $analysis['documents'],
+            totals: $totals,
+            addOns: $addOns,
+            pricing: $pricing,
+            deliverySpeed: $deliverySpeed,
+            previousEstimate: $this->resolvePreviousEstimate($request->input('previous_request_id')),
+            sessionUuid: $request->input('session_id'),
+        );
+
         return response()->json([
-            'request_id' => $analysis['request_id'],
+            'estimate_id' => $estimate->id,
+            'request_id' => $estimate->uuid,
+            'session_id' => $estimate->session_uuid,
             'document_type' => [
                 'id' => $documentType->id,
                 'name' => $documentType->displayName(),
@@ -103,5 +122,14 @@ class EstimateController extends Controller
                 'icon_url' => currencyIconUrl(),
             ],
         ]);
+    }
+
+    protected function resolvePreviousEstimate(mixed $previousRequestId): ?Estimate
+    {
+        if (! is_string($previousRequestId) || $previousRequestId === '') {
+            return null;
+        }
+
+        return Estimate::query()->where('uuid', $previousRequestId)->first();
     }
 }

@@ -2,25 +2,24 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Services\Admin\EstimateDashboardStats;
+
 class DashboardController extends Controller
 {
-    /**
-     * Create a new controller instance.
-     *
-     * @return void
-     */
     public function __construct()
     {
         $this->middleware('auth:admin');
     }
 
     /**
-     * Admin Dashboard
+     * Admin Dashboard — estimate funnel & quote insights.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function index()
+    public function index(EstimateDashboardStats $stats)
     {
-        return view('admin.dashboard.crm');
+        return view('admin.dashboard.index', [
+            'dashboard' => $stats->build(),
+        ]);
     }
 }
