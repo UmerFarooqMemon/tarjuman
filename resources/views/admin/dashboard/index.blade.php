@@ -265,20 +265,31 @@
         }
     }
 
-    const renderBar = (selector, rows, horizontal) => {
+    const renderBar = (selector, rows, horizontal, options = {}) => {
         const el = document.querySelector(selector);
         if (!el) return;
         if (!rows.length) {
             emptyState(el, noData);
             return;
         }
+        const showCategoryLabels = options.showCategoryLabels !== false;
         new ApexCharts(el, {
             chart: { type: 'bar', height: horizontal ? 300 : 260, toolbar: { show: false } },
             series: [{ name: countLabel, data: rows.map((r) => r.count) }],
-            xaxis: { categories: rows.map((r) => r.label) },
+            xaxis: {
+                categories: rows.map((r) => r.label),
+                labels: { show: horizontal ? true : showCategoryLabels },
+            },
+            yaxis: {
+                labels: { show: horizontal ? showCategoryLabels : true },
+            },
             plotOptions: { bar: { horizontal: !!horizontal, borderRadius: 6, columnWidth: '45%' } },
             colors: [primary],
             dataLabels: { enabled: false },
+            tooltip: {
+                y: { formatter: (val) => val },
+                x: { show: true },
+            },
             grid: { borderColor: 'rgba(75,70,92,0.08)' },
         }).render();
     };
@@ -302,7 +313,7 @@
 
     renderBar('#dashLanguagePairs', chartData.languagePairs, true);
     renderDonut('#dashDocumentTypes', chartData.documentTypes);
-    renderBar('#dashPricingRules', chartData.pricingRules, false);
+    renderBar('#dashPricingRules', chartData.pricingRules, false, { showCategoryLabels: false });
     renderDonut('#dashDeliverySpeeds', chartData.deliverySpeeds);
 })();
 </script>
