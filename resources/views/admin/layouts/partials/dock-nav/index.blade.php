@@ -138,6 +138,17 @@
             'children' => [],
         ],
         [
+            'id' => 'cms-pages',
+            'label' => __('general.menu_pages'),
+            'icon' => 'ti ti-layout-dashboard',
+            'route' => 'admin.cms.pages.index',
+            'url' => route('admin.cms.pages.index'),
+            'active' => request()->routeIs('admin.cms.*'),
+            'permission' => 'cms_pages.view',
+            'priority' => 7,
+            'children' => [],
+        ],
+        [
             'id' => 'settings',
             'label' => __('general.menu_settings'),
             'icon' => 'ti ti-settings',
@@ -145,7 +156,7 @@
             'url' => null,
             'active' => request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*', 'admin.document-types.*', 'admin.add-ons.*', 'admin.delivery-speeds.*'),
             'permission' => null,
-            'priority' => 7,
+            'priority' => 8,
             'children' => $settingsChildren,
         ],
     ])->filter(function (array $item) {

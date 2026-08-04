@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Api\AddOnsController;
 use App\Http\Controllers\Api\AuthoritiesController;
+use App\Http\Controllers\Api\CmsPageController;
 use App\Http\Controllers\Api\DeliverySpeedsController;
 use App\Http\Controllers\Api\DocumentTypesController;
 use App\Http\Controllers\Api\EstimateController;
@@ -26,6 +27,10 @@ Route::middleware('api.token')->group(function () {
     Route::get('add-ons', [AddOnsController::class, 'index'])->name('api.add-ons.index');
     Route::get('delivery-speeds', [DeliverySpeedsController::class, 'index'])->name('api.delivery-speeds.index');
     Route::get('platform-settings', [PlatformSettingsController::class, 'show'])->name('api.platform-settings.show');
+    Route::get('cms/pages/{slug}', [CmsPageController::class, 'show'])->name('api.cms.pages.show');
 
     Route::post('estimate', [EstimateController::class, 'store'])->name('api.estimate');
 });
+
+// Signed preview bootstrap for CMS admin iframe (no API token; signature is the auth).
+Route::get('cms/preview/{slug}', [CmsPageController::class, 'preview'])->name('api.cms.preview');

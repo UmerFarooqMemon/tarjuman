@@ -84,6 +84,12 @@ Route::group([
 
                 Route::resource('roles', 'RolesController')->except(['show']);
                 Route::resource('site-settings', 'SiteSettingsController')->only(['index', 'update']);
+
+                Route::get('cms/pages', 'Cms\PageController@index')->name('cms.pages.index');
+                Route::get('cms/pages/{page}', 'Cms\PageController@show')->name('cms.pages.show');
+                Route::get('cms/pages/{page}/sections/{section}/edit', 'Cms\PageController@editSection')->name('cms.pages.sections.edit');
+                Route::put('cms/pages/{page}/sections/{section}', 'Cms\PageController@updateSection')->name('cms.pages.sections.update');
+                Route::post('cms/pages/{page}/sections/{section}/toggle', 'Cms\PageController@toggleSection')->name('cms.pages.sections.toggle');
             }
         );
     });

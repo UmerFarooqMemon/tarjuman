@@ -481,3 +481,46 @@ if (! function_exists('siteFontCssStack')) {
         return '"'.siteFontFamilyName($locale).'", '.$fallback;
     }
 }
+
+if (! function_exists('cms_asset_url')) {
+    /**
+     * Absolute URL for a CMS content asset path.
+     */
+    function cms_asset_url(?string $path): ?string
+    {
+        if ($path === null || $path === '') {
+            return null;
+        }
+
+        if (str_starts_with($path, 'http://') || str_starts_with($path, 'https://')) {
+            return $path;
+        }
+
+        if (str_starts_with($path, '/images/')) {
+            return rtrim((string) config('cms.frontend_url'), '/').$path;
+        }
+
+        if (str_starts_with($path, '/')) {
+            return rtrim((string) config('app.url'), '/').$path;
+        }
+
+        return asset($path);
+    }
+}
+
+if (! function_exists('cms_frontend_url')) {
+    /**
+     * Absolute frontend URL for a preview path.
+     */
+    function cms_frontend_url(string $path = '/'): string
+    {
+        $base = rtrim((string) config('cms.frontend_url'), '/');
+        $path = '/'.ltrim($path, '/');
+
+        if ($path === '/') {
+            return $base.'/';
+        }
+
+        return $base.$path;
+    }
+}

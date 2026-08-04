@@ -63,6 +63,15 @@
         </li>
         @endcan
 
+        @can('cms_pages.view')
+        <li class="menu-item {{ request()->routeIs('admin.cms.*') ? 'active' : '' }}">
+            <a href="{{ route('admin.cms.pages.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-layout-dashboard"></i>
+                <div>{!! __('general.menu_pages') !!}</div>
+            </a>
+        </li>
+        @endcan
+
         <li class="menu-header small text-uppercase">
             <span class="menu-header-text">{!! __('general.menu_settings') !!}</span>
         </li>

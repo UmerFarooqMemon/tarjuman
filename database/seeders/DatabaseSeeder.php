@@ -25,5 +25,6 @@ class DatabaseSeeder extends Seeder
         $this->call(AddOnsSeeder::class);
         $this->call(DeliverySpeedsSeeder::class);
         $this->call(PricingRulesSeeder::class);
+        $this->call(CmsHomePageSeeder::class);
     }
 }

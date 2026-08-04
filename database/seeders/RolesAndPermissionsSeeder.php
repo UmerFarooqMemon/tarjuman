@@ -75,6 +75,20 @@ class RolesAndPermissionsSeeder extends Seeder
                     ],
                 ],
             ],
+            'cms_pages' => [
+                'module_en' => 'CMS Pages',
+                'module_ar' => 'صفحات المحتوى',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View CMS Pages',
+                        'name_ar' => 'عرض صفحات المحتوى',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit CMS Pages',
+                        'name_ar' => 'تعديل صفحات المحتوى',
+                    ],
+                ],
+            ],
             'vendors' => [
                 'module_en' => 'Vendors',
                 'module_ar' => 'موردو الخدمة',

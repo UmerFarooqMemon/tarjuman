@@ -30,6 +30,10 @@ return [
             'view',
             'edit',
         ],
+        'cms_pages' => [
+            'view',
+            'edit',
+        ],
         'vendors' => [
             'view',
             'create',
