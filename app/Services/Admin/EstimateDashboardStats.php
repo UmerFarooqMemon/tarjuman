@@ -2,6 +2,9 @@
 
 namespace App\Services\Admin;
 
+use App\Models\AddOn;
+use App\Models\DeliverySpeed;
+use App\Models\DocumentType;
 use App\Models\Estimate;
 use App\Models\EstimateAddOn;
 use Carbon\Carbon;
@@ -58,7 +61,7 @@ class EstimateDashboardStats
             ],
             'quotes_over_time' => $this->quotesOverTime($chartStart, $now),
             'language_pairs' => $this->languagePairs(),
-            'document_types' => $this->groupedCounts('document_type_name', 8),
+            'document_types' => $this->documentTypes(8),
             'pricing_rules' => $this->groupedCounts('pricing_rule_name', 8),
             'delivery_speeds' => $this->deliverySpeedMix(),
             'top_add_ons' => $this->topAddOns(8),
@@ -118,11 +121,41 @@ class EstimateDashboardStats
     }
 
     /**
+     * Group by FK and resolve labels in the current admin locale.
+     *
+     * @return list<array{label: string, count: int}>
+     */
+    protected function documentTypes(int $limit = 8): array
+    {
+        $rows = Estimate::query()
+            ->current()
+            ->select(['document_type_id', DB::raw('COUNT(*) as total')])
+            ->groupBy('document_type_id')
+            ->orderByDesc('total')
+            ->limit($limit)
+            ->get();
+
+        $types = DocumentType::query()
+            ->with('translations')
+            ->whereIn('id', $rows->pluck('document_type_id')->filter()->all())
+            ->get()
+            ->keyBy('id');
+
+        return $rows
+            ->map(fn ($row) => [
+                'label' => $types->get($row->document_type_id)?->displayName()
+                    ?: __('general.unknown'),
+                'count' => (int) $row->total,
+            ])
+            ->all();
+    }
+
+    /**
      * @return list<array{label: string, count: int}>
      */
     protected function groupedCounts(string $column, int $limit = 8): array
     {
-        $allowed = ['document_type_name', 'pricing_rule_name'];
+        $allowed = ['pricing_rule_name'];
         if (! in_array($column, $allowed, true)) {
             return [];
         }
@@ -151,19 +184,24 @@ class EstimateDashboardStats
      */
     protected function deliverySpeedMix(): array
     {
-        $none = __('general.no_delivery_speed');
-
-        return Estimate::query()
+        $rows = Estimate::query()
             ->current()
-            ->select([
-                DB::raw('COALESCE(delivery_speed_name, '.$this->quote($none).') as label'),
-                DB::raw('COUNT(*) as total'),
-            ])
-            ->groupBy('label')
+            ->select(['delivery_speed_id', DB::raw('COUNT(*) as total')])
+            ->groupBy('delivery_speed_id')
             ->orderByDesc('total')
+            ->get();
+
+        $speeds = DeliverySpeed::query()
+            ->with('translations')
+            ->whereIn('id', $rows->pluck('delivery_speed_id')->filter()->all())
             ->get()
+            ->keyBy('id');
+
+        return $rows
             ->map(fn ($row) => [
-                'label' => (string) $row->label,
+                'label' => $row->delivery_speed_id
+                    ? ($speeds->get($row->delivery_speed_id)?->displayName() ?: __('general.unknown'))
+                    : __('general.no_delivery_speed'),
                 'count' => (int) $row->total,
             ])
             ->all();
@@ -174,20 +212,30 @@ class EstimateDashboardStats
      */
     protected function topAddOns(int $limit = 8): array
     {
-        return EstimateAddOn::query()
+        $rows = EstimateAddOn::query()
             ->select([
-                'estimate_add_ons.name as label',
+                'estimate_add_ons.add_on_id',
                 DB::raw('COUNT(*) as total'),
                 DB::raw('SUM(estimate_add_ons.amount) as amount_total'),
+                DB::raw('MAX(estimate_add_ons.name) as snapshot_name'),
             ])
             ->join('estimates', 'estimates.id', '=', 'estimate_add_ons.estimate_id')
             ->whereIn('estimates.status', [Estimate::STATUS_QUOTED, Estimate::STATUS_CONVERTED])
-            ->groupBy('estimate_add_ons.name')
+            ->groupBy('estimate_add_ons.add_on_id')
             ->orderByDesc('total')
             ->limit($limit)
+            ->get();
+
+        $addOns = AddOn::query()
+            ->with('translations')
+            ->whereIn('id', $rows->pluck('add_on_id')->filter()->all())
             ->get()
+            ->keyBy('id');
+
+        return $rows
             ->map(fn ($row) => [
-                'label' => (string) $row->label,
+                'label' => $addOns->get($row->add_on_id)?->displayName()
+                    ?: ((string) $row->snapshot_name ?: __('general.unknown')),
                 'count' => (int) $row->total,
                 'amount' => (float) $row->amount_total,
             ])
@@ -201,6 +249,7 @@ class EstimateDashboardStats
     {
         return Estimate::query()
             ->current()
+            ->with(['documentType.translations'])
             ->latest('id')
             ->limit($limit)
             ->get();

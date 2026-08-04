@@ -7,8 +7,8 @@ use Illuminate\Support\Facades\Route;
 | Vendor Routes (portal)
 |--------------------------------------------------------------------------
 |
-| Vendor dashboard and authentication routes will be registered here.
 | Guard: vendor (provider: vendor_users)
+| URL: /{locale}/vendor/...
 |
 */
 
@@ -22,6 +22,24 @@ Route::group([
     ],
 ], function () {
     Route::name('vendor.')->group(function () {
-        // Vendor auth & dashboard routes will be added in a follow-up.
+        Route::get('/', 'IndexController@index');
+
+        Route::get('/auth/login', [
+            'uses' => 'Auth\LoginController@showLoginForm',
+            'as' => 'auth.login',
+        ]);
+        Route::post('/auth/login', [
+            'uses' => 'Auth\LoginController@login',
+            'as' => 'auth.login',
+        ]);
+        Route::any('/auth/logout', [
+            'uses' => 'Auth\LoginController@logout',
+            'as' => 'auth.logout',
+        ]);
+
+        Route::get('dashboard', [
+            'uses' => 'DashboardController@index',
+            'as' => 'dashboard.index',
+        ]);
     });
 });

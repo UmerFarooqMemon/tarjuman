@@ -70,9 +70,24 @@
     }
   }
 
+  function closeSidebarMenu() {
+    if (!document.documentElement.classList.contains('layout-menu-expanded')) {
+      return;
+    }
+
+    var overlay = document.querySelector('.layout-overlay');
+    if (overlay) {
+      overlay.click();
+      return;
+    }
+
+    document.documentElement.classList.remove('layout-menu-expanded');
+  }
+
   function openModal() {
     syncFormFromStorage();
     closeDockUi();
+    closeSidebarMenu();
 
     if (window.bootstrap && window.bootstrap.Modal) {
       window.bootstrap.Modal.getOrCreateInstance(modalEl).show();

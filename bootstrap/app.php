@@ -26,6 +26,7 @@ return Application::configure(basePath: dirname(__DIR__))
                 ->group(base_path('routes/admin.php'));
 
             Route::middleware('web')
+                ->namespace('App\Http\Controllers\Vendor')
                 ->group(base_path('routes/vendor.php'));
         }
     )
@@ -35,9 +36,19 @@ return Application::configure(basePath: dirname(__DIR__))
                 return null;
             }
 
+            if (preg_match('#(^|/)vendor(/|$)#', $request->path())) {
+                return route('vendor.auth.login');
+            }
+
             return route('admin.auth.login');
         });
-        $middleware->redirectUsersTo(fn () => route('admin.dashboard.index'));
+        $middleware->redirectUsersTo(function (Request $request) {
+            if (preg_match('#(^|/)vendor(/|$)#', $request->path())) {
+                return route('vendor.dashboard.index');
+            }
+
+            return route('admin.dashboard.index');
+        });
 
         $middleware->alias([
             'verified' => \Illuminate\Auth\Middleware\EnsureEmailIsVerified::class,

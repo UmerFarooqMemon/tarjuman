@@ -1,0 +1,93 @@
+/* Site settings trust-badge image galleries */
+.settings-image-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 0.85rem;
+}
+
+@media (max-width: 991.98px) {
+  .settings-image-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 575.98px) {
+  .settings-image-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.settings-image-tile {
+  position: relative;
+  aspect-ratio: 1 / 1;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(67, 89, 113, 0.15);
+  background: #f8f7fa;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0;
+}
+
+.settings-image-tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  padding: 0.65rem;
+  background: #fff;
+}
+
+.settings-image-tile__delete {
+  position: absolute;
+  top: 0.45rem;
+  inset-inline-end: 0.45rem;
+  width: 1.75rem;
+  height: 1.75rem;
+  border: 0;
+  border-radius: 999px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: color-mix(in srgb, #ea5455 92%, #000);
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.18);
+  cursor: pointer;
+  z-index: 2;
+  padding: 0;
+  line-height: 1;
+}
+
+.settings-image-tile__delete:hover,
+.settings-image-tile__delete:focus {
+  background: #ea5455;
+  color: #fff;
+}
+
+.settings-image-tile--add {
+  border-style: dashed;
+  border-color: color-mix(in srgb, var(--admin-primary, #7367f0) 45%, #d0d4e4);
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 6%, #fff);
+  color: var(--admin-primary, #7367f0);
+  cursor: pointer;
+  flex-direction: column;
+  gap: 0.25rem;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.settings-image-tile--add:hover,
+.settings-image-tile--add:focus-within {
+  background: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, #fff);
+  border-color: var(--admin-primary, #7367f0);
+}
+
+.settings-image-tile__plus {
+  font-size: 1.85rem;
+  font-weight: 600;
+  line-height: 1;
+}
+
+.settings-image-tile__add-label {
+  font-size: 0.75rem;
+  font-weight: 500;
+}

@@ -161,9 +161,7 @@
         ? asset(uploadsDir('admin').$adminUser->image)
         : asset('assets/img/avatars/1.png');
 
-    $dockLogo = ($siteSettings?->logo && file_exists(uploadsDir('front').$siteSettings->logo))
-        ? asset(uploadsDir('front').$siteSettings->logo)
-        : asset('assets/img/logo-placeholder.png');
+    $dockLogo = siteLogoUrl();
     $dockTitle = $siteSettings->site_title ?? config('app.name', 'Laravel');
 @endphp
 
@@ -312,25 +310,25 @@
         </div>
     </div>
 
-    {{-- Mobile compact bar --}}
-    <div class="admin-dock__mobile d-flex d-md-none" aria-hidden="false">
-        <a
-            href="{{ route('admin.dashboard.index') }}"
-            class="admin-dock__mobile-brand"
-            aria-label="{{ $dockTitle }}">
-            <img src="{{ $dockLogo }}" alt="{{ $dockTitle }}">
-        </a>
-
+    {{-- Mobile compact bar: menu | centered logo | actions --}}
+    <div class="admin-dock__mobile d-md-none" aria-hidden="false">
         <button
             type="button"
             class="admin-dock__mobile-menu btn"
             data-dock-open-drawer
             aria-haspopup="dialog"
             aria-controls="adminDockDrawer"
-            aria-expanded="false">
+            aria-expanded="false"
+            aria-label="{{ __('general.menu') }}">
             <i class="ti ti-menu-2"></i>
-            <span>{{ __('general.menu') }}</span>
         </button>
+
+        <a
+            href="{{ route('admin.dashboard.index') }}"
+            class="admin-dock__mobile-brand"
+            aria-label="{{ $dockTitle }}">
+            <img src="{{ $dockLogo }}" alt="{{ $dockTitle }}">
+        </a>
 
         <div class="admin-dock__mobile-actions">
             <button

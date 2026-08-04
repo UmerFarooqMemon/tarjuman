@@ -66,6 +66,40 @@
         background-size: 100% 100% !important;
     }
 
+    /* Nav pills / tabs */
+    .nav-pills .nav-link.active,
+    .nav-pills .nav-link.active:hover,
+    .nav-pills .nav-link.active:focus,
+    .nav-pills .nav-link.active:active,
+    .nav.nav-pills .nav-link.active,
+    .nav.nav-pills .nav-link.active:hover,
+    .nav.nav-pills .nav-link.active:focus {
+        background-image: var(--admin-primary-gradient) !important;
+        background-color: var(--admin-primary) !important;
+        border-color: var(--admin-primary) !important;
+        background-size: 100% 100% !important;
+        color: #fff !important;
+        box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--admin-primary) 40%, transparent);
+    }
+
+    .nav-pills .nav-link:not(.active):hover,
+    .nav-pills .nav-link:not(.active):focus {
+        color: var(--admin-primary) !important;
+        background-color: color-mix(in srgb, var(--admin-primary) 12%, transparent) !important;
+    }
+
+    .nav-tabs .nav-link.active,
+    .nav-tabs .nav-link.active:hover,
+    .nav-tabs .nav-link.active:focus {
+        color: var(--admin-primary) !important;
+        border-bottom-color: var(--admin-primary) !important;
+    }
+
+    .nav-tabs .nav-link:hover,
+    .nav-tabs .nav-link:focus {
+        color: var(--admin-primary) !important;
+    }
+
     /*
      * Vuexy RTL theme sets a hardcoded gradient with !important on active menu
      * items; match that specificity so branding wins in Arabic/RTL too.
@@ -97,9 +131,12 @@
         color: var(--admin-primary) !important;
     }
 
-    .switch-success .switch-input:checked ~ .switch-toggle-slider {
+    .switch-success .switch-input:checked ~ .switch-toggle-slider,
+    .switch-primary .switch-input:checked ~ .switch-toggle-slider {
         background: var(--admin-primary-gradient) !important;
         background-color: var(--admin-primary) !important;
+        border-color: var(--admin-primary) !important;
+        box-shadow: 0 2px 6px 0 color-mix(in srgb, var(--admin-primary) 40%, transparent) !important;
     }
 
     .form-control:focus,

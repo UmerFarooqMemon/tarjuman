@@ -40,6 +40,7 @@ class VendorUser extends Authenticatable
         'is_active' => 'boolean',
         'is_owner' => 'boolean',
         'email_verified_at' => 'datetime',
+        'password' => 'hashed',
     ];
 
     public function vendor(): BelongsTo

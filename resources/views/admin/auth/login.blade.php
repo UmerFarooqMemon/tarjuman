@@ -28,11 +28,7 @@
       <div class="w-px-400 mx-auto">
         <!-- Logo -->
         <div class="app-brand mb-4 d-flex justify-content-center align-items-center">
-            @if (isset($siteSettings) && $siteSettings->logo && file_exists(uploadsDir('front') . $siteSettings->logo))
-            <img src="{!! asset(uploadsDir('front') . $siteSettings->logo) !!}" class="img-fluid" style="">
-            @else
-            <img src="{!! asset('assets/img/logo-placeholder.png') !!}" class="img-fluid" style="max-height: 150px;">
-            @endif
+            <img src="{{ siteLogoUrl() }}" class="img-fluid" style="" alt="">
         </div>
         <!-- /Logo -->
         <h3 class="mb-1">Welcome to {{ $siteSettings->site_title ?? config('app.name', 'Laravel') }}! 👋</h3>

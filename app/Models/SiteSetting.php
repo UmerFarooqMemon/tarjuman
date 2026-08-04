@@ -9,12 +9,37 @@ class SiteSetting extends Model
 {
     protected $guarded = [];
 
+    /**
+     * @var array<string, string>
+     */
+    protected $casts = [
+        'accepted_by_images' => 'array',
+        'certified_by_images' => 'array',
+        'regulated_by_images' => 'array',
+    ];
+
     protected static function booted(): void
     {
         $flush = fn () => CatalogCache::flushSiteSettings();
 
         static::saved($flush);
         static::deleted($flush);
+    }
+
+    /**
+     * Ordered list of gallery filenames for a JSON column.
+     *
+     * @return list<string>
+     */
+    public function galleryFilenames(string $column): array
+    {
+        $images = $this->{$column} ?? [];
+
+        if (! is_array($images)) {
+            return [];
+        }
+
+        return array_values(array_filter($images, fn ($file) => is_string($file) && $file !== ''));
     }
 
     /**

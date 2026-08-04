@@ -331,3 +331,27 @@ if (! function_exists('siteSettings')) {
         return once(fn () => \App\Support\CatalogCache::siteSettings());
     }
 }
+
+if (! function_exists('siteLogoUrl')) {
+    /**
+     * Locale-aware site logo URL (falls back to EN logo, then placeholder).
+     */
+    function siteLogoUrl(?string $locale = null): string
+    {
+        $settings = siteSettings();
+        $locale = $locale ?: app()->getLocale();
+        $dir = uploadsDir('front');
+
+        $candidates = $locale === 'ar'
+            ? [$settings?->logo_ar, $settings?->logo]
+            : [$settings?->logo, $settings?->logo_ar];
+
+        foreach ($candidates as $file) {
+            if (is_string($file) && $file !== '' && file_exists($dir.$file)) {
+                return asset($dir.$file);
+            }
+        }
+
+        return asset('assets/img/logo-placeholder.png');
+    }
+}

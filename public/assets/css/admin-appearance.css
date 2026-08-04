@@ -302,6 +302,16 @@ html[data-admin-card-style="glass"] .swal2-popup .swal2-html-container {
   min-height: 100%;
 }
 
+/* Keep appearance modal above Vuexy mobile sidebar (z-index ~1080–1095) */
+#adminAppearanceModal {
+  z-index: 1200 !important;
+}
+
+body.modal-open .modal-backdrop.show:last-of-type,
+.modal-backdrop.admin-appearance-backdrop {
+  z-index: 1190 !important;
+}
+
 /* ---------- Appearance modal option cards ---------- */
 .admin-appearance-option__input {
   position: absolute;

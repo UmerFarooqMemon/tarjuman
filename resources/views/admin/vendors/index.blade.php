@@ -23,7 +23,22 @@
             <tbody>
                 @foreach ($vendors as $vendor)
                     <tr>
-                        <td>{{ $vendor->displayName() }}</td>
+                        <td>
+                            <div class="d-flex align-items-center gap-2">
+                                @if (!empty($vendor->logo) && file_exists(uploadsDir('vendors').$vendor->logo))
+                                    <div class="avatar avatar-sm">
+                                        <img src="{{ asset(uploadsDir('vendors').$vendor->logo) }}" alt="{{ $vendor->displayName() }}" class="rounded">
+                                    </div>
+                                @else
+                                    <div class="avatar avatar-sm">
+                                        <span class="avatar-initial rounded bg-label-secondary">
+                                            {{ strtoupper(mb_substr($vendor->displayName() ?: 'V', 0, 1)) }}
+                                        </span>
+                                    </div>
+                                @endif
+                                <span>{{ $vendor->displayName() }}</span>
+                            </div>
+                        </td>
                         <td>{{ $vendor->trn }}</td>
                         <td>{{ $vendor->email }}</td>
                         <td>

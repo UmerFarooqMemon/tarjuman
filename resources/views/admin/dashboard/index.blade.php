@@ -193,7 +193,7 @@
                                 <td>
                                     <span class="text-nowrap">{{ $quote->source_language_code }} → {{ $quote->target_language_code }}</span>
                                 </td>
-                                <td>{{ $quote->document_type_name ?: '—' }}</td>
+                                <td>{{ $quote->documentType?->displayName() ?: ($quote->document_type_name ?: '—') }}</td>
                                 <td>{{ number_format($quote->page_count) }} / {{ number_format($quote->word_count) }}</td>
                                 <td>
                                     @if ($quote->status === \App\Models\Estimate::STATUS_CONVERTED)

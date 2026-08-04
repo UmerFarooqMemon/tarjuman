@@ -8,11 +8,7 @@
         <div class="card-body">
           <!-- Logo -->
           <div class="app-brand justify-content-center mb-4 mt-2">
-            @if (isset($siteSettings) && $siteSettings->logo && file_exists(uploadsDir('front') . $siteSettings->logo))
-            <img src="{!! asset(uploadsDir('front') . $siteSettings->logo) !!}" class="img-fluid" style="">
-            @else
-            <img src="{!! asset('assets/img/logo-placeholder.png') !!}" class="img-fluid" style="max-height: 150px;">
-            @endif
+            <img src="{{ siteLogoUrl() }}" class="img-fluid" alt="" style="max-height: 150px;">
           </div>
           <!-- /Logo -->
           <h4 class="mb-1 pt-2">Reset Password 🔒</h4>

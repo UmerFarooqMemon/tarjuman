@@ -5,9 +5,37 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Requests\Admin\UpdateSiteSettingRequest;
 use App\Models\SiteSetting;
 use App\Support\CatalogCache;
+use Illuminate\Http\UploadedFile;
 
 class SiteSettingsController extends Controller
 {
+    /**
+     * @var list<array{column: string, keep: string, uploads: string, prefix: string}>
+     */
+    protected array $galleries = [
+        [
+            'column' => 'accepted_by_images',
+            'keep' => 'accepted_by_keep',
+            'uploads' => 'accepted_by_uploads',
+            'managed' => 'accepted_by_managed',
+            'prefix' => 'accepted-by-',
+        ],
+        [
+            'column' => 'certified_by_images',
+            'keep' => 'certified_by_keep',
+            'uploads' => 'certified_by_uploads',
+            'managed' => 'certified_by_managed',
+            'prefix' => 'certified-by-',
+        ],
+        [
+            'column' => 'regulated_by_images',
+            'keep' => 'regulated_by_keep',
+            'uploads' => 'regulated_by_uploads',
+            'managed' => 'regulated_by_managed',
+            'prefix' => 'regulated-by-',
+        ],
+    ];
+
     /**
      * Create a new controller instance.
      *
@@ -49,6 +77,9 @@ class SiteSettingsController extends Controller
                 'secondary_button_text_color' => '#000000',
                 'primary_button_border_color' => '#000000',
                 'secondary_button_border_color' => '#000000',
+                'accepted_by_images' => [],
+                'certified_by_images' => [],
+                'regulated_by_images' => [],
             ]
         );
 
@@ -63,62 +94,28 @@ class SiteSettingsController extends Controller
      */
     public function update(UpdateSiteSettingRequest $request, $id)
     {
-        // check logo if exists
-        if ($request->hasfile('logo')) {
+        $settings = SiteSetting::query()->findOrFail($id);
 
-            // move | upload file on server
-            $file = $request->file('logo');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $filename = 'logo-'.time().'.'.$extension;
-            $file->move(uploadsDir('front'), $filename);
+        $filename = $this->storeBrandingUpload(
+            $request,
+            'logo',
+            'previous_logo',
+            'logo-'
+        );
 
-            // check if upload successfully
-            if (file_exists(uploadsDir('front').$filename)
-                && ! empty($request->previous_logo && file_exists(uploadsDir('front').$request->previous_logo))
-            ) {
-                unlink(uploadsDir('front').$request->previous_logo);
-            }
-        } else {
-            $filename = $request->previous_logo;
-        }
+        $logoAr = $this->storeBrandingUpload(
+            $request,
+            'logo_ar',
+            'previous_logo_ar',
+            'logo-ar-'
+        );
 
-        // check small logo if exists
-        if ($request->hasfile('small_logo')) {
-
-            // move | upload file on server
-            $file = $request->file('small_logo');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $smlogo = 'small_logo-'.time().'.'.$extension;
-            $file->move(uploadsDir('front'), $smlogo);
-
-            // check if upload successfully
-            if (file_exists(uploadsDir('front').$smlogo)
-                && ! empty($request->previous_small_logo && file_exists(uploadsDir('front').$request->previous_small_logo))
-            ) {
-                unlink(uploadsDir('front').$request->previous_small_logo);
-            }
-        } else {
-            $smlogo = $request->previous_small_logo;
-        }
-
-        // check favicon if exists
-        if ($request->hasfile('favicon')) {
-
-            // move | upload file on server
-            $file = $request->file('favicon');
-            $extension = $file->getClientOriginalExtension(); // getting image extension
-            $favicon = 'favicon-'.time().'.'.$extension;
-            $file->move(uploadsDir('front'), $favicon);
-
-            // check if upload successfully
-            if (file_exists(uploadsDir('front').$favicon)
-                && ! empty($request->previous_favicon && file_exists(uploadsDir('front').$request->previous_favicon))
-            ) {
-                unlink(uploadsDir('front').$request->previous_favicon);
-            }
-        } else {
-            $favicon = $request->previous_favicon;
-        }
+        $favicon = $this->storeBrandingUpload(
+            $request,
+            'favicon',
+            'previous_favicon',
+            'favicon-'
+        );
 
         $data = $request->except([
             '_token',
@@ -131,18 +128,123 @@ class SiteSettingsController extends Controller
             'logo_ar',
             'favicon',
             'small_logo',
+            'accepted_by_keep',
+            'accepted_by_uploads',
+            'accepted_by_managed',
+            'certified_by_keep',
+            'certified_by_uploads',
+            'certified_by_managed',
+            'regulated_by_keep',
+            'regulated_by_uploads',
+            'regulated_by_managed',
         ]);
 
         $data['logo'] = $filename;
-        // $data['logo_ar'] = $logo_ar;
+        $data['logo_ar'] = $logoAr;
         $data['favicon'] = $favicon;
-        // $data['small_logo'] = $smlogo;
 
-        SiteSetting::where('id', $id)->update($data);
+        foreach ($this->galleries as $gallery) {
+            $data[$gallery['column']] = $this->syncGallery(
+                $request,
+                $settings,
+                $gallery['column'],
+                $gallery['keep'],
+                $gallery['uploads'],
+                $gallery['managed'],
+                $gallery['prefix']
+            );
+        }
+
+        $settings->update($data);
         CatalogCache::flushSiteSettings();
 
         return redirect()
             ->route('admin.site-settings.index')
             ->with('success', __('general.site_settings_was_updated_successfully'));
+    }
+
+    /**
+     * @return list<string>
+     */
+    protected function syncGallery(
+        UpdateSiteSettingRequest $request,
+        SiteSetting $settings,
+        string $column,
+        string $keepKey,
+        string $uploadKey,
+        string $managedKey,
+        string $prefix,
+    ): array {
+        $existing = $settings->galleryFilenames($column);
+
+        if (! $request->boolean($managedKey)) {
+            return $existing;
+        }
+
+        $keepInput = $request->input($keepKey, []);
+        if (! is_array($keepInput)) {
+            $keepInput = [];
+        }
+
+        $keep = [];
+        foreach ($keepInput as $file) {
+            if (is_string($file) && $file !== '' && in_array($file, $existing, true) && ! in_array($file, $keep, true)) {
+                $keep[] = $file;
+            }
+        }
+
+        foreach (array_diff($existing, $keep) as $removed) {
+            $path = uploadsDir('front').$removed;
+            if (is_file($path)) {
+                @unlink($path);
+            }
+        }
+
+        $uploaded = [];
+        $files = $request->file($uploadKey, []);
+        if (! is_array($files)) {
+            $files = $files ? [$files] : [];
+        }
+
+        foreach (array_values($files) as $index => $file) {
+            if (! $file instanceof UploadedFile || ! $file->isValid()) {
+                continue;
+            }
+
+            $filename = $prefix.time().'-'.$index.'.'.$file->getClientOriginalExtension();
+            $file->move(uploadsDir('front'), $filename);
+            $uploaded[] = $filename;
+        }
+
+        return array_values(array_merge($keep, $uploaded));
+    }
+
+    protected function storeBrandingUpload(
+        UpdateSiteSettingRequest $request,
+        string $fileKey,
+        string $previousKey,
+        string $prefix,
+    ): ?string {
+        if ($request->hasFile($fileKey)) {
+            $file = $request->file($fileKey);
+            $filename = $prefix.time().'.'.$file->getClientOriginalExtension();
+            $file->move(uploadsDir('front'), $filename);
+
+            $previous = $request->input($previousKey);
+            if (
+                file_exists(uploadsDir('front').$filename)
+                && is_string($previous)
+                && $previous !== ''
+                && file_exists(uploadsDir('front').$previous)
+            ) {
+                unlink(uploadsDir('front').$previous);
+            }
+
+            return $filename;
+        }
+
+        $previous = $request->input($previousKey);
+
+        return is_string($previous) && $previous !== '' ? $previous : null;
     }
 }

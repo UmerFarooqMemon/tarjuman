@@ -72,7 +72,16 @@
 </div>
 <div class="mb-3 col-md-6">
     <label class="form-label" for="phone">{!! __('general.contact_number') !!}</label>
-    <input type="text" class="form-control phone-mask" id="phone" name="phone" value="{{ old('phone', optional($vendor)->phone) }}">
+    <input
+        type="tel"
+        class="form-control"
+        id="phone"
+        name="phone"
+        autocomplete="tel"
+        data-intl-phone
+        data-initial-phone="{{ old('phone', optional($vendor)->phone) }}"
+        value="{{ old('phone', optional($vendor)->phone) }}">
+    <div class="invalid-feedback" data-intl-phone-error hidden></div>
 </div>
 <div class="mb-3 col-md-6">
     <label class="form-label" for="logo">{!! __('general.business_logo') !!}</label>

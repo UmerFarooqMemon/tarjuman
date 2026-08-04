@@ -1,12 +1,8 @@
 <!-- Menu -->
 <aside id="layout-menu" class="layout-menu menu-vertical menu bg-menu-theme">
     <div class="app-brand demo text-center" style="margin: 0px; padding-left: 20px;height: fit-content !important;min-height: 80px;">
-        <a href="javascript:;" class="app-brand-link text-center">
-            @if ($siteSettings?->logo && file_exists(uploadsDir('front') . $siteSettings->logo))
-            <img src="{!! asset(uploadsDir('front') . $siteSettings->logo) !!}" class="img-fluid" style="width: 100%;">
-            @else
-            <img src="{!! asset('assets/img/logo-placeholder.png') !!}" class="img-fluid" style="width: 100%;">
-            @endif
+        <a href="javascript:;" class="app-brand-link text-center p-2">
+            <img src="{{ siteLogoUrl() }}" class="img-fluid" style="width: 100%;" alt="{{ $siteSettings->site_title ?? config('app.name') }}">
         </a>
         <a href="javascript:void(0);" class="layout-menu-toggle menu-link text-large ms-auto">
             <i class="ti menu-toggle-icon d-none d-xl-block ti-sm align-middle"></i>

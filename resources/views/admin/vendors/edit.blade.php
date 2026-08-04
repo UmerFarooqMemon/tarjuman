@@ -1,5 +1,13 @@
 @extends('admin.layouts.app')
 
+@section('css')
+<link rel="stylesheet" href="{!! asset('assets/vendor/libs/intl-tel-input/css/intlTelInput.min.css') !!}" />
+<style>
+  .iti { width: 100%; }
+  .iti .form-control { width: 100%; }
+</style>
+@endsection
+
 @section('content')
 @php
     $crudLocales = crudLocales();
@@ -32,4 +40,13 @@
         </div>
     </div>
 </div>
+@endsection
+
+@section('footer-js')
+<script>
+  document.documentElement.setAttribute('data-iti-utils', @json(asset('assets/vendor/libs/intl-tel-input/js/utils.js')));
+  document.documentElement.setAttribute('data-iti-invalid-msg', @json(__('general.invalid_phone_number')));
+</script>
+<script src="{!! asset('assets/vendor/libs/intl-tel-input/js/intlTelInput.min.js') !!}"></script>
+<script src="{!! asset('assets/js/admin-vendor-phone.js') !!}"></script>
 @endsection
