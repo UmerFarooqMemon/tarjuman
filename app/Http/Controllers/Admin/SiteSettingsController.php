@@ -135,6 +135,20 @@ class SiteSettingsController extends Controller
             'footer-logo-ar-'
         );
 
+        $fontEn = $this->storeBrandingUpload(
+            $request,
+            'font_en',
+            'previous_font_en',
+            'font-en-'
+        );
+
+        $fontAr = $this->storeBrandingUpload(
+            $request,
+            'font_ar',
+            'previous_font_ar',
+            'font-ar-'
+        );
+
         $data = $request->except([
             '_token',
             '_method',
@@ -143,12 +157,16 @@ class SiteSettingsController extends Controller
             'previous_favicon',
             'previous_footer_logo',
             'previous_footer_logo_ar',
+            'previous_font_en',
+            'previous_font_ar',
             'previous_small_logo',
             'logo',
             'logo_ar',
             'favicon',
             'footer_logo',
             'footer_logo_ar',
+            'font_en',
+            'font_ar',
             'small_logo',
             'accepted_by_keep',
             'accepted_by_uploads',
@@ -166,6 +184,8 @@ class SiteSettingsController extends Controller
         $data['favicon'] = $favicon;
         $data['footer_logo'] = $footerLogo;
         $data['footer_logo_ar'] = $footerLogoAr;
+        $data['font_en'] = $fontEn;
+        $data['font_ar'] = $fontAr;
 
         foreach ($this->galleries as $gallery) {
             $data[$gallery['column']] = $this->syncGallery(

@@ -47,6 +47,7 @@ class SiteSettingsGalleriesSeeder extends Seeder
         );
 
         SiteSettingsTableSeeder::seedFooterLogosIfMissing($settings);
+        SiteSettingsTableSeeder::seedFontsIfMissing($settings);
         $settings->refresh();
 
         $payload = [];

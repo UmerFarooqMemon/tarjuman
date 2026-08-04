@@ -2,10 +2,9 @@
 
 @section('css')
 <link rel="stylesheet" href="{!! asset('assets/vendor/libs/intl-tel-input/css/intlTelInput.min.css') !!}" />
+<link rel="stylesheet" href="{!! asset('assets/css/admin-intl-tel-input.css') !!}" />
 <link rel="stylesheet" href="{!! asset('assets/css/admin-site-settings-gallery.css') !!}" />
 <style>
-    .iti { width: 100%; }
-    .iti .form-control { width: 100%; }
     .footer-logo-avatar {
         display: inline-flex;
         align-items: center;
@@ -202,6 +201,31 @@
                                                  style="background-color: {{ old('footer_bg_color', $records->footer_bg_color ?: '#0F172A') }};">
                                                 <img src="{!! asset(uploadsDir('front'). $records->footer_logo_ar) !!}" alt="" title="Footer Logo AR" />
                                             </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="col-12 mb-3 mt-2">
+                                    <h6 class="mb-1">{!! __('general.font_family_en') !!} / {!! __('general.font_family_ar') !!}</h6>
+                                    <!-- <small class="text-muted">{!! __('general.font_family_hint') !!}</small> -->
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="font_en">{!! __('general.font_family_en') !!}</label>
+                                    <input type="hidden" name="previous_font_en" value="{{ $records->font_en }}" />
+                                    <input type="file" id="font_en" name="font_en" class="form-control" accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,font/ttf,font/otf">
+                                    @if ($records->font_en != '' && is_file(public_path(uploadsDir('front') . $records->font_en)))
+                                        <div class="mt-2 small text-muted">
+                                            <i class="ti ti-typography me-1"></i>{{ $records->font_en }}
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="font_ar">{!! __('general.font_family_ar') !!}</label>
+                                    <input type="hidden" name="previous_font_ar" value="{{ $records->font_ar }}" />
+                                    <input type="file" id="font_ar" name="font_ar" class="form-control" accept=".woff2,.woff,.ttf,.otf,font/woff2,font/woff,font/ttf,font/otf">
+                                    @if ($records->font_ar != '' && is_file(public_path(uploadsDir('front') . $records->font_ar)))
+                                        <div class="mt-2 small text-muted">
+                                            <i class="ti ti-typography me-1"></i>{{ $records->font_ar }}
                                         </div>
                                     @endif
                                 </div>

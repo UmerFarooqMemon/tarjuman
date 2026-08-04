@@ -2,10 +2,7 @@
 
 @section('css')
 <link rel="stylesheet" href="{!! asset('assets/vendor/libs/intl-tel-input/css/intlTelInput.min.css') !!}" />
-<style>
-  .iti { width: 100%; }
-  .iti .form-control { width: 100%; }
-</style>
+<link rel="stylesheet" href="{!! asset('assets/css/admin-intl-tel-input.css') !!}" />
 @endsection
 
 @section('content')

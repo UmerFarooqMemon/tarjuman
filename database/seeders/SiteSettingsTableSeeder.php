@@ -23,6 +23,8 @@ class SiteSettingsTableSeeder extends Seeder
             $favicon,
             $footerLogo,
             $footerLogoAr,
+            $fontEn,
+            $fontAr,
         ] = $this->copyDefaultBrandingAssets();
 
         DB::table('site_settings')->insert([
@@ -36,6 +38,8 @@ class SiteSettingsTableSeeder extends Seeder
             'favicon' => $favicon,
             'footer_logo' => $footerLogo,
             'footer_logo_ar' => $footerLogoAr,
+            'font_en' => $fontEn,
+            'font_ar' => $fontAr,
             'facebook' => '',
             'twitter' => '',
             'pinterest' => '',
@@ -61,7 +65,7 @@ class SiteSettingsTableSeeder extends Seeder
             'footer_bg_color' => '#000000',
             'footer_heading_color' => '#fff',
             'footer_link_color' => '#fff',
-            'footer_link_hover_color' => '#ffffff69',
+            'footer_link_hover_color' => '#cccccc',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
@@ -70,9 +74,9 @@ class SiteSettingsTableSeeder extends Seeder
     }
 
     /**
-     * Copy default branding images into uploads/front (same path as SiteSettingsController@update).
+     * Copy default branding images/fonts into uploads/front (same path as SiteSettingsController@update).
      *
-     * @return array{0: string, 1: string, 2: string, 3: string, 4: string}
+     * @return array{0: string, 1: string, 2: string, 3: string, 4: string, 5: string, 6: string}
      */
     protected function copyDefaultBrandingAssets(): array
     {
@@ -87,6 +91,8 @@ class SiteSettingsTableSeeder extends Seeder
             ['source' => 'assets/img/branding/default-favicon.svg', 'filename' => 'favicon-'.$stamp.'.svg'],
             ['source' => 'assets/img/branding/default-footer-en-logo.svg', 'filename' => 'footer-logo-'.$stamp.'.svg'],
             ['source' => 'assets/img/branding/default-footer-ar-logo.svg', 'filename' => 'footer-logo-ar-'.$stamp.'.svg'],
+            ['source' => 'assets/fonts/SpaceGrotesk-Regular.ttf', 'filename' => 'font-en-'.$stamp.'.ttf'],
+            ['source' => 'assets/fonts/IBMPlexSansArabic-Regular.ttf', 'filename' => 'font-ar-'.$stamp.'.ttf'],
         ];
 
         $copied = [];
@@ -137,6 +143,46 @@ class SiteSettingsTableSeeder extends Seeder
                 $filename = 'footer-logo-ar-'.$stamp.'.svg';
                 File::copy($source, $destinationAbsolute.$filename);
                 $payload['footer_logo_ar'] = $filename;
+            }
+        }
+
+        if ($payload !== []) {
+            $settings->update($payload);
+            CatalogCache::flushSiteSettings();
+        }
+    }
+
+    /**
+     * Fill empty font columns on an existing settings row (safe for re-runs).
+     */
+    public static function seedFontsIfMissing(?SiteSetting $settings = null): void
+    {
+        $settings ??= SiteSetting::query()->find(1);
+        if (! $settings) {
+            return;
+        }
+
+        $destinationRelative = uploadsDir('front');
+        $destinationAbsolute = public_path($destinationRelative);
+        File::ensureDirectoryExists($destinationAbsolute);
+        $stamp = time();
+        $payload = [];
+
+        if (empty($settings->font_en)) {
+            $source = public_path('assets/fonts/SpaceGrotesk-Regular.ttf');
+            if (File::exists($source)) {
+                $filename = 'font-en-'.$stamp.'.ttf';
+                File::copy($source, $destinationAbsolute.$filename);
+                $payload['font_en'] = $filename;
+            }
+        }
+
+        if (empty($settings->font_ar)) {
+            $source = public_path('assets/fonts/IBMPlexSansArabic-Regular.ttf');
+            if (File::exists($source)) {
+                $filename = 'font-ar-'.$stamp.'.ttf';
+                File::copy($source, $destinationAbsolute.$filename);
+                $payload['font_ar'] = $filename;
             }
         }
 

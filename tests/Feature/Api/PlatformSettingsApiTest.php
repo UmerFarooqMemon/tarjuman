@@ -39,6 +39,8 @@ class PlatformSettingsApiTest extends TestCase
         $favicon = 'favicon-test.svg';
         $footerEn = 'footer-logo-en-test.svg';
         $footerAr = 'footer-logo-ar-test.svg';
+        $fontEn = 'font-en-test.woff2';
+        $fontAr = 'font-ar-test.woff2';
         $accepted = 'accepted-by-test.png';
         $certified = 'certified-by-test.png';
         $regulated = 'regulated-by-test.webp';
@@ -47,6 +49,8 @@ class PlatformSettingsApiTest extends TestCase
         File::put($dir.$favicon, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$footerEn, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$footerAr, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+        File::put($dir.$fontEn, 'woff2');
+        File::put($dir.$fontAr, 'woff2');
         File::put($dir.$accepted, 'png');
         File::put($dir.$certified, 'png');
         File::put($dir.$regulated, 'webp');
@@ -86,6 +90,8 @@ class PlatformSettingsApiTest extends TestCase
             'footer_heading_color' => '#FFFFFF',
             'footer_link_color' => '#CBD5E1',
             'footer_link_hover_color' => '#F8FAFC',
+            'font_en' => $fontEn,
+            'font_ar' => $fontAr,
         ]);
 
         CatalogCache::flushSiteSettings();
@@ -114,6 +120,10 @@ class PlatformSettingsApiTest extends TestCase
             ->assertJsonPath('data.branding.footer_heading', '#FFFFFF')
             ->assertJsonPath('data.branding.footer_link', '#CBD5E1')
             ->assertJsonPath('data.branding.footer_link_hover', '#F8FAFC')
+            ->assertJsonPath('data.branding.fonts.en.family', 'Tarjuman EN')
+            ->assertJsonPath('data.branding.fonts.ar.family', 'Tarjuman AR')
+            ->assertJsonPath('data.branding.fonts.en.format', 'woff2')
+            ->assertJsonPath('data.branding.fonts.ar.format', 'woff2')
             ->assertJsonCount(1, 'data.accepted_by')
             ->assertJsonCount(1, 'data.certified_by')
             ->assertJsonCount(1, 'data.regulated_by');
@@ -123,6 +133,8 @@ class PlatformSettingsApiTest extends TestCase
         $this->assertStringContainsString($favicon, (string) $response->json('data.logos.favicon'));
         $this->assertStringContainsString($footerEn, (string) $response->json('data.logos.footer_en'));
         $this->assertStringContainsString($footerAr, (string) $response->json('data.logos.footer_ar'));
+        $this->assertStringContainsString($fontEn, (string) $response->json('data.branding.fonts.en.url'));
+        $this->assertStringContainsString($fontAr, (string) $response->json('data.branding.fonts.ar.url'));
         $this->assertStringContainsString($accepted, (string) $response->json('data.accepted_by.0'));
         $this->assertStringContainsString($certified, (string) $response->json('data.certified_by.0'));
         $this->assertStringContainsString($regulated, (string) $response->json('data.regulated_by.0'));
@@ -133,6 +145,8 @@ class PlatformSettingsApiTest extends TestCase
             $dir.$favicon,
             $dir.$footerEn,
             $dir.$footerAr,
+            $dir.$fontEn,
+            $dir.$fontAr,
             $dir.$accepted,
             $dir.$certified,
             $dir.$regulated,

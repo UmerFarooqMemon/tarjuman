@@ -1,0 +1,40 @@
+/* intl-tel-input: full width + RTL page fixes
+   Phone widgets stay LTR (flag + dial code + number) even when the page is Arabic. */
+.iti {
+  width: 100%;
+  display: block;
+  direction: ltr;
+  text-align: left;
+  unicode-bidi: isolate;
+}
+
+.iti .iti__tel-input,
+.iti input.form-control {
+  width: 100%;
+  direction: ltr !important;
+  text-align: left !important;
+  unicode-bidi: isolate;
+}
+
+/* Flag + dial code always on the left of the LTR phone field */
+.iti__country-container {
+  left: 0 !important;
+  right: auto !important;
+}
+
+.iti__dropdown-content {
+  left: 0 !important;
+  right: auto !important;
+  text-align: left;
+  direction: ltr;
+}
+
+/*
+ * Do not set padding-left here — JS sets it from the dial-code width.
+ * Only keep a normal right padding so Vuexy RTL form styles don't squeeze the text.
+ */
+.iti--separate-dial-code .iti__tel-input.form-control,
+.iti--separate-dial-code input.form-control {
+  padding-right: 0.875rem !important;
+  padding-inline-end: 0.875rem !important;
+}

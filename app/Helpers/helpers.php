@@ -390,3 +390,94 @@ if (! function_exists('siteFooterLogoUrl')) {
         return asset('assets/img/logo-placeholder.png');
     }
 }
+
+if (! function_exists('siteFontFile')) {
+    /**
+     * Locale-aware uploaded font filename (EN / AR), or null when missing.
+     */
+    function siteFontFile(?string $locale = null): ?string
+    {
+        $settings = siteSettings();
+        $locale = strtolower(substr((string) ($locale ?: app()->getLocale()), 0, 2));
+        $dir = uploadsDir('front');
+
+        $candidates = $locale === 'ar'
+            ? [$settings?->font_ar, $settings?->font_en]
+            : [$settings?->font_en, $settings?->font_ar];
+
+        foreach ($candidates as $file) {
+            if (! is_string($file) || $file === '') {
+                continue;
+            }
+
+            if (is_file(public_path($dir.$file))) {
+                return $file;
+            }
+        }
+
+        return null;
+    }
+}
+
+if (! function_exists('siteFontUrl')) {
+    /**
+     * Absolute URL for the locale-aware uploaded font, or null.
+     */
+    function siteFontUrl(?string $locale = null): ?string
+    {
+        $file = siteFontFile($locale);
+
+        return $file ? asset(uploadsDir('front').$file) : null;
+    }
+}
+
+if (! function_exists('siteFontFormat')) {
+    /**
+     * CSS @font-face format keyword for a font filename.
+     */
+    function siteFontFormat(?string $filename): ?string
+    {
+        if (! is_string($filename) || $filename === '') {
+            return null;
+        }
+
+        $ext = strtolower(pathinfo($filename, PATHINFO_EXTENSION));
+
+        return match ($ext) {
+            'woff2' => 'woff2',
+            'woff' => 'woff',
+            'ttf' => 'truetype',
+            'otf' => 'opentype',
+            default => null,
+        };
+    }
+}
+
+if (! function_exists('siteFontFamilyName')) {
+    /**
+     * CSS font-family name for uploaded site fonts.
+     */
+    function siteFontFamilyName(?string $locale = null): string
+    {
+        $locale = strtolower(substr((string) ($locale ?: app()->getLocale()), 0, 2));
+
+        return $locale === 'ar' ? 'Tarjuman AR' : 'Tarjuman EN';
+    }
+}
+
+if (! function_exists('siteFontCssStack')) {
+    /**
+     * font-family stack for the current (or given) locale.
+     */
+    function siteFontCssStack(?string $locale = null): string
+    {
+        $locale = strtolower(substr((string) ($locale ?: app()->getLocale()), 0, 2));
+        $fallback = '"Public Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif';
+
+        if (! siteFontFile($locale)) {
+            return $fallback;
+        }
+
+        return '"'.siteFontFamilyName($locale).'", '.$fallback;
+    }
+}

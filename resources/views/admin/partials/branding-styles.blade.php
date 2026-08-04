@@ -10,8 +10,39 @@
     $secondaryButtonText = $settings?->brandingSolid('secondary_button_text_color', '#FFFFFF') ?? '#FFFFFF';
     $primaryButtonBorder = $settings?->brandingSolid('primary_button_border_color', $primarySolid) ?? $primarySolid;
     $secondaryButtonBorder = $settings?->brandingSolid('secondary_button_border_color', $secondarySolid) ?? $secondarySolid;
+
+    $fontEnFile = is_string($settings?->font_en) && $settings->font_en !== '' && is_file(public_path(uploadsDir('front').$settings->font_en))
+        ? $settings->font_en
+        : null;
+    $fontArFile = is_string($settings?->font_ar) && $settings->font_ar !== '' && is_file(public_path(uploadsDir('front').$settings->font_ar))
+        ? $settings->font_ar
+        : null;
+    $fontEnUrl = $fontEnFile ? asset(uploadsDir('front').$fontEnFile) : null;
+    $fontArUrl = $fontArFile ? asset(uploadsDir('front').$fontArFile) : null;
+    $fontEnFormat = siteFontFormat($fontEnFile);
+    $fontArFormat = siteFontFormat($fontArFile);
+    $activeFontStack = siteFontCssStack();
 @endphp
 <style>
+    @if ($fontEnUrl && $fontEnFormat)
+    @font-face {
+        font-family: "Tarjuman EN";
+        src: url("{{ $fontEnUrl }}") format("{{ $fontEnFormat }}");
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+    }
+    @endif
+    @if ($fontArUrl && $fontArFormat)
+    @font-face {
+        font-family: "Tarjuman AR";
+        src: url("{{ $fontArUrl }}") format("{{ $fontArFormat }}");
+        font-style: normal;
+        font-weight: 100 900;
+        font-display: swap;
+    }
+    @endif
+
     :root {
         --bs-primary: {{ $primarySolid }};
         --bs-secondary: {{ $secondarySolid }};
@@ -29,6 +60,13 @@
         --bs-dropdown-link-hover-bg: color-mix(in srgb, {{ $primarySolid }} 8%, transparent);
         --bs-dropdown-link-active-color: #fff;
         --bs-dropdown-link-active-bg: {{ $primarySolid }};
+        --bs-body-font-family: {!! $activeFontStack !!};
+        --admin-font-family: {!! $activeFontStack !!};
+    }
+
+    html,
+    body {
+        font-family: var(--admin-font-family) !important;
     }
 
     .btn-primary,

@@ -23,6 +23,10 @@
   document.querySelectorAll('[data-intl-phone]').forEach(function (input) {
     var fieldWrap = input.closest('.mb-3') || input.parentElement;
     var initial = (input.getAttribute('data-initial-phone') || input.value || '').trim();
+
+    // Must be LTR before init so separateDialCode padding is applied on the left
+    input.setAttribute('dir', 'ltr');
+
     var iti = window.intlTelInput(input, {
       initialCountry: 'ae',
       preferredCountries: ['ae', 'sa', 'qa', 'kw', 'bh', 'om', 'eg', 'jo', 'pk', 'in', 'gb', 'us'],
@@ -34,9 +38,36 @@
       utilsScript: utilsUrl
     });
 
+    var container = typeof iti.getContainer === 'function' ? iti.getContainer() : input.closest('.iti');
+    if (container) {
+      container.setAttribute('dir', 'ltr');
+    }
+
+    var syncPadding = function () {
+      if (!container) {
+        return;
+      }
+      var countryEl = container.querySelector('.iti__selected-country, .iti__country-container');
+      if (!countryEl) {
+        return;
+      }
+      var gutter = Math.ceil(countryEl.getBoundingClientRect().width) + 8;
+      if (gutter > 8) {
+        input.style.paddingLeft = gutter + 'px';
+        input.style.paddingInlineStart = gutter + 'px';
+      }
+    };
+
     if (initial) {
       iti.setNumber(initial);
     }
+
+    // Recalculate after layout / flag assets settle
+    syncPadding();
+    requestAnimationFrame(syncPadding);
+    setTimeout(syncPadding, 50);
+    input.addEventListener('countrychange', syncPadding);
+    window.addEventListener('load', syncPadding);
 
     var feedback = fieldWrap ? fieldWrap.querySelector('[data-intl-phone-error]') : null;
     if (!feedback && fieldWrap) {

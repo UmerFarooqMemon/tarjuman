@@ -70,6 +70,31 @@ class PlatformSettingsController extends Controller
             'footer_heading' => $settings->brandingSolid('footer_heading_color', '#FFFFFF'),
             'footer_link' => $settings->brandingSolid('footer_link_color', '#CBD5E1'),
             'footer_link_hover' => $settings->brandingSolid('footer_link_hover_color', '#FFFFFF'),
+            'fonts' => [
+                'en' => $this->fontPayload($settings->font_en, 'Tarjuman EN'),
+                'ar' => $this->fontPayload($settings->font_ar, 'Tarjuman AR'),
+            ],
+        ];
+    }
+
+    /**
+     * @return array{family: string, url: string|null, format: string|null}|null
+     */
+    protected function fontPayload(?string $filename, string $family): ?array
+    {
+        if (! is_string($filename) || $filename === '') {
+            return null;
+        }
+
+        $relative = uploadsDir('front').$filename;
+        if (! is_file(public_path($relative))) {
+            return null;
+        }
+
+        return [
+            'family' => $family,
+            'url' => asset($relative),
+            'format' => siteFontFormat($filename),
         ];
     }
 
