@@ -335,11 +335,12 @@ if (! function_exists('siteSettings')) {
 if (! function_exists('siteLogoUrl')) {
     /**
      * Locale-aware site logo URL (falls back to EN logo, then placeholder).
+     * Uses Arabic logo when locale is AR and logo_ar file exists.
      */
     function siteLogoUrl(?string $locale = null): string
     {
         $settings = siteSettings();
-        $locale = $locale ?: app()->getLocale();
+        $locale = strtolower(substr((string) ($locale ?: app()->getLocale()), 0, 2));
         $dir = uploadsDir('front');
 
         $candidates = $locale === 'ar'
@@ -347,8 +348,13 @@ if (! function_exists('siteLogoUrl')) {
             : [$settings?->logo, $settings?->logo_ar];
 
         foreach ($candidates as $file) {
-            if (is_string($file) && $file !== '' && file_exists($dir.$file)) {
-                return asset($dir.$file);
+            if (! is_string($file) || $file === '') {
+                continue;
+            }
+
+            $relative = $dir.$file;
+            if (is_file(public_path($relative))) {
+                return asset($relative);
             }
         }
 

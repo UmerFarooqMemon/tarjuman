@@ -407,7 +407,10 @@
     <div class="admin-dock-drawer__sheet" data-dock-sheet>
         <div class="admin-dock-drawer__handle" data-dock-sheet-handle aria-hidden="true"></div>
         <div class="admin-dock-drawer__header">
-            <h6 class="mb-0">{{ __('general.menu') }}</h6>
+            <a href="{{ route('admin.dashboard.index') }}" class="admin-dock-drawer__brand d-flex align-items-center gap-2 text-body text-decoration-none">
+                <img src="{{ $dockLogo }}" alt="{{ $dockTitle }}" style="max-height: 28px; width: auto;">
+                <h6 class="mb-0">{{ __('general.menu') }}</h6>
+            </a>
             <button type="button" class="btn btn-icon btn-sm" data-dock-close-drawer aria-label="{{ __('general.cancel') }}">
                 <i class="ti ti-x"></i>
             </button>

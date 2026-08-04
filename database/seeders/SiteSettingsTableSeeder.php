@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Support\CatalogCache;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -15,7 +16,7 @@ class SiteSettingsTableSeeder extends Seeder
     {
         DB::table('site_settings')->truncate();
 
-        [$logo, $favicon] = $this->copyDefaultBrandingAssets();
+        [$logo, $logoAr, $favicon] = $this->copyDefaultBrandingAssets();
 
         DB::table('site_settings')->insert([
             'site_title' => 'Tarjuman',
@@ -24,6 +25,7 @@ class SiteSettingsTableSeeder extends Seeder
             'address' => 'Dubai, UAE',
             'currency' => 'AED',
             'logo' => $logo,
+            'logo_ar' => $logoAr,
             'favicon' => $favicon,
             'facebook' => '',
             'twitter' => '',
@@ -50,34 +52,40 @@ class SiteSettingsTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now(),
         ]);
+
+        CatalogCache::flushSiteSettings();
     }
 
     /**
      * Copy default branding images into uploads/front (same path as SiteSettingsController@update).
      *
-     * @return array{0: string, 1: string} [logo filename, favicon filename]
+     * @return array{0: string, 1: string, 2: string} [logo EN, logo AR, favicon]
      */
     protected function copyDefaultBrandingAssets(): array
     {
         $destinationRelative = uploadsDir('front');
         $destinationAbsolute = public_path($destinationRelative);
+        File::ensureDirectoryExists($destinationAbsolute);
 
         $stamp = time();
         $logoFilename = 'logo-'.$stamp.'.svg';
+        $logoArFilename = 'logo-ar-'.$stamp.'.svg';
         $faviconFilename = 'favicon-'.$stamp.'.svg';
 
         $logoSource = public_path('assets/img/branding/default-logo.svg');
+        $logoArSource = public_path('assets/img/branding/default-ar-logo.svg');
         $faviconSource = public_path('assets/img/branding/default-favicon.svg');
 
-        if (! File::exists($logoSource) || ! File::exists($faviconSource)) {
+        if (! File::exists($logoSource) || ! File::exists($logoArSource) || ! File::exists($faviconSource)) {
             throw new \RuntimeException(
-                'Default branding assets are missing from public/assets/img/branding (default-logo.svg, default-favicon.svg).'
+                'Default branding assets are missing from public/assets/img/branding (default-logo.svg, default-ar-logo.svg, default-favicon.svg).'
             );
         }
 
         File::copy($logoSource, $destinationAbsolute.$logoFilename);
+        File::copy($logoArSource, $destinationAbsolute.$logoArFilename);
         File::copy($faviconSource, $destinationAbsolute.$faviconFilename);
 
-        return [$logoFilename, $faviconFilename];
+        return [$logoFilename, $logoArFilename, $faviconFilename];
     }
 }

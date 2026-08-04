@@ -42,9 +42,9 @@ class UpdateSiteSettingRequest extends FormRequest
             'pinterest' => 'max:190',
             'copyright' => 'max:65535',
             'footer_scripts' => 'max:65535',
-            'logo' => 'nullable|image|mimes:jpeg,jpg,png,svg,webp|max:4096',
-            'logo_ar' => 'nullable|image|mimes:jpeg,jpg,png,svg,webp|max:4096',
-            'favicon' => 'nullable|image|mimes:jpeg,jpg,png,svg,webp,ico|max:2048',
+            'logo' => ['nullable', 'file', 'extensions:jpeg,jpg,png,svg,webp', 'max:4096'],
+            'logo_ar' => ['nullable', 'file', 'extensions:jpeg,jpg,png,svg,webp', 'max:4096'],
+            'favicon' => ['nullable', 'file', 'extensions:jpeg,jpg,png,svg,webp,ico', 'max:2048'],
             'primary_color' => $hex,
             'primary_color_end' => $hex,
             'primary_color_angle' => $angle,
@@ -64,17 +64,17 @@ class UpdateSiteSettingRequest extends FormRequest
             'accepted_by_keep' => ['nullable', 'array'],
             'accepted_by_keep.*' => ['string', 'max:120'],
             'accepted_by_uploads' => ['nullable', 'array', 'max:24'],
-            'accepted_by_uploads.*' => ['image', 'mimes:jpeg,jpg,png,svg,webp', 'max:4096'],
+            'accepted_by_uploads.*' => ['file', 'extensions:jpeg,jpg,png,svg,webp', 'max:4096'],
             'accepted_by_managed' => ['nullable', 'boolean'],
             'certified_by_keep' => ['nullable', 'array'],
             'certified_by_keep.*' => ['string', 'max:120'],
             'certified_by_uploads' => ['nullable', 'array', 'max:24'],
-            'certified_by_uploads.*' => ['image', 'mimes:jpeg,jpg,png,svg,webp', 'max:4096'],
+            'certified_by_uploads.*' => ['file', 'extensions:jpeg,jpg,png,svg,webp', 'max:4096'],
             'certified_by_managed' => ['nullable', 'boolean'],
             'regulated_by_keep' => ['nullable', 'array'],
             'regulated_by_keep.*' => ['string', 'max:120'],
             'regulated_by_uploads' => ['nullable', 'array', 'max:24'],
-            'regulated_by_uploads.*' => ['image', 'mimes:jpeg,jpg,png,svg,webp', 'max:4096'],
+            'regulated_by_uploads.*' => ['file', 'extensions:jpeg,jpg,png,svg,webp', 'max:4096'],
             'regulated_by_managed' => ['nullable', 'boolean'],
         ];
     }
@@ -132,18 +132,19 @@ class UpdateSiteSettingRequest extends FormRequest
     public function messages(): array
     {
         return [
-            'accepted_by_uploads.*.image' => __('general.settings_gallery_invalid_image', ['gallery' => __('general.settings_tab_accepted_by')]),
-            'accepted_by_uploads.*.mimes' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_accepted_by')]),
+            'logo.extensions' => __('general.settings_logo_invalid_type', ['logo' => __('general.logo_en')]),
+            'logo_ar.extensions' => __('general.settings_logo_invalid_type', ['logo' => __('general.logo_ar')]),
+            'favicon.extensions' => __('general.settings_logo_invalid_type', ['logo' => __('general.favicon_logo')]),
+
+            'accepted_by_uploads.*.extensions' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_accepted_by')]),
             'accepted_by_uploads.*.max' => __('general.settings_gallery_too_large', ['gallery' => __('general.settings_tab_accepted_by')]),
             'accepted_by_uploads.max' => __('general.settings_gallery_too_many', ['gallery' => __('general.settings_tab_accepted_by')]),
 
-            'certified_by_uploads.*.image' => __('general.settings_gallery_invalid_image', ['gallery' => __('general.settings_tab_certified_by')]),
-            'certified_by_uploads.*.mimes' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_certified_by')]),
+            'certified_by_uploads.*.extensions' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_certified_by')]),
             'certified_by_uploads.*.max' => __('general.settings_gallery_too_large', ['gallery' => __('general.settings_tab_certified_by')]),
             'certified_by_uploads.max' => __('general.settings_gallery_too_many', ['gallery' => __('general.settings_tab_certified_by')]),
 
-            'regulated_by_uploads.*.image' => __('general.settings_gallery_invalid_image', ['gallery' => __('general.settings_tab_regulated_by')]),
-            'regulated_by_uploads.*.mimes' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_regulated_by')]),
+            'regulated_by_uploads.*.extensions' => __('general.settings_gallery_invalid_type', ['gallery' => __('general.settings_tab_regulated_by')]),
             'regulated_by_uploads.*.max' => __('general.settings_gallery_too_large', ['gallery' => __('general.settings_tab_regulated_by')]),
             'regulated_by_uploads.max' => __('general.settings_gallery_too_many', ['gallery' => __('general.settings_tab_regulated_by')]),
         ];

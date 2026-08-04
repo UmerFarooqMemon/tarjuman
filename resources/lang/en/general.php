@@ -149,6 +149,7 @@ return [
     'settings_gallery_image' => ':gallery image',
     'settings_gallery_invalid_image' => 'One of the :gallery files is not a valid image.',
     'settings_gallery_invalid_type' => 'One of the :gallery images must be JPEG, JPG, PNG, SVG, or WebP.',
+    'settings_logo_invalid_type' => ':logo must be a JPEG, JPG, PNG, SVG, or WebP file.',
     'settings_gallery_too_large' => 'One of the :gallery images must not be larger than 4 MB.',
     'settings_gallery_too_many' => 'You may upload up to 24 :gallery images at once.',
     'platform_currency' => 'Platform Currency',

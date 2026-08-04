@@ -145,6 +145,7 @@ return [
     'settings_gallery_image' => 'صورة :gallery',
     'settings_gallery_invalid_image' => 'أحد ملفات «:gallery» ليس صورة صالحة.',
     'settings_gallery_invalid_type' => 'يجب أن تكون إحدى صور «:gallery» من نوع JPEG أو JPG أو PNG أو SVG أو WebP.',
+    'settings_logo_invalid_type' => 'يجب أن يكون «:logo» ملف JPEG أو JPG أو PNG أو SVG أو WebP.',
     'settings_gallery_too_large' => 'يجب ألا يتجاوز حجم إحدى صور «:gallery» 4 ميجابايت.',
     'settings_gallery_too_many' => 'يمكنك رفع حتى 24 صورة لـ «:gallery» دفعة واحدة.',
     'platform_currency' => 'عملة المنصة',
