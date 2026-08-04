@@ -103,6 +103,19 @@ html[data-admin-nav-layout="sidebar"] {
     height: 100%;
     max-height: 100%;
   }
+
+  /* Floating sidebar sits over the layout-page gutter; keep containers flat so
+     LTR/RTL both show the same page canvas (no tinted strip behind the menu). */
+  html[data-admin-nav-layout="sidebar"] .layout-wrapper,
+  html[data-admin-nav-layout="sidebar"] .layout-container {
+    background-color: transparent !important;
+    background-image: none !important;
+  }
+}
+
+/* Hide Vuexy scroll fade under logo — custom logo height misaligns the white gradient */
+html[data-admin-nav-layout="sidebar"] #layout-menu .menu-inner-shadow {
+  display: none !important;
 }
 
 /* ---------- Desktop glass dock (near full width, inset + rounded) ---------- */

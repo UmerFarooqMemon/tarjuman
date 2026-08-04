@@ -514,16 +514,15 @@ html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-nav
   border-radius: var(--admin-glass-radius) !important;
 }
 
-/* Soft page wash so frosted sidebar/navbar can read against the canvas */
+/* Page canvas behind floating sidebar — flat + symmetric (no side-biased wash).
+   RTL sidebar sits on the right; the old 90% radial looked like a tinted strip there. */
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] body,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-wrapper,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-container,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-page,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .content-wrapper {
-  background:
-    radial-gradient(1200px 600px at 10% -10%, rgba(255, 255, 255, 0.9), transparent 55%),
-    radial-gradient(900px 500px at 90% 0%, rgba(180, 184, 196, 0.28), transparent 50%),
-    linear-gradient(160deg, #f3f4f7 0%, #e7e9ef 48%, #f6f7f9 100%) !important;
+  background: #f3f4f7 !important;
+  background-image: none !important;
 }
 
 html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] body,
@@ -536,8 +535,6 @@ html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] 
 [data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-container,
 [data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .layout-page,
 [data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .content-wrapper {
-  background:
-    radial-gradient(1000px 520px at 8% -8%, rgba(255, 255, 255, 0.06), transparent 50%),
-    radial-gradient(800px 480px at 92% 0%, rgba(90, 96, 130, 0.28), transparent 48%),
-    linear-gradient(160deg, #232738 0%, #1f2333 50%, #25293c 100%) !important;
+  background: #25293c !important;
+  background-image: none !important;
 }
