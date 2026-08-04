@@ -37,12 +37,16 @@ class PlatformSettingsApiTest extends TestCase
         $logoEn = 'logo-en-test.svg';
         $logoAr = 'logo-ar-test.svg';
         $favicon = 'favicon-test.svg';
+        $footerEn = 'footer-logo-en-test.svg';
+        $footerAr = 'footer-logo-ar-test.svg';
         $accepted = 'accepted-by-test.png';
         $certified = 'certified-by-test.png';
         $regulated = 'regulated-by-test.webp';
         File::put($dir.$logoEn, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$logoAr, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$favicon, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+        File::put($dir.$footerEn, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+        File::put($dir.$footerAr, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$accepted, 'png');
         File::put($dir.$certified, 'png');
         File::put($dir.$regulated, 'webp');
@@ -58,6 +62,8 @@ class PlatformSettingsApiTest extends TestCase
             'logo' => $logoEn,
             'logo_ar' => $logoAr,
             'favicon' => $favicon,
+            'footer_logo' => $footerEn,
+            'footer_logo_ar' => $footerAr,
             'instagram' => 'https://instagram.com/tarjuman',
             'facebook' => 'https://facebook.com/tarjuman',
             'tiktok' => 'https://tiktok.com/@tarjuman',
@@ -76,6 +82,10 @@ class PlatformSettingsApiTest extends TestCase
             'secondary_button_text_color' => '#000000',
             'primary_button_border_color' => '#227241',
             'secondary_button_border_color' => '#000000',
+            'footer_bg_color' => '#0F172A',
+            'footer_heading_color' => '#FFFFFF',
+            'footer_link_color' => '#CBD5E1',
+            'footer_link_hover_color' => '#F8FAFC',
         ]);
 
         CatalogCache::flushSiteSettings();
@@ -100,6 +110,10 @@ class PlatformSettingsApiTest extends TestCase
             ->assertJsonPath('data.branding.primary.angle', 90)
             ->assertJsonPath('data.branding.primary.css', 'linear-gradient(90deg, #111111 0%, #222222 100%)')
             ->assertJsonPath('data.branding.primary_button_text', '#FFFFFF')
+            ->assertJsonPath('data.branding.footer_bg', '#0F172A')
+            ->assertJsonPath('data.branding.footer_heading', '#FFFFFF')
+            ->assertJsonPath('data.branding.footer_link', '#CBD5E1')
+            ->assertJsonPath('data.branding.footer_link_hover', '#F8FAFC')
             ->assertJsonCount(1, 'data.accepted_by')
             ->assertJsonCount(1, 'data.certified_by')
             ->assertJsonCount(1, 'data.regulated_by');
@@ -107,10 +121,21 @@ class PlatformSettingsApiTest extends TestCase
         $this->assertStringContainsString($logoEn, (string) $response->json('data.logos.en'));
         $this->assertStringContainsString($logoAr, (string) $response->json('data.logos.ar'));
         $this->assertStringContainsString($favicon, (string) $response->json('data.logos.favicon'));
+        $this->assertStringContainsString($footerEn, (string) $response->json('data.logos.footer_en'));
+        $this->assertStringContainsString($footerAr, (string) $response->json('data.logos.footer_ar'));
         $this->assertStringContainsString($accepted, (string) $response->json('data.accepted_by.0'));
         $this->assertStringContainsString($certified, (string) $response->json('data.certified_by.0'));
         $this->assertStringContainsString($regulated, (string) $response->json('data.regulated_by.0'));
 
-        File::delete([$dir.$logoEn, $dir.$logoAr, $dir.$favicon, $dir.$accepted, $dir.$certified, $dir.$regulated]);
+        File::delete([
+            $dir.$logoEn,
+            $dir.$logoAr,
+            $dir.$favicon,
+            $dir.$footerEn,
+            $dir.$footerAr,
+            $dir.$accepted,
+            $dir.$certified,
+            $dir.$regulated,
+        ]);
     }
 }

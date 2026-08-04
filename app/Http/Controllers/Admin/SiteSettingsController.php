@@ -77,6 +77,10 @@ class SiteSettingsController extends Controller
                 'secondary_button_text_color' => '#000000',
                 'primary_button_border_color' => '#000000',
                 'secondary_button_border_color' => '#000000',
+                'footer_bg_color' => '#0F172A',
+                'footer_heading_color' => '#FFFFFF',
+                'footer_link_color' => '#CBD5E1',
+                'footer_link_hover_color' => '#FFFFFF',
                 'accepted_by_images' => [],
                 'certified_by_images' => [],
                 'regulated_by_images' => [],
@@ -117,16 +121,34 @@ class SiteSettingsController extends Controller
             'favicon-'
         );
 
+        $footerLogo = $this->storeBrandingUpload(
+            $request,
+            'footer_logo',
+            'previous_footer_logo',
+            'footer-logo-'
+        );
+
+        $footerLogoAr = $this->storeBrandingUpload(
+            $request,
+            'footer_logo_ar',
+            'previous_footer_logo_ar',
+            'footer-logo-ar-'
+        );
+
         $data = $request->except([
             '_token',
             '_method',
             'previous_logo',
             'previous_logo_ar',
             'previous_favicon',
+            'previous_footer_logo',
+            'previous_footer_logo_ar',
             'previous_small_logo',
             'logo',
             'logo_ar',
             'favicon',
+            'footer_logo',
+            'footer_logo_ar',
             'small_logo',
             'accepted_by_keep',
             'accepted_by_uploads',
@@ -142,6 +164,8 @@ class SiteSettingsController extends Controller
         $data['logo'] = $filename;
         $data['logo_ar'] = $logoAr;
         $data['favicon'] = $favicon;
+        $data['footer_logo'] = $footerLogo;
+        $data['footer_logo_ar'] = $footerLogoAr;
 
         foreach ($this->galleries as $gallery) {
             $data[$gallery['column']] = $this->syncGallery(

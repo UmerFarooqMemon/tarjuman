@@ -3,43 +3,42 @@
    Card style: html[data-admin-card-style="classic|glass"]
    ========================================================================== */
 
-/* ---------- Glass tokens (match macOS dock grey glass) ---------- */
+/* ---------- Glass tokens (frosted, more solid so cards read as real glass) ---------- */
 html[data-admin-card-style="glass"] {
-  --admin-glass-bg: rgba(170, 172, 178, 0.28);
+  --admin-glass-bg: rgba(210, 212, 218, 0.62);
   --admin-glass-bg-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.28) 0%,
-    rgba(255, 255, 255, 0.06) 100%
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.14) 100%
   );
-  --admin-glass-border: rgba(255, 255, 255, 0.32);
+  --admin-glass-border: rgba(255, 255, 255, 0.55);
   --admin-glass-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 10px 28px rgba(0, 0, 0, 0.14);
-  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
-  --admin-glass-blur: blur(40px) saturate(1.8);
-  --admin-glass-divider: rgba(75, 70, 92, 0.08);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.12);
+  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.55);
+  --admin-glass-blur: blur(48px) saturate(1.65);
+  --admin-glass-divider: rgba(75, 70, 92, 0.1);
   --admin-glass-radius: 0.75rem;
 }
 
 html.dark-style[data-admin-card-style="glass"],
 [data-bs-theme="dark"][data-admin-card-style="glass"] {
-  --admin-glass-bg: rgba(48, 48, 52, 0.32);
+  --admin-glass-bg: rgba(52, 56, 72, 0.72);
   --admin-glass-bg-image: linear-gradient(
     180deg,
-    rgba(255, 255, 255, 0.08) 0%,
-    rgba(255, 255, 255, 0.01) 100%
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 100%
   );
-  --admin-glass-border: rgba(255, 255, 255, 0.12);
+  --admin-glass-border: rgba(255, 255, 255, 0.16);
   --admin-glass-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.35),
-    0 12px 32px rgba(0, 0, 0, 0.32);
-  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
-  --admin-glass-divider: rgba(255, 255, 255, 0.08);
+    0 12px 32px rgba(0, 0, 0, 0.36);
+  --admin-glass-inset: inset 0 0.5px 0 rgba(255, 255, 255, 0.14);
+  --admin-glass-divider: rgba(255, 255, 255, 0.1);
 }
 
 /* Shared frosted surface — blur on ::before so radius clips cleanly on iOS */
 html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card),
-html[data-admin-card-style="glass"] .modal-content,
 html[data-admin-card-style="glass"] .dropdown-menu,
 html[data-admin-card-style="glass"] .popover,
 html[data-admin-card-style="glass"] .offcanvas,
@@ -57,7 +56,6 @@ html[data-admin-card-style="glass"] .flatpickr-calendar {
 }
 
 html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance-option__card)::before,
-html[data-admin-card-style="glass"] .modal-content::before,
 html[data-admin-card-style="glass"] .dropdown-menu::before,
 html[data-admin-card-style="glass"] .popover::before,
 html[data-admin-card-style="glass"] .offcanvas::before,
@@ -124,21 +122,28 @@ html[data-admin-card-style="glass"] .content-wrapper .card:not(.admin-appearance
   border-color: var(--admin-glass-divider);
 }
 
-/* ---------- Glass modals ---------- */
+/* ---------- Solid modals (readable forms; avoid glass tint / stuck overlays) ---------- */
 html[data-admin-card-style="glass"] .modal-content {
-  --bs-modal-bg: var(--admin-glass-bg);
-  --bs-modal-border-color: var(--admin-glass-border);
+  background-color: var(--bs-body-bg, #fff) !important;
+  background-image: none !important;
+  border: 1px solid rgba(75, 70, 92, 0.12) !important;
+  box-shadow: 0 0.5rem 1.5rem rgba(34, 41, 47, 0.18) !important;
+}
+
+html[data-admin-card-style="glass"] .modal-content::before {
+  content: none !important;
+  display: none !important;
+}
+
+html.dark-style[data-admin-card-style="glass"] .modal-content,
+[data-bs-theme="dark"][data-admin-card-style="glass"] .modal-content {
+  background-color: #2f3349 !important;
+  border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
 html[data-admin-card-style="glass"] .modal-header,
 html[data-admin-card-style="glass"] .modal-footer {
   background-color: transparent !important;
-  border-color: var(--admin-glass-divider) !important;
-}
-
-html[data-admin-card-style="glass"] .modal-backdrop {
-  backdrop-filter: blur(6px);
-  -webkit-backdrop-filter: blur(6px);
 }
 
 /* ---------- Glass dropdowns ---------- */
@@ -161,8 +166,10 @@ html[data-admin-card-style="glass"] .dropdown-item:active {
   background-color: rgba(115, 103, 240, 0.1) !important;
 }
 
-/* Sidebar locale switcher: solid panel like dock (readable over glass navbar) */
-html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu {
+/* Sidebar navbar menus: solid panels (readable over glass; no page text bleed-through) */
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-menu,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-menu {
   --bs-dropdown-bg: rgba(255, 255, 255, 0.96);
   --bs-dropdown-border-color: rgba(75, 70, 92, 0.1);
   --bs-dropdown-link-color: #5d596c;
@@ -174,13 +181,19 @@ html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu {
   -webkit-backdrop-filter: none !important;
 }
 
-html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu::before {
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu::before,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-menu::before,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-menu::before {
   content: none !important;
   display: none !important;
 }
 
 html.dark-style[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu,
-[data-bs-theme="dark"][data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu {
+html.dark-style[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-menu,
+html.dark-style[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-menu,
+[data-bs-theme="dark"][data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu,
+[data-bs-theme="dark"][data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-menu,
+[data-bs-theme="dark"][data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-menu {
   --bs-dropdown-bg: rgba(47, 51, 73, 0.96);
   --bs-dropdown-border-color: rgba(255, 255, 255, 0.08);
   --bs-dropdown-link-color: #cfd3ec;
@@ -188,18 +201,28 @@ html.dark-style[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-menu
   border-color: rgba(255, 255, 255, 0.08) !important;
 }
 
-html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item {
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-item,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-item {
   color: var(--bs-dropdown-link-color, #5d596c) !important;
 }
 
 html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:hover,
-html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:focus {
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:focus,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-item:hover,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-item:focus,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-item:hover,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-item:focus {
   color: var(--admin-primary, #7367f0) !important;
   background-color: color-mix(in srgb, var(--admin-primary, #7367f0) 12%, transparent) !important;
 }
 
 html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item.active,
-html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:active {
+html[data-admin-nav-layout="sidebar"] .dropdown-locale .dropdown-item:active,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-item.active,
+html[data-admin-nav-layout="sidebar"] .dropdown-style-switcher .dropdown-item:active,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-item.active,
+html[data-admin-nav-layout="sidebar"] .dropdown-user .dropdown-item:active {
   color: #fff !important;
   background-color: var(--admin-primary, #7367f0) !important;
   background-image: var(--admin-primary-gradient, none) !important;
@@ -302,12 +325,13 @@ html[data-admin-card-style="glass"] .swal2-popup .swal2-html-container {
   min-height: 100%;
 }
 
-/* Keep appearance modal above Vuexy mobile sidebar (z-index ~1080–1095) */
+/* Keep appearance modal above Vuexy mobile sidebar (z-index ~1080–1095).
+   Do NOT raise all modal backdrops — that puts the dimmer above Create/Edit dialogs and freezes the UI. */
 #adminAppearanceModal {
   z-index: 1200 !important;
 }
 
-body.modal-open .modal-backdrop.show:last-of-type,
+body.modal-open:has(#adminAppearanceModal.show) .modal-backdrop.show,
 .modal-backdrop.admin-appearance-backdrop {
   z-index: 1190 !important;
 }
@@ -376,16 +400,16 @@ body.modal-open .modal-backdrop.show:last-of-type,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.14) 100%
     ),
-    rgba(170, 172, 178, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+    rgba(210, 212, 218, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 8px 20px rgba(0, 0, 0, 0.12);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(48px) saturate(1.65);
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
 }
 
 .admin-appearance-option__preview-bar,
@@ -420,57 +444,57 @@ html.dark-style .admin-appearance-option__preview--glass,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.01) 100%
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.03) 100%
     ),
-    rgba(48, 48, 52, 0.32);
-  border-color: rgba(255, 255, 255, 0.12);
+    rgba(52, 56, 72, 0.72);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 /* ---------- Glass sidebar + top navbar (sidebar nav layout) ---------- */
+/* Keep an opaque-enough base under the frost so page/brand colors do not bleed through.
+   Do not set background-color: transparent after the shorthand — that wiped the base layer. */
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 100%
-    ),
-    rgba(170, 172, 178, 0.28) !important;
-  background-color: transparent !important;
-  border: 1px solid rgba(255, 255, 255, 0.32) !important;
+  background-color: rgba(210, 212, 218, 0.72) !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.55) 0%,
+    rgba(255, 255, 255, 0.14) 100%
+  ) !important;
+  border: 1px solid rgba(255, 255, 255, 0.55) !important;
   box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 10px 28px rgba(0, 0, 0, 0.14),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.4) !important;
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.12),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.55) !important;
+  backdrop-filter: blur(48px) saturate(1.65);
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
+  isolation: isolate;
 }
 
 html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
 html.dark-style[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar,
 [data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu.layout-menu,
 [data-bs-theme="dark"][data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-navbar.layout-navbar {
-  background:
-    linear-gradient(
-      180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.01) 100%
-    ),
-    rgba(48, 48, 52, 0.32) !important;
-  border-color: rgba(255, 255, 255, 0.12) !important;
+  background-color: rgba(52, 56, 72, 0.78) !important;
+  background-image: linear-gradient(
+    180deg,
+    rgba(255, 255, 255, 0.14) 0%,
+    rgba(255, 255, 255, 0.03) 100%
+  ) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
   box-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.35),
-    0 12px 32px rgba(0, 0, 0, 0.32),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.1) !important;
+    0 12px 32px rgba(0, 0, 0, 0.36),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.14) !important;
 }
 
-/* Theme utility classes force opaque fills; clear them for glass */
+/* Theme utility classes force opaque fills; clear them so our glass base shows */
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .bg-menu-theme,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] .bg-navbar-theme {
   background-color: transparent !important;
+  background-image: none !important;
 }
-
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .app-brand,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .menu-inner,
 html[data-admin-card-style="glass"][data-admin-nav-layout="sidebar"] #layout-menu .menu-sub,

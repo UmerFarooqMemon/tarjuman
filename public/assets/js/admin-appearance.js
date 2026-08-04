@@ -90,7 +90,19 @@
     closeSidebarMenu();
 
     if (window.bootstrap && window.bootstrap.Modal) {
-      window.bootstrap.Modal.getOrCreateInstance(modalEl).show();
+      var instance = window.bootstrap.Modal.getOrCreateInstance(modalEl);
+      modalEl.addEventListener(
+        'shown.bs.modal',
+        function markAppearanceBackdrop() {
+          var backdrops = document.querySelectorAll('.modal-backdrop.show');
+          var backdrop = backdrops[backdrops.length - 1];
+          if (backdrop) {
+            backdrop.classList.add('admin-appearance-backdrop');
+          }
+        },
+        { once: true }
+      );
+      instance.show();
     }
   }
 

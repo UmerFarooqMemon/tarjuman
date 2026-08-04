@@ -39,6 +39,8 @@ class PlatformSettingsController extends Controller
                     'en' => $this->uploadUrl($settings->logo),
                     'ar' => $this->uploadUrl($settings->logo_ar),
                     'favicon' => $this->uploadUrl($settings->favicon),
+                    'footer_en' => $this->uploadUrl($settings->footer_logo),
+                    'footer_ar' => $this->uploadUrl($settings->footer_logo_ar),
                 ],
                 'accepted_by' => $this->galleryUrls($settings, 'accepted_by_images'),
                 'certified_by' => $this->galleryUrls($settings, 'certified_by_images'),
@@ -64,6 +66,10 @@ class PlatformSettingsController extends Controller
             'secondary_button_text' => $settings->brandingSolid('secondary_button_text_color', '#000000'),
             'primary_button_border' => $settings->brandingSolid('primary_button_border_color', '#227241'),
             'secondary_button_border' => $settings->brandingSolid('secondary_button_border_color', '#000000'),
+            'footer_bg' => $settings->brandingSolid('footer_bg_color', '#0F172A'),
+            'footer_heading' => $settings->brandingSolid('footer_heading_color', '#FFFFFF'),
+            'footer_link' => $settings->brandingSolid('footer_link_color', '#CBD5E1'),
+            'footer_link_hover' => $settings->brandingSolid('footer_link_hover_color', '#FFFFFF'),
         ];
     }
 

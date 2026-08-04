@@ -39,6 +39,17 @@
         target.input.value = hex;
         updateSwatch(target.swatch, hex);
         refreshGradientPreviews();
+        refreshFooterLogoAvatars();
+    }
+
+    function refreshFooterLogoAvatars() {
+        var input = document.getElementById('footer_bg_color');
+        var fallback = '#0F172A';
+        var color = input ? normalizeHex(input.value, fallback) : fallback;
+
+        document.querySelectorAll('.js-footer-logo-avatar').forEach(function (avatar) {
+            avatar.style.backgroundColor = color;
+        });
     }
 
     function refreshGradientPreviews() {
@@ -194,6 +205,7 @@
                 }
 
                 refreshGradientPreviews();
+                refreshFooterLogoAvatars();
             });
         });
 
@@ -233,5 +245,6 @@
         });
 
         refreshGradientPreviews();
+        refreshFooterLogoAvatars();
     });
 })();

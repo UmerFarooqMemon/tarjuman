@@ -118,6 +118,12 @@ html[data-admin-nav-layout="sidebar"] {
   padding: 0 var(--dock-inset-x, 0.85rem);
 }
 
+/* Keep dock under Bootstrap modals (1050/1055) so Create/Edit aren't blocked */
+body.modal-open .admin-dock,
+body.modal-open .admin-dock-drawer {
+  z-index: 1030 !important;
+}
+
 .admin-dock__desktop,
 .admin-dock__mobile {
   pointer-events: auto;
@@ -154,22 +160,22 @@ html.dark-style .admin-dock__glass,
   box-shadow: 0 12px 32px rgba(0, 0, 0, 0.35);
 }
 
-/* Glass appearance: macOS grey frosted dock */
+/* Glass appearance: frosted dock (matches card glass tokens) */
 html[data-admin-card-style="glass"] .admin-dock__glass {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.14) 100%
     ),
-    rgba(170, 172, 178, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+    rgba(210, 212, 218, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 10px 28px rgba(0, 0, 0, 0.14),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.12),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(48px) saturate(1.65);
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
 }
 
 html.dark-style[data-admin-card-style="glass"] .admin-dock__glass,
@@ -177,15 +183,15 @@ html.dark-style[data-admin-card-style="glass"] .admin-dock__glass,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.01) 100%
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.03) 100%
     ),
-    rgba(48, 48, 52, 0.32);
-  border-color: rgba(255, 255, 255, 0.12);
+    rgba(52, 56, 72, 0.72);
+  border-color: rgba(255, 255, 255, 0.16);
   box-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.35),
-    0 12px 32px rgba(0, 0, 0, 0.32),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.1);
+    0 12px 32px rgba(0, 0, 0, 0.36),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.14);
 }
 
 .admin-dock__scroller {
@@ -527,17 +533,17 @@ html[data-admin-card-style="glass"] .admin-dock__mobile {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.14) 100%
     ),
-    rgba(170, 172, 178, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+    rgba(210, 212, 218, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 10px 28px rgba(0, 0, 0, 0.14),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 10px 28px rgba(0, 0, 0, 0.12),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(48px) saturate(1.65);
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
 }
 
 html.dark-style[data-admin-card-style="glass"] .admin-dock__mobile,
@@ -545,11 +551,11 @@ html.dark-style[data-admin-card-style="glass"] .admin-dock__mobile,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.01) 100%
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.03) 100%
     ),
-    rgba(48, 48, 52, 0.32);
-  border-color: rgba(255, 255, 255, 0.12);
+    rgba(52, 56, 72, 0.72);
+  border-color: rgba(255, 255, 255, 0.16);
 }
 
 .admin-dock__mobile-actions {
@@ -683,17 +689,17 @@ html[data-admin-card-style="glass"] .admin-dock-drawer__sheet {
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.28) 0%,
-      rgba(255, 255, 255, 0.06) 100%
+      rgba(255, 255, 255, 0.55) 0%,
+      rgba(255, 255, 255, 0.14) 100%
     ),
-    rgba(170, 172, 178, 0.28);
-  border: 1px solid rgba(255, 255, 255, 0.32);
+    rgba(210, 212, 218, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.55);
   box-shadow:
-    0 0 0 0.5px rgba(0, 0, 0, 0.1),
-    0 12px 32px rgba(0, 0, 0, 0.16),
-    inset 0 0.5px 0 rgba(255, 255, 255, 0.4);
-  backdrop-filter: blur(40px) saturate(1.8);
-  -webkit-backdrop-filter: blur(40px) saturate(1.8);
+    0 0 0 0.5px rgba(0, 0, 0, 0.08),
+    0 12px 32px rgba(0, 0, 0, 0.14),
+    inset 0 0.5px 0 rgba(255, 255, 255, 0.55);
+  backdrop-filter: blur(48px) saturate(1.65);
+  -webkit-backdrop-filter: blur(48px) saturate(1.65);
 }
 
 html.dark-style[data-admin-card-style="glass"] .admin-dock-drawer__sheet,
@@ -701,11 +707,11 @@ html.dark-style[data-admin-card-style="glass"] .admin-dock-drawer__sheet,
   background:
     linear-gradient(
       180deg,
-      rgba(255, 255, 255, 0.08) 0%,
-      rgba(255, 255, 255, 0.01) 100%
+      rgba(255, 255, 255, 0.14) 0%,
+      rgba(255, 255, 255, 0.03) 100%
     ),
-    rgba(48, 48, 52, 0.32);
-  border-color: rgba(255, 255, 255, 0.12);
+    rgba(52, 56, 72, 0.72);
+  border-color: rgba(255, 255, 255, 0.16);
   box-shadow:
     0 0 0 0.5px rgba(0, 0, 0, 0.35),
     0 12px 32px rgba(0, 0, 0, 0.32),

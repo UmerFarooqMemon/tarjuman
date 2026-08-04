@@ -46,6 +46,9 @@ class SiteSettingsGalleriesSeeder extends Seeder
             ]
         );
 
+        SiteSettingsTableSeeder::seedFooterLogosIfMissing($settings);
+        $settings->refresh();
+
         $payload = [];
 
         foreach ($this->galleries as $gallery) {

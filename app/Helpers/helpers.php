@@ -361,3 +361,32 @@ if (! function_exists('siteLogoUrl')) {
         return asset('assets/img/logo-placeholder.png');
     }
 }
+
+if (! function_exists('siteFooterLogoUrl')) {
+    /**
+     * Locale-aware footer logo URL (falls back to EN footer logo, then site logo, then placeholder).
+     */
+    function siteFooterLogoUrl(?string $locale = null): string
+    {
+        $settings = siteSettings();
+        $locale = strtolower(substr((string) ($locale ?: app()->getLocale()), 0, 2));
+        $dir = uploadsDir('front');
+
+        $candidates = $locale === 'ar'
+            ? [$settings?->footer_logo_ar, $settings?->footer_logo, $settings?->logo_ar, $settings?->logo]
+            : [$settings?->footer_logo, $settings?->footer_logo_ar, $settings?->logo, $settings?->logo_ar];
+
+        foreach ($candidates as $file) {
+            if (! is_string($file) || $file === '') {
+                continue;
+            }
+
+            $relative = $dir.$file;
+            if (is_file(public_path($relative))) {
+                return asset($relative);
+            }
+        }
+
+        return asset('assets/img/logo-placeholder.png');
+    }
+}

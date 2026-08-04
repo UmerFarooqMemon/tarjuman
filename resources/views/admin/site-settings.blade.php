@@ -6,6 +6,24 @@
 <style>
     .iti { width: 100%; }
     .iti .form-control { width: 100%; }
+    .footer-logo-avatar {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 5.5rem;
+        height: 5.5rem;
+        border-radius: 50%;
+        overflow: hidden;
+        border: 1px solid rgba(75, 70, 92, 0.12);
+        box-shadow: 0 2px 8px rgba(34, 41, 47, 0.08);
+    }
+    .footer-logo-avatar img {
+        max-width: 70%;
+        max-height: 70%;
+        width: auto;
+        height: auto;
+        object-fit: contain;
+    }
 </style>
 @endsection
 
@@ -135,7 +153,7 @@
                                     <label class="form-label" for="logo_en">{!! __('general.logo_en') !!}</label>
                                     <input type="hidden" name="previous_logo" value="{{ $records->logo }}" />
                                     <input type="file" id="logo_en" name="logo" class="form-control" accept="image/*">
-                                    @if ($records->logo != '' && file_exists(uploadsDir('front') . $records->logo))
+                                    @if ($records->logo != '' && is_file(public_path(uploadsDir('front') . $records->logo)))
                                         <div class="mt-2">
                                             <img src="{!! asset(uploadsDir('front'). $records->logo) !!}" alt="" title="Logo EN" class="img-responsive" style="max-height: 80px;" />
                                         </div>
@@ -145,22 +163,81 @@
                                     <label class="form-label" for="logo_ar">{!! __('general.logo_ar') !!}</label>
                                     <input type="hidden" name="previous_logo_ar" value="{{ $records->logo_ar }}" />
                                     <input type="file" id="logo_ar" name="logo_ar" class="form-control" accept="image/*">
-                                    @if ($records->logo_ar != '' && file_exists(uploadsDir('front') . $records->logo_ar))
+                                    @if ($records->logo_ar != '' && is_file(public_path(uploadsDir('front') . $records->logo_ar)))
                                         <div class="mt-2">
                                             <img src="{!! asset(uploadsDir('front'). $records->logo_ar) !!}" alt="" title="Logo AR" class="img-responsive" style="max-height: 80px;" />
                                         </div>
                                     @endif
                                 </div>
-                                <div class="mb-3 col-md-6">
+                                <div class="mb-3 col-md-12">
                                     <label class="form-label" for="favicon_logo">{!! __('general.favicon_logo') !!}</label>
                                     <input type="hidden" name="previous_favicon" value="{{ $records->favicon }}" />
                                     <input type="file" id="favicon_logo" name="favicon" class="form-control" accept="image/*">
-                                    @if ($records->favicon != '' && file_exists(uploadsDir('front') . $records->favicon))
+                                    @if ($records->favicon != '' && is_file(public_path(uploadsDir('front') . $records->favicon)))
                                         <div class="avatar mr-1 avatar-xl mt-2">
                                             <img src="{!! asset(uploadsDir('front'). $records->favicon) !!}" alt="" title="Favicon" class="img-responsive rounded" />
                                         </div>
                                     @endif
                                 </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="footer_logo_en">{!! __('general.footer_logo_en') !!}</label>
+                                    <input type="hidden" name="previous_footer_logo" value="{{ $records->footer_logo }}" />
+                                    <input type="file" id="footer_logo_en" name="footer_logo" class="form-control" accept="image/*">
+                                    @if ($records->footer_logo != '' && is_file(public_path(uploadsDir('front') . $records->footer_logo)))
+                                        <div class="mt-2">
+                                            <div class="js-footer-logo-avatar footer-logo-avatar"
+                                                 style="background-color: {{ old('footer_bg_color', $records->footer_bg_color ?: '#0F172A') }};">
+                                                <img src="{!! asset(uploadsDir('front'). $records->footer_logo) !!}" alt="" title="Footer Logo EN" />
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+                                <div class="mb-3 col-md-6">
+                                    <label class="form-label" for="footer_logo_ar">{!! __('general.footer_logo_ar') !!}</label>
+                                    <input type="hidden" name="previous_footer_logo_ar" value="{{ $records->footer_logo_ar }}" />
+                                    <input type="file" id="footer_logo_ar" name="footer_logo_ar" class="form-control" accept="image/*">
+                                    @if ($records->footer_logo_ar != '' && is_file(public_path(uploadsDir('front') . $records->footer_logo_ar)))
+                                        <div class="mt-2">
+                                            <div class="js-footer-logo-avatar footer-logo-avatar"
+                                                 style="background-color: {{ old('footer_bg_color', $records->footer_bg_color ?: '#0F172A') }};">
+                                                <img src="{!! asset(uploadsDir('front'). $records->footer_logo_ar) !!}" alt="" title="Footer Logo AR" />
+                                            </div>
+                                        </div>
+                                    @endif
+                                </div>
+
+                                <div class="col-12 mb-3 mt-2">
+                                    <h6 class="mb-1">{!! __('general.footer_colors') !!}</h6>
+                                    <small class="text-muted">{!! __('general.footer_colors_hint') !!}</small>
+                                </div>
+
+                                @include('admin.partials.solid-color-field', [
+                                    'label' => __('general.footer_bg_color'),
+                                    'name' => 'footer_bg_color',
+                                    'default' => '#0F172A',
+                                    'records' => $records,
+                                ])
+
+                                @include('admin.partials.solid-color-field', [
+                                    'label' => __('general.footer_heading_color'),
+                                    'name' => 'footer_heading_color',
+                                    'default' => '#FFFFFF',
+                                    'records' => $records,
+                                ])
+
+                                @include('admin.partials.solid-color-field', [
+                                    'label' => __('general.footer_link_color'),
+                                    'name' => 'footer_link_color',
+                                    'default' => '#CBD5E1',
+                                    'records' => $records,
+                                ])
+
+                                @include('admin.partials.solid-color-field', [
+                                    'label' => __('general.footer_link_hover_color'),
+                                    'name' => 'footer_link_hover_color',
+                                    'default' => '#FFFFFF',
+                                    'records' => $records,
+                                ])
 
                                 <div class="col-12 mb-3 mt-2">
                                     <h6 class="mb-1">{!! __('general.branding_colors') !!}</h6>
