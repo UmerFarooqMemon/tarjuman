@@ -24,6 +24,7 @@ return [
     'menu_media_files' => 'Media (Images)',
     'welcome' => 'Welcome',
     'login_page_content' => 'Please sign-in to your account and manage the orders & services',
+    'auth_cover_tagline' => 'English ↔ Arabic translation, made clear.',
     'email' => 'Email',
     'password' => 'Password',
     'forgot_password' => 'Forgot Password?',

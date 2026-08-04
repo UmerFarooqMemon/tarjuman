@@ -30,7 +30,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      href="https://fonts.googleapis.com/css2?family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&ampdisplay=swap"
+      href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600;9..144,700&family=IBM+Plex+Sans+Arabic:wght@400;500;600;700&family=Public+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500;1,600;1,700&display=swap"
       rel="stylesheet" />
 
     <!-- Icons -->
@@ -53,6 +53,7 @@
     <!-- Page CSS -->
     <!-- Page -->
     <link rel="stylesheet" href="{!! asset('assets/vendor/css/pages/page-auth.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/auth-translation-cover.css') !!}" />
 
     <!-- Helpers -->
     <script src="{!! asset('assets/vendor/js/helpers.js') !!}"></script>
@@ -106,6 +107,7 @@
 
     <!-- Page JS -->
     <script src="{!! asset('assets/js/pages-auth.js') !!}"></script>
+    <script src="{!! asset('assets/js/auth-translation-cover.js') !!}"></script>
     <!-- END: Theme JS-->
     
     <!-- Toastr -->

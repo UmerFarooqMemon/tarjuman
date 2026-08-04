@@ -4,26 +4,15 @@
 <div class="authentication-wrapper authentication-cover authentication-bg">
   <div class="authentication-inner row">
     <div class="d-none d-lg-flex col-lg-7 p-0">
-      <div class="auth-cover-bg auth-cover-bg-color d-flex justify-content-center align-items-center">
-        <img
-          src="{!! asset('assets/img/illustrations/auth-login-illustration-light.png') !!}"
-          alt="auth-login-cover"
-          class="img-fluid my-5 auth-illustration"
-          data-app-light-img="illustrations/auth-login-illustration-light.png"
-          data-app-dark-img="illustrations/auth-login-illustration-dark.png" />
-        <img
-          src="{!! asset('assets/img/illustrations/bg-shape-image-light.png') !!}"
-          alt="auth-login-cover"
-          class="platform-bg"
-          data-app-light-img="illustrations/bg-shape-image-light.png"
-          data-app-dark-img="illustrations/bg-shape-image-dark.png" />
+      <div class="auth-cover-bg d-flex justify-content-center align-items-center p-0">
+        @include('admin.auth.partials.translation-cover')
       </div>
     </div>
 
     <div class="d-flex col-12 col-lg-5 align-items-center p-sm-5 p-4">
       <div class="w-px-400 mx-auto">
         <div class="app-brand mb-4 d-flex justify-content-center align-items-center">
-            <img src="{{ siteLogoUrl() }}" class="img-fluid" alt="" style="max-height: 150px;">
+            <img src="{{ siteLogoUrl() }}" class="img-fluid" alt="{{ $siteSettings->site_title ?? config('app.name', 'Tarjuman') }}" style="max-height: 150px;">
         </div>
 
         <h3 class="mb-1">{{ __('general.vendor_login_welcome', ['site' => $siteSettings->site_title ?? config('app.name', 'Tarjuman')]) }}</h3>
