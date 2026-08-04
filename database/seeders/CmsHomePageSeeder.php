@@ -25,17 +25,26 @@ class CmsHomePageSeeder extends Seeder
         foreach (['stats_trust', 'supported_documents', 'why_choose_us'] as $type) {
             $schema = SchemaRegistry::get($type);
 
-            CmsSection::query()->updateOrCreate(
+            $section = CmsSection::query()->firstOrCreate(
                 [
                     'cms_page_id' => $page->id,
                     'type' => $type,
                 ],
                 [
-                    'sort_order' => $order++,
+                    'sort_order' => $order,
                     'is_enabled' => true,
                     'content' => $schema->defaults(),
                 ]
             );
+
+            // Never overwrite edited content (including uploaded images) on re-seed.
+            if (! $section->wasRecentlyCreated) {
+                $section->update([
+                    'sort_order' => $order,
+                ]);
+            }
+
+            $order++;
         }
 
         CmsCache::flushPage('home');
