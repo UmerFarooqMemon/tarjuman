@@ -35,6 +35,11 @@ class SiteSetting extends Model
     {
         $images = $this->{$column} ?? [];
 
+        if (is_string($images)) {
+            $decoded = json_decode($images, true);
+            $images = is_array($decoded) ? $decoded : [];
+        }
+
         if (! is_array($images)) {
             return [];
         }

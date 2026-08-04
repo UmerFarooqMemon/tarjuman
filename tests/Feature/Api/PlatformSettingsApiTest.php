@@ -37,9 +37,15 @@ class PlatformSettingsApiTest extends TestCase
         $logoEn = 'logo-en-test.svg';
         $logoAr = 'logo-ar-test.svg';
         $favicon = 'favicon-test.svg';
+        $accepted = 'accepted-by-test.png';
+        $certified = 'certified-by-test.png';
+        $regulated = 'regulated-by-test.webp';
         File::put($dir.$logoEn, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$logoAr, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
         File::put($dir.$favicon, '<svg xmlns="http://www.w3.org/2000/svg"></svg>');
+        File::put($dir.$accepted, 'png');
+        File::put($dir.$certified, 'png');
+        File::put($dir.$regulated, 'webp');
 
         SiteSetting::query()->create([
             'id' => 1,
@@ -57,6 +63,9 @@ class PlatformSettingsApiTest extends TestCase
             'tiktok' => 'https://tiktok.com/@tarjuman',
             'whatsapp' => 'https://wa.me/971501234567',
             'copyright' => '© Tarjuman',
+            'accepted_by_images' => [$accepted],
+            'certified_by_images' => [$certified],
+            'regulated_by_images' => [$regulated],
             'primary_color' => '#111111',
             'primary_color_end' => '#222222',
             'primary_color_angle' => 90,
@@ -90,16 +99,18 @@ class PlatformSettingsApiTest extends TestCase
             ->assertJsonPath('data.branding.primary.end', '#222222')
             ->assertJsonPath('data.branding.primary.angle', 90)
             ->assertJsonPath('data.branding.primary.css', 'linear-gradient(90deg, #111111 0%, #222222 100%)')
-            ->assertJsonPath('data.branding.primary_button_text', '#FFFFFF');
-
-        $response->assertJsonPath('data.accepted_by', [])
-            ->assertJsonPath('data.certified_by', [])
-            ->assertJsonPath('data.regulated_by', []);
+            ->assertJsonPath('data.branding.primary_button_text', '#FFFFFF')
+            ->assertJsonCount(1, 'data.accepted_by')
+            ->assertJsonCount(1, 'data.certified_by')
+            ->assertJsonCount(1, 'data.regulated_by');
 
         $this->assertStringContainsString($logoEn, (string) $response->json('data.logos.en'));
         $this->assertStringContainsString($logoAr, (string) $response->json('data.logos.ar'));
         $this->assertStringContainsString($favicon, (string) $response->json('data.logos.favicon'));
+        $this->assertStringContainsString($accepted, (string) $response->json('data.accepted_by.0'));
+        $this->assertStringContainsString($certified, (string) $response->json('data.certified_by.0'));
+        $this->assertStringContainsString($regulated, (string) $response->json('data.regulated_by.0'));
 
-        File::delete([$dir.$logoEn, $dir.$logoAr, $dir.$favicon]);
+        File::delete([$dir.$logoEn, $dir.$logoAr, $dir.$favicon, $dir.$accepted, $dir.$certified, $dir.$regulated]);
     }
 }
