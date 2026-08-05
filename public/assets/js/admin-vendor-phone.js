@@ -35,6 +35,10 @@
       strictMode: true,
       formatOnDisplay: true,
       autoPlaceholder: 'polite',
+      searchInputClass: 'form-control',
+      i18n: {
+        searchPlaceholder: '',
+      },
       utilsScript: utilsUrl
     });
 
@@ -42,6 +46,16 @@
     if (container) {
       container.setAttribute('dir', 'ltr');
     }
+
+    var clearSearchPlaceholder = function () {
+      if (!container) {
+        return;
+      }
+      container.querySelectorAll('.iti__search-input, input[type="search"]').forEach(function (searchInput) {
+        searchInput.setAttribute('placeholder', '');
+        searchInput.placeholder = '';
+      });
+    };
 
     var syncPadding = function () {
       if (!container) {
@@ -51,11 +65,12 @@
       if (!countryEl) {
         return;
       }
-      var gutter = Math.ceil(countryEl.getBoundingClientRect().width) + 8;
-      if (gutter > 8) {
+      var gutter = Math.ceil(countryEl.getBoundingClientRect().width) + 14;
+      if (gutter > 14) {
         input.style.paddingLeft = gutter + 'px';
         input.style.paddingInlineStart = gutter + 'px';
       }
+      clearSearchPlaceholder();
     };
 
     if (initial) {
@@ -67,7 +82,9 @@
     requestAnimationFrame(syncPadding);
     setTimeout(syncPadding, 50);
     input.addEventListener('countrychange', syncPadding);
+    input.addEventListener('open:countrydropdown', clearSearchPlaceholder);
     window.addEventListener('load', syncPadding);
+    clearSearchPlaceholder();
 
     var feedback = fieldWrap ? fieldWrap.querySelector('[data-intl-phone-error]') : null;
     if (!feedback && fieldWrap) {
