@@ -46,10 +46,60 @@ class PlatformSettingsController extends Controller
                 'certified_by' => $this->galleryUrls($settings, 'certified_by_images'),
                 'regulated_by' => $this->galleryUrls($settings, 'regulated_by_images'),
                 'branding' => $this->brandingPayload($settings),
+                'orders' => $this->ordersPayload($settings),
             ],
             'locale' => $locale,
             'currency' => $this->currencyPayload(),
         ]);
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    protected function ordersPayload(SiteSetting $settings): array
+    {
+        $default = is_string($settings->default_payment_gateway) && $settings->default_payment_gateway !== ''
+            ? $settings->default_payment_gateway
+            : null;
+
+        return [
+            'payment_mode' => in_array($settings->order_payment_mode, ['quick', 'later'], true)
+                ? $settings->order_payment_mode
+                : 'later',
+            'assignment_mode' => normalizeAssignmentMode($settings->order_assignment_mode),
+            'source_retention_days' => (int) ($settings->order_source_retention_days ?: 90),
+            'delivery_retention_days' => (int) ($settings->order_delivery_retention_days ?: 1095),
+            'vendor_payout_schedule' => in_array($settings->vendor_payout_schedule, ['weekly', 'monthly'], true)
+                ? $settings->vendor_payout_schedule
+                : 'weekly',
+            'payment_gateway' => [
+                'default' => $default,
+                'test_mode' => $this->defaultGatewayTestMode($settings, $default),
+                'public_key' => $this->defaultGatewayPublicKey($settings, $default),
+            ],
+        ];
+    }
+
+    protected function defaultGatewayTestMode(SiteSetting $settings, ?string $driver): ?bool
+    {
+        return match ($driver) {
+            'paytabs' => (bool) $settings->paytabs_test_mode,
+            'tap' => (bool) $settings->tap_test_mode,
+            'noon' => (bool) $settings->noon_test_mode,
+            'amazon_ps' => (bool) $settings->amazon_ps_test_mode,
+            default => null,
+        };
+    }
+
+    protected function defaultGatewayPublicKey(SiteSetting $settings, ?string $driver): ?string
+    {
+        $key = match ($driver) {
+            'paytabs' => $settings->paytabs_client_key,
+            'tap' => $settings->tap_public_key,
+            default => null,
+        };
+
+        return $this->nullableString(is_string($key) ? $key : null);
     }
 
     /**

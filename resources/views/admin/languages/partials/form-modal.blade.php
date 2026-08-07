@@ -1,18 +1,17 @@
-<div class="modal fade" id="languageFormModal" tabindex="-1" aria-labelledby="languageFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <form method="POST" action="{{ route('admin.languages.store') }}" id="languageForm">
-                @csrf
-                <input type="hidden" name="_method" id="language_form_method" value="POST">
-                <input type="hidden" name="language_id" id="language_id" value="{{ old('language_id') }}">
-                <input type="hidden" name="update_url" id="language_update_url" value="{{ old('update_url') }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="languageFormModalLabel">{!! __('general.create_language') !!}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
+<div class="modal fade" id="languageFormModal">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+        <div class="modal-content p-0 p-md-5">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2" id="languageFormModalLabel">{!! __('general.create_language') !!}</h3>
                 </div>
+                <form method="POST" action="{{ route('admin.languages.store') }}" id="languageForm">
+                    @csrf
+                    <input type="hidden" name="_method" id="language_form_method" value="POST">
+                    <input type="hidden" name="language_id" id="language_id" value="{{ old('language_id') }}">
+                    <input type="hidden" name="update_url" id="language_update_url" value="{{ old('update_url') }}">
 
-                <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -78,13 +77,13 @@
                             @enderror
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
-                    <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
+                        <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

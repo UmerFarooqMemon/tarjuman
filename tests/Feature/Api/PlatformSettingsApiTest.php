@@ -126,7 +126,13 @@ class PlatformSettingsApiTest extends TestCase
             ->assertJsonPath('data.branding.fonts.ar.format', 'woff2')
             ->assertJsonCount(1, 'data.accepted_by')
             ->assertJsonCount(1, 'data.certified_by')
-            ->assertJsonCount(1, 'data.regulated_by');
+            ->assertJsonCount(1, 'data.regulated_by')
+            ->assertJsonPath('data.orders.payment_mode', 'later')
+            ->assertJsonPath('data.orders.assignment_mode', 'open')
+            ->assertJsonPath('data.orders.source_retention_days', 90)
+            ->assertJsonPath('data.orders.delivery_retention_days', 1095)
+            ->assertJsonPath('data.orders.vendor_payout_schedule', 'weekly')
+            ->assertJsonPath('data.orders.payment_gateway.default', null);
 
         $this->assertStringContainsString($logoEn, (string) $response->json('data.logos.en'));
         $this->assertStringContainsString($logoAr, (string) $response->json('data.logos.ar'));

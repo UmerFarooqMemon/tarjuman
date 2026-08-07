@@ -2,21 +2,20 @@
     $crudLocales = $crudLocales ?? crudLocales();
 @endphp
 
-<div class="modal fade" id="addOnFormModal" tabindex="-1" aria-labelledby="addOnFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <form method="POST" action="{{ route('admin.add-ons.store') }}" id="addOnForm">
-                @csrf
-                <input type="hidden" name="_method" id="add_on_form_method" value="POST">
-                <input type="hidden" name="add_on_id" id="add_on_id" value="{{ old('add_on_id') }}">
-                <input type="hidden" name="update_url" id="add_on_update_url" value="{{ old('update_url') }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="addOnFormModalLabel">{!! __('general.create_add_on') !!}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
+<div class="modal fade" id="addOnFormModal">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+        <div class="modal-content p-0 p-md-5">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2" id="addOnFormModalLabel">{!! __('general.create_add_on') !!}</h3>
                 </div>
+                <form method="POST" action="{{ route('admin.add-ons.store') }}" id="addOnForm">
+                    @csrf
+                    <input type="hidden" name="_method" id="add_on_form_method" value="POST">
+                    <input type="hidden" name="add_on_id" id="add_on_id" value="{{ old('add_on_id') }}">
+                    <input type="hidden" name="update_url" id="add_on_update_url" value="{{ old('update_url') }}">
 
-                <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -31,7 +30,7 @@
                         @foreach ($crudLocales as $locale)
                         <div class="col-md-6">
                             <div class="card border mb-3">
-                                <div class="card-header py-2">
+                                <div class="card-header">
                                     <strong>{{ $locale->native_name ?: $locale->displayName() }}</strong>
                                     <small class="text-muted">({{ strtoupper($locale->code) }})</small>
                                 </div>
@@ -76,13 +75,13 @@
                             @enderror
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
-                    <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
+                        <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

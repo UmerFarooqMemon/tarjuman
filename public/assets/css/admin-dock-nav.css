@@ -990,3 +990,272 @@ html.dark-style[data-admin-card-style="glass"] .admin-dock-drawer__folder,
     --dock-height: 4.25rem;
   }
 }
+
+
+/* ---------- Notifications (dock) ---------- */
+.admin-dock__notifications {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+.admin-dock__notifications .admin-dock__btn,
+.admin-dock__mobile-notifications .admin-dock__btn,
+.admin-dock__mobile-notifications .admin-dock__mobile-locale-btn {
+  position: relative;
+  overflow: visible;
+}
+
+.admin-dock__notifications .admin-dock__icon {
+  position: relative;
+  overflow: visible;
+}
+
+.admin-dock__notifications .badge-notifications,
+.admin-dock__mobile-notifications .badge-notifications {
+  position: absolute;
+  top: -0.2rem;
+  inset-inline-end: -0.3rem;
+  inset-inline-start: auto;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.28rem;
+  font-size: 0.625rem;
+  line-height: 1.05rem;
+  z-index: 3;
+  pointer-events: none;
+  /* Override Vuexy badge-notifications translate that pulls it away */
+  transform: none !important;
+  margin: 0 !important;
+}
+
+.admin-dock__mobile-notifications .badge-notifications {
+  top: -0.15rem;
+  right: -0.15rem;
+  inset-inline-end: -0.15rem;
+}
+
+[dir="rtl"] .admin-dock__mobile-notifications .badge-notifications {
+  right: auto;
+  left: -0.15rem;
+}
+
+/* Sidebar navbar bell badge — keep tight to the icon */
+.dropdown-notifications > .nav-link > .position-relative > .badge-notifications {
+  position: absolute;
+  top: -0.15rem;
+  inset-inline-end: -0.35rem;
+  inset-inline-start: auto;
+  transform: none !important;
+  margin: 0 !important;
+  min-width: 1.05rem;
+  height: 1.05rem;
+  padding: 0 0.28rem;
+  font-size: 0.625rem;
+  line-height: 1.05rem;
+}
+
+.admin-dock__dropdown--notifications {
+  min-width: min(22rem, calc(100vw - 1.5rem));
+  max-width: min(24rem, calc(100vw - 1.5rem));
+  padding: 0;
+  overflow: hidden;
+}
+
+.admin-dock__notifications-list {
+  max-height: 22rem;
+  overflow: auto;
+}
+
+.admin-dock__notifications-header,
+.admin-dock__notifications-footer {
+  background: transparent;
+}
+
+.admin-dock__theme,
+.admin-dock__locale,
+.admin-dock__notifications {
+  position: relative;
+  flex: 0 0 auto;
+}
+
+/* Notification dismiss slide (panel + modal) */
+.dropdown-notifications-item,
+.notifications-modal-list > .list-group-item[data-notification-id] {
+  transition: transform 0.28s ease, opacity 0.28s ease, max-height 0.28s ease, margin 0.28s ease, padding 0.28s ease;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.dropdown-notifications-item.is-dismissing,
+.notifications-modal-list > .list-group-item[data-notification-id].is-dismissing {
+  opacity: 0;
+  transform: translateX(-110%);
+  max-height: 0 !important;
+  margin-top: 0 !important;
+  margin-bottom: 0 !important;
+  padding-top: 0 !important;
+  padding-bottom: 0 !important;
+  border-width: 0 !important;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+[dir="rtl"] .dropdown-notifications-item.is-dismissing,
+[dir="rtl"] .notifications-modal-list > .list-group-item[data-notification-id].is-dismissing {
+  transform: translateX(110%);
+}
+
+#notificationsAllModal .modal-dialog {
+  max-width: min(56rem, calc(100vw - 1.5rem));
+  width: calc(100vw - 1.5rem);
+  margin: 1rem auto;
+}
+
+#notificationsAllModal .notifications-all-modal__content {
+  max-height: calc(100vh - 2rem);
+  min-height: min(36rem, calc(100vh - 2rem));
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  padding: 1rem 1.5rem 1rem !important;
+  position: relative;
+}
+
+#notificationsAllModal .notifications-all-modal__chrome {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-height: 2.25rem;
+  margin-bottom: 0.25rem;
+}
+
+/* Vuexy .modal .btn-close uses translate(23px, -25px) which clips against overflow */
+#notificationsAllModal .notifications-all-modal__chrome .btn-close,
+#notificationsAllModal .notifications-all-modal__chrome .btn-close:hover,
+#notificationsAllModal .notifications-all-modal__chrome .btn-close:focus,
+#notificationsAllModal .notifications-all-modal__chrome .btn-close:active {
+  position: static !important;
+  top: auto !important;
+  right: auto !important;
+  left: auto !important;
+  transform: none !important;
+  margin: 0 !important;
+  padding: 0.5rem !important;
+  box-sizing: content-box;
+  opacity: 1;
+  z-index: 5;
+}
+
+[dir="rtl"] #notificationsAllModal .notifications-all-modal__chrome {
+  justify-content: flex-start;
+}
+
+#notificationsAllModal .notifications-all-modal__body {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+  max-height: calc(100vh - 2rem - 1.5rem);
+  overflow: hidden;
+  padding: 0;
+  position: relative;
+}
+
+#notificationsAllModal .notifications-all-modal__header {
+  flex: 0 0 auto;
+  margin-bottom: 1rem;
+}
+
+#notificationsAllModal .notifications-all-modal__tabs {
+  flex: 0 0 auto;
+  flex-wrap: nowrap;
+  margin-bottom: 0.75rem;
+  border-bottom: 1px solid var(--bs-border-color, #d9dee3);
+}
+
+#notificationsAllModal .notifications-all-modal__tabs .nav-item {
+  flex: 1 1 0;
+  min-width: 0;
+}
+
+#notificationsAllModal .notifications-all-modal__tabs .nav-link {
+  width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding-inline: 0.75rem;
+}
+
+#notificationsAllModal .notifications-all-modal__tab-content {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+#notificationsAllModal .notifications-all-modal__pane {
+  min-height: 0;
+  overflow: hidden;
+}
+
+#notificationsAllModal .notifications-all-modal__pane.active {
+  display: flex !important;
+  flex-direction: column;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: 0;
+}
+
+#notificationsAllModal .notifications-all-modal__toolbar {
+  flex: 0 0 auto;
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 0.5rem;
+}
+
+#notificationsAllModal .notifications-modal-list {
+  flex: 1 1 auto;
+  min-height: 16rem;
+  max-height: none;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  -webkit-overflow-scrolling: touch;
+  margin: 0;
+  padding: 0 0 0.5rem;
+}
+
+#notificationsAllModal .notifications-modal-item {
+  padding: 1rem 0.25rem;
+  border-inline: 0;
+}
+
+#notificationsAllModal .notifications-modal-item .notifications-item-body {
+  min-width: 0;
+}
+
+#notificationsAllModal .notifications-modal-item__title {
+  font-size: 1rem;
+  line-height: 1.4;
+  word-break: break-word;
+}
+
+#notificationsAllModal .notifications-item-text {
+  color: var(--bs-secondary-color, #697a8d);
+  font-size: 0.9375rem;
+  line-height: 1.55;
+  white-space: normal;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
+
+#notificationsAllModal .notifications-modal-list > .list-group-item {
+  overflow: visible;
+}
+
+#notificationsAllModal .notifications-modal-item .dropdown-notifications-actions {
+  margin-inline-start: 0.5rem;
+  padding-top: 0.15rem;
+}

@@ -2,21 +2,20 @@
     $crudLocales = $crudLocales ?? crudLocales();
 @endphp
 
-<div class="modal fade" id="currencyFormModal" tabindex="-1" aria-labelledby="currencyFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <form method="POST" action="{{ route('admin.currencies.store') }}" id="currencyForm" enctype="multipart/form-data">
-                @csrf
-                <input type="hidden" name="_method" id="currency_form_method" value="POST">
-                <input type="hidden" name="currency_id" id="currency_id" value="{{ old('currency_id') }}">
-                <input type="hidden" name="update_url" id="currency_update_url" value="{{ old('update_url') }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="currencyFormModalLabel">{!! __('general.create_currency') !!}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
+<div class="modal fade" id="currencyFormModal">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+        <div class="modal-content p-0 p-md-5">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2" id="currencyFormModalLabel">{!! __('general.create_currency') !!}</h3>
                 </div>
+                <form method="POST" action="{{ route('admin.currencies.store') }}" id="currencyForm" enctype="multipart/form-data">
+                    @csrf
+                    <input type="hidden" name="_method" id="currency_form_method" value="POST">
+                    <input type="hidden" name="currency_id" id="currency_id" value="{{ old('currency_id') }}">
+                    <input type="hidden" name="update_url" id="currency_update_url" value="{{ old('update_url') }}">
 
-                <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -31,7 +30,7 @@
                         @foreach ($crudLocales as $locale)
                         <div class="col-md-6">
                             <div class="card border mb-3">
-                                <div class="card-header py-2">
+                                <div class="card-header">
                                     <strong>{{ $locale->native_name ?: $locale->displayName() }}</strong>
                                     <small class="text-muted">({{ strtoupper($locale->code) }})</small>
                                 </div>
@@ -82,13 +81,13 @@
                             <span class="currency-option" id="currency_preview"></span>
                         </div>
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
-                    <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
+                        <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

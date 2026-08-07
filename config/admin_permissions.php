@@ -30,6 +30,10 @@ return [
             'view',
             'edit',
         ],
+        'platform_settings' => [
+            'view',
+            'edit',
+        ],
         'cms_pages' => [
             'view',
             'edit',
@@ -75,6 +79,16 @@ return [
             'create',
             'edit',
             'delete',
+        ],
+        'plans' => [
+            'view',
+            'create',
+            'edit',
+            'delete',
+        ],
+        'orders' => [
+            'view',
+            'edit',
         ],
         'pricing_rules' => [
             'view',

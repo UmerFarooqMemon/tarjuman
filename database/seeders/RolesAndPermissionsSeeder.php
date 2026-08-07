@@ -75,6 +75,20 @@ class RolesAndPermissionsSeeder extends Seeder
                     ],
                 ],
             ],
+            'platform_settings' => [
+                'module_en' => 'Platform Settings',
+                'module_ar' => 'إعدادات المنصة',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Platform Settings',
+                        'name_ar' => 'عرض إعدادات المنصة',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Platform Settings',
+                        'name_ar' => 'تعديل إعدادات المنصة',
+                    ],
+                ],
+            ],
             'cms_pages' => [
                 'module_en' => 'CMS Pages',
                 'module_ar' => 'صفحات المحتوى',
@@ -240,6 +254,42 @@ class RolesAndPermissionsSeeder extends Seeder
                     'delete' => [
                         'name_en' => 'Delete Delivery Speeds',
                         'name_ar' => 'حذف سرعات التسليم',
+                    ],
+                ],
+            ],
+            'plans' => [
+                'module_en' => 'Enterprise Plans',
+                'module_ar' => 'خطط الشركات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Plans',
+                        'name_ar' => 'عرض الخطط',
+                    ],
+                    'create' => [
+                        'name_en' => 'Create Plans',
+                        'name_ar' => 'إنشاء خطط',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Plans',
+                        'name_ar' => 'تعديل الخطط',
+                    ],
+                    'delete' => [
+                        'name_en' => 'Delete Plans',
+                        'name_ar' => 'حذف الخطط',
+                    ],
+                ],
+            ],
+            'orders' => [
+                'module_en' => 'Orders',
+                'module_ar' => 'الطلبات',
+                'permissions' => [
+                    'view' => [
+                        'name_en' => 'View Orders',
+                        'name_ar' => 'عرض الطلبات',
+                    ],
+                    'edit' => [
+                        'name_en' => 'Edit Orders',
+                        'name_ar' => 'تعديل الطلبات',
                     ],
                 ],
             ],

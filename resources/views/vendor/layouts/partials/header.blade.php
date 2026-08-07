@@ -16,5 +16,33 @@
                 <div>{!! __('general.menu_dashboard') !!}</div>
             </a>
         </li>
+
+        <li class="menu-item {{ request()->routeIs('vendor.orders.discover') ? 'active' : '' }}">
+            <a href="{{ route('vendor.orders.discover') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-world-search"></i>
+                <div>{{ __('general.vendor_discover') }}</div>
+            </a>
+        </li>
+
+        <li class="menu-item {{ request()->routeIs('vendor.orders.*') && ! request()->routeIs('vendor.orders.discover') ? 'active' : '' }}">
+            <a href="{{ route('vendor.orders.index') }}" class="menu-link">
+                <i class="menu-icon tf-icons ti ti-shopping-cart"></i>
+                <div>{!! __('general.menu_orders') !!}</div>
+            </a>
+        </li>
+
+        <li class="menu-item">
+            <a href="javascript:void(0);" class="menu-link menu-toggle">
+                <i class="menu-icon tf-icons ti ti-settings"></i>
+                <div>{!! __('general.menu_settings') !!}</div>
+            </a>
+            <ul class="menu-sub">
+                <li class="menu-item">
+                    <a href="javascript:void(0);" class="menu-link" data-open-admin-appearance>
+                        <div>{!! __('general.menu_appearance') !!}</div>
+                    </a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </aside>

@@ -84,6 +84,20 @@ Route::group([
 
                 Route::resource('roles', 'RolesController')->except(['show']);
                 Route::resource('site-settings', 'SiteSettingsController')->only(['index', 'update']);
+                Route::resource('platform-settings', 'PlatformSettingsController')->only(['index', 'update']);
+
+                Route::resource('plans', 'PlansController')->except(['show', 'create', 'edit']);
+                Route::post('plans/change-status', 'PlansController@changeStatus')->name('plans.update-status');
+
+                Route::get('orders', 'OrdersController@index')->name('orders.index');
+                Route::get('orders/{order}', 'OrdersController@show')->name('orders.show');
+                Route::post('orders/{order}/assign', 'OrdersController@assign')->name('orders.assign');
+
+                Route::get('notifications', 'NotificationsController@index')->name('notifications.index');
+                Route::post('notifications/read-all', 'NotificationsController@markAllRead')->name('notifications.read-all');
+                Route::post('notifications/{id}/read', 'NotificationsController@markRead')->name('notifications.read');
+                Route::delete('notifications/{id}', 'NotificationsController@destroy')->name('notifications.destroy');
+                Route::post('broadcasting/auth', [\Illuminate\Broadcasting\BroadcastController::class, 'authenticate'])->middleware('auth:admin')->name('broadcasting.auth');
 
                 Route::get('cms/pages', 'Cms\PageController@index')->name('cms.pages.index');
                 Route::get('cms/pages/{page}', 'Cms\PageController@show')->name('cms.pages.show');

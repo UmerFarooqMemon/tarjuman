@@ -16,7 +16,6 @@ class DatabaseSeeder extends Seeder
     {
         $this->call(AdminsTableSeeder::class);
         $this->call(SiteSettingsTableSeeder::class);
-        $this->call(SiteSettingsGalleriesSeeder::class);
         $this->call(RolesAndPermissionsSeeder::class);
         $this->call(LanguagesTableSeeder::class);
         $this->call(CurrenciesTableSeeder::class);
@@ -25,6 +24,7 @@ class DatabaseSeeder extends Seeder
         $this->call(AddOnsSeeder::class);
         $this->call(DeliverySpeedsSeeder::class);
         $this->call(PricingRulesSeeder::class);
+        $this->call(PlansSeeder::class);
         $this->call(CmsHomePageSeeder::class);
     }
 }

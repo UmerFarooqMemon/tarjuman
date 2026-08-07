@@ -185,8 +185,8 @@
         }
     </style>
     @include('admin.partials.branding-styles')
-    <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}" />
-    <link rel="stylesheet" href="{!! asset('assets/css/admin-appearance.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}?v=20260807i" />
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-appearance.css') !!}?v=20260807e" />
     @yield('css')
 </head>
 <body>
@@ -213,6 +213,7 @@
 
     @include('admin.layouts.partials.dock-nav.index')
     @include('admin.layouts.partials.appearance-modal')
+    @include('partials.notifications-modal')
     <form id="logout-form" action="{{ route('admin.auth.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
@@ -321,7 +322,41 @@
     @include('admin.partials.errors')
     <script src="{!! asset('assets/js/admin-nav-layout.js') !!}"></script>
     <script src="{!! asset('assets/js/admin-appearance.js') !!}"></script>
-    <script src="{!! asset('assets/js/admin-dock-nav.js') !!}"></script>
+    <script src="{!! asset('assets/js/admin-dock-nav.js') !!}?v=20260807d"></script>
+
+    @auth('admin')
+    @php($notificationsDropdown = notificationsDropdownConfig('admin'))
+    @if ($notificationsDropdown)
+    <script>
+    window.__notificationsNewLabel = @json(__('general.new_notification'));
+    window.__notificationsI18n = {
+      markAsRead: @json(__('general.mark_as_read')),
+      noUnread: @json(__('general.no_unread_notifications')),
+      noRead: @json(__('general.no_read_notifications')),
+      seeAll: @json(__('general.see_all')),
+    };
+    </script>
+    @if (config('broadcasting.default') === 'pusher' && filled(config('broadcasting.connections.pusher.key')))
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
+    <script>
+    window.__notificationsBroadcast = {
+      key: @json(config('broadcasting.connections.pusher.key')),
+      cluster: @json(config('broadcasting.connections.pusher.options.cluster')),
+    };
+    window.Echo = new Echo({
+      broadcaster: 'pusher',
+      key: window.__notificationsBroadcast.key,
+      cluster: window.__notificationsBroadcast.cluster || 'mt1',
+      forceTLS: true,
+      authEndpoint: @json($notificationsDropdown['broadcastAuthUrl']),
+      auth: { headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content } }
+    });
+    </script>
+    @endif
+    <script src="{{ asset('assets/js/admin-notifications.js') }}?v=20260807f"></script>
+    @endif
+    @endauth
     @stack('footer-js')
     @yield('footer-js')
 </body>

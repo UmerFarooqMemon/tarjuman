@@ -25,12 +25,26 @@ class UserFactory extends Factory
     public function definition(): array
     {
         return [
+            'type' => 'individual',
             'name' => fake()->name(),
+            'first_name' => fake()->firstName(),
+            'last_name' => fake()->lastName(),
             'email' => fake()->unique()->safeEmail(),
+            'phone' => fake()->numerify('+9715#######'),
             'email_verified_at' => now(),
             'password' => static::$password ??= Hash::make('password'),
+            'is_active' => true,
             'remember_token' => Str::random(10),
         ];
+    }
+
+    public function enterprise(): static
+    {
+        return $this->state(fn () => [
+            'type' => 'enterprise',
+            'company_name' => fake()->company(),
+            'expected_volume' => '1-50',
+        ]);
     }
 
     /**

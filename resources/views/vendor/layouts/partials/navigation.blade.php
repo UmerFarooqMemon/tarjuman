@@ -14,6 +14,12 @@
         </div>
         <ul class="navbar-nav flex-row align-items-center ms-auto">
             @php($localeSwitcher = adminLocaleSwitcher())
+            @auth('vendor')
+                @php($notificationsDropdown = notificationsDropdownConfig('vendor'))
+                @if ($notificationsDropdown)
+                    @include('partials.notifications-dropdown', $notificationsDropdown)
+                @endif
+            @endauth
             <li class="nav-item dropdown-locale dropdown me-2 me-xl-0">
                 <a
                     class="nav-link dropdown-toggle hide-arrow"

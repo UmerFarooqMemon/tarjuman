@@ -2,21 +2,20 @@
     $crudLocales = $crudLocales ?? crudLocales();
 @endphp
 
-<div class="modal fade" id="documentTypeFormModal" tabindex="-1" aria-labelledby="documentTypeFormModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg modal-dialog-scrollable">
-        <div class="modal-content">
-            <form method="POST" action="{{ route('admin.document-types.store') }}" id="documentTypeForm">
-                @csrf
-                <input type="hidden" name="_method" id="document_type_form_method" value="POST">
-                <input type="hidden" name="document_type_id" id="document_type_id" value="{{ old('document_type_id') }}">
-                <input type="hidden" name="update_url" id="document_type_update_url" value="{{ old('update_url') }}">
-
-                <div class="modal-header">
-                    <h5 class="modal-title" id="documentTypeFormModalLabel">{!! __('general.create_document_type') !!}</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
+<div class="modal fade" id="documentTypeFormModal">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+        <div class="modal-content p-0 p-md-5">
+            <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2" id="documentTypeFormModalLabel">{!! __('general.create_document_type') !!}</h3>
                 </div>
+                <form method="POST" action="{{ route('admin.document-types.store') }}" id="documentTypeForm">
+                    @csrf
+                    <input type="hidden" name="_method" id="document_type_form_method" value="POST">
+                    <input type="hidden" name="document_type_id" id="document_type_id" value="{{ old('document_type_id') }}">
+                    <input type="hidden" name="update_url" id="document_type_update_url" value="{{ old('update_url') }}">
 
-                <div class="modal-body">
                     @if ($errors->any())
                         <div class="alert alert-danger">
                             <ul class="mb-0">
@@ -31,7 +30,7 @@
                         @foreach ($crudLocales as $locale)
                         <div class="col-md-6">
                             <div class="card border mb-3">
-                                <div class="card-header py-2">
+                                <div class="card-header">
                                     <strong>{{ $locale->native_name ?: $locale->displayName() }}</strong>
                                     <small class="text-muted">({{ strtoupper($locale->code) }})</small>
                                 </div>
@@ -53,13 +52,13 @@
                         </div>
                         @endforeach
                     </div>
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
-                    <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
-                </div>
-            </form>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{!! __('general.cancel') !!}</button>
+                        <button type="submit" class="btn btn-primary">{!! __('general.save') !!}</button>
+                    </div>
+                </form>
+            </div>
         </div>
     </div>
 </div>

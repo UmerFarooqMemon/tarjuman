@@ -100,6 +100,54 @@ if (! function_exists('adminLocaleSwitcher')) {
     }
 }
 
+if (! function_exists('notificationsDropdownConfig')) {
+    /**
+     * Config for the theme notifications dropdown (admin or vendor).
+     *
+     * @return array<string, string>|null
+     */
+    function notificationsDropdownConfig(string $guard): ?array
+    {
+        if ($guard === 'admin') {
+            $user = auth('admin')->user();
+            if (! $user) {
+                return null;
+            }
+
+            return [
+                'notificationsIndexUrl' => route('admin.notifications.index', [], false),
+                'notificationsMarkAllUrl' => route('admin.notifications.read-all', [], false),
+                'notificationsMarkReadUrlTemplate' => str_replace('PLACEHOLDER', '__ID__', route('admin.notifications.read', ['id' => 'PLACEHOLDER'], false)),
+                'notificationsDestroyUrlTemplate' => str_replace('PLACEHOLDER', '__ID__', route('admin.notifications.destroy', ['id' => 'PLACEHOLDER'], false)),
+                'broadcastAuthUrl' => route('admin.broadcasting.auth', [], false),
+                'broadcastChannel' => 'App.Models.Admin.'.$user->id,
+                'userId' => (string) $user->id,
+                'guard' => 'admin',
+            ];
+        }
+
+        if ($guard === 'vendor') {
+            $user = auth('vendor')->user();
+            if (! $user) {
+                return null;
+            }
+
+            return [
+                'notificationsIndexUrl' => route('vendor.notifications.index', [], false),
+                'notificationsMarkAllUrl' => route('vendor.notifications.read-all', [], false),
+                'notificationsMarkReadUrlTemplate' => str_replace('PLACEHOLDER', '__ID__', route('vendor.notifications.read', ['id' => 'PLACEHOLDER'], false)),
+                'notificationsDestroyUrlTemplate' => str_replace('PLACEHOLDER', '__ID__', route('vendor.notifications.destroy', ['id' => 'PLACEHOLDER'], false)),
+                'broadcastAuthUrl' => route('vendor.broadcasting.auth', [], false),
+                'broadcastChannel' => 'App.Models.VendorUser.'.$user->id,
+                'userId' => (string) $user->id,
+                'guard' => 'vendor',
+            ];
+        }
+
+        return null;
+    }
+}
+
 if (! function_exists('crudLocales')) {
     /**
      * Fixed CRUD locales (en/ar) for bilingual admin translation forms.
@@ -322,6 +370,216 @@ if (! function_exists('formatMoney')) {
     }
 }
 
+if (! function_exists('formatOrderStatus')) {
+    /**
+     * Human-readable order status (title case / translated).
+     */
+    function formatOrderStatus(?string $status): string
+    {
+        if (! filled($status)) {
+            return '—';
+        }
+
+        $key = 'general.order_status_'.$status;
+        $translated = __($key);
+
+        if ($translated !== $key) {
+            return $translated;
+        }
+
+        return \Illuminate\Support\Str::of($status)->replace('_', ' ')->title()->toString();
+    }
+}
+
+if (! function_exists('orderStatusBadgeClass')) {
+    /**
+     * Vuexy badge background class for an order status.
+     */
+    function orderStatusBadgeClass(?string $status): string
+    {
+        return match ($status) {
+            \App\Models\Order::STATUS_PENDING_PAYMENT => 'bg-label-warning',
+            \App\Models\Order::STATUS_OPEN => 'bg-label-info',
+            \App\Models\Order::STATUS_ASSIGNED => 'bg-label-primary',
+            \App\Models\Order::STATUS_PENDING_VENDOR_CONFIRM => 'bg-label-warning',
+            \App\Models\Order::STATUS_AWAITING_CUSTOMER_PAYMENT => 'bg-label-warning',
+            \App\Models\Order::STATUS_IN_PROGRESS => 'bg-label-primary',
+            \App\Models\Order::STATUS_COMPLETED => 'bg-label-success',
+            \App\Models\Order::STATUS_CANCELLED => 'bg-label-danger',
+            default => 'bg-label-secondary',
+        };
+    }
+}
+
+if (! function_exists('orderStatusBadge')) {
+    /**
+     * Colored badge HTML for an order status.
+     */
+    function orderStatusBadge(?string $status): string
+    {
+        $label = e(formatOrderStatus($status));
+
+        return '<span class="badge '.orderStatusBadgeClass($status).'">'.$label.'</span>';
+    }
+}
+
+if (! function_exists('formatOrderPaymentStatus')) {
+    /**
+     * Human-readable order payment status (title case / translated).
+     */
+    function formatOrderPaymentStatus(?string $status): string
+    {
+        if (! filled($status)) {
+            return '—';
+        }
+
+        $key = 'general.order_payment_status_'.$status;
+        $translated = __($key);
+
+        if ($translated !== $key) {
+            return $translated;
+        }
+
+        return \Illuminate\Support\Str::of($status)->replace('_', ' ')->title()->toString();
+    }
+}
+
+if (! function_exists('orderPaymentStatusBadgeClass')) {
+    /**
+     * Vuexy badge background class for a payment status.
+     */
+    function orderPaymentStatusBadgeClass(?string $status): string
+    {
+        return match ($status) {
+            \App\Models\Order::PAYMENT_UNPAID => 'bg-label-secondary',
+            \App\Models\Order::PAYMENT_PENDING => 'bg-label-warning',
+            \App\Models\Order::PAYMENT_PAID => 'bg-label-success',
+            \App\Models\Order::PAYMENT_REFUNDED => 'bg-label-info',
+            \App\Models\Order::PAYMENT_COVERED_BY_PLAN => 'bg-label-primary',
+            default => 'bg-label-secondary',
+        };
+    }
+}
+
+if (! function_exists('orderPaymentStatusBadge')) {
+    /**
+     * Colored badge HTML for a payment status.
+     */
+    function orderPaymentStatusBadge(?string $status): string
+    {
+        $label = e(formatOrderPaymentStatus($status));
+
+        return '<span class="badge '.orderPaymentStatusBadgeClass($status).'">'.$label.'</span>';
+    }
+}
+
+if (! function_exists('normalizeAssignmentMode')) {
+    /**
+     * Canonical assignment mode: manual|open (legacy "uber" maps to open).
+     */
+    function normalizeAssignmentMode(?string $mode): string
+    {
+        $mode = is_string($mode) ? strtolower(trim($mode)) : '';
+
+        return match ($mode) {
+            'manual' => 'manual',
+            'open', 'uber', 'marketplace' => 'open',
+            default => 'open',
+        };
+    }
+}
+
+if (! function_exists('formatAssignmentMode')) {
+    /**
+     * Human label for assignment mode snapshots.
+     */
+    function formatAssignmentMode(?string $mode): string
+    {
+        return match (normalizeAssignmentMode($mode)) {
+            'open' => __('general.platform_assignment_open'),
+            'manual' => __('general.platform_assignment_manual'),
+            default => filled($mode)
+                ? \Illuminate\Support\Str::of($mode)->replace('_', ' ')->title()->toString()
+                : '—',
+        };
+    }
+}
+
+if (! function_exists('orderAssignmentMode')) {
+    /**
+     * Effective assignment mode for an order (snapshot, else live platform setting).
+     */
+    function orderAssignmentMode(?\App\Models\Order $order): string
+    {
+        $snapshot = $order?->assignment_mode_snapshot;
+        if (in_array($snapshot, ['manual', 'open', 'uber'], true)) {
+            return normalizeAssignmentMode($snapshot);
+        }
+
+        return normalizeAssignmentMode(siteSettings()?->order_assignment_mode);
+    }
+}
+
+if (! function_exists('platformAssignmentIsManual')) {
+    function platformAssignmentIsManual(): bool
+    {
+        return normalizeAssignmentMode(siteSettings()?->order_assignment_mode) === 'manual';
+    }
+}
+
+if (! function_exists('adminCanAssignOrder')) {
+    /**
+     * Whether an admin may assign this unassigned order to a vendor.
+     * Allowed when the order snapshot is manual, or the live platform mode is manual.
+     */
+    function adminCanAssignOrder(?\App\Models\Order $order): bool
+    {
+        if (! $order || filled($order->vendor_id)) {
+            return false;
+        }
+
+        if ($order->status !== \App\Models\Order::STATUS_OPEN) {
+            return false;
+        }
+
+        return orderAssignmentMode($order) === 'manual' || platformAssignmentIsManual();
+    }
+}
+
+if (! function_exists('formatPaymentTimingMode')) {
+    /**
+     * Human label for payment timing snapshots.
+     */
+    function formatPaymentTimingMode(?string $mode): string
+    {
+        return match ($mode) {
+            'quick' => __('general.platform_quick_payment'),
+            'later' => __('general.platform_pay_later'),
+            default => filled($mode)
+                ? \Illuminate\Support\Str::of($mode)->replace('_', ' ')->title()->toString()
+                : '—',
+        };
+    }
+}
+
+if (! function_exists('formatOrderEventType')) {
+    function formatOrderEventType(?string $type): string
+    {
+        if (! filled($type)) {
+            return '—';
+        }
+
+        $key = 'general.order_event_'.$type;
+        $translated = __($key);
+
+        if ($translated !== $key) {
+            return $translated;
+        }
+
+        return \Illuminate\Support\Str::of($type)->replace('_', ' ')->title()->toString();
+    }
+}
+
 if (! function_exists('siteSettings')) {
     /**
      * Cached singleton site settings row (invalidated on create/update/delete).
@@ -329,6 +587,54 @@ if (! function_exists('siteSettings')) {
     function siteSettings(): ?\App\Models\SiteSetting
     {
         return once(fn () => \App\Support\CatalogCache::siteSettings());
+    }
+}
+
+if (! function_exists('vendorDocumentDownloadAllowed')) {
+    /**
+     * Whether vendors may download order source documents (vs preview-only).
+     */
+    function vendorDocumentDownloadAllowed(): bool
+    {
+        $settings = siteSettings();
+
+        if ($settings === null || $settings->vendor_document_download_allowed === null) {
+            return false;
+        }
+
+        return (bool) $settings->vendor_document_download_allowed;
+    }
+}
+
+if (! function_exists('orderFeeBreakdown')) {
+    /**
+     * Split a customer-facing order total into platform fee + vendor net.
+     *
+     * @return array{
+     *     total: float,
+     *     platform_fee: float,
+     *     vendor_amount: float,
+     *     fee_percent: float,
+     *     fee_fixed: float
+     * }
+     */
+    function orderFeeBreakdown(float|int|string|null $total): array
+    {
+        $total = round(max(0, (float) $total), 2);
+        $settings = siteSettings();
+        $percent = round(max(0, (float) ($settings?->platform_fee_percent ?? 10)), 2);
+        $fixed = round(max(0, (float) ($settings?->platform_fee_fixed ?? 0)), 2);
+        $fee = round(($total * $percent / 100) + $fixed, 2);
+        $fee = min($fee, $total);
+        $vendorAmount = round(max(0, $total - $fee), 2);
+
+        return [
+            'total' => $total,
+            'platform_fee' => $fee,
+            'vendor_amount' => $vendorAmount,
+            'fee_percent' => $percent,
+            'fee_fixed' => $fixed,
+        ];
     }
 }
 

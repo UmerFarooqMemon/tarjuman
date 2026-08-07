@@ -1,20 +1,16 @@
-<div
-    class="modal fade"
-    id="adminAppearanceModal"
-    tabindex="-1"
-    aria-labelledby="adminAppearanceModalLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="adminAppearanceModalLabel">{{ __('general.menu_appearance') }}</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
-            </div>
+<div class="modal fade" id="adminAppearanceModal" tabindex="-1" aria-labelledby="adminAppearanceModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-simple modal-edit-user">
+        <div class="modal-content p-0 p-md-5">
             <div class="modal-body">
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="{{ __('general.cancel') }}"></button>
+                <div class="text-center mb-4">
+                    <h3 class="mb-2" id="adminAppearanceModalLabel">{{ __('general.menu_appearance') }}</h3>
+                </div>
+
                 <div class="mb-4 pb-3 border-bottom admin-appearance-dock-row">
                     <div class="admin-appearance-dock-row__text">
-                            <h6 class="mb-1">{{ __('general.dock_mode') }}</h6>
-                            <p class="text-muted small mb-0">{{ __('general.dock_mode_description') }}</p>
+                        <h6 class="mb-1">{{ __('general.dock_mode') }}</h6>
+                        <p class="text-muted small mb-0">{{ __('general.dock_mode_description') }}</p>
                     </div>
                     <div class="admin-appearance-dock-toggle">
                         <label class="switch switch-primary mb-0">
@@ -27,7 +23,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="mb-4">
                     <h6 class="mb-1">{{ __('general.card_style') }}</h6>
                     <p class="text-muted small mb-3">{{ __('general.card_style_description') }}</p>
 
@@ -62,10 +58,11 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{{ __('general.cancel') }}</button>
-                <button type="button" class="btn btn-primary" id="appearanceApplyBtn" data-appearance-apply>{{ __('general.apply') }}</button>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-label-secondary" data-bs-dismiss="modal">{{ __('general.cancel') }}</button>
+                    <button type="button" class="btn btn-primary" id="appearanceApplyBtn" data-appearance-apply>{{ __('general.apply') }}</button>
+                </div>
             </div>
         </div>
     </div>

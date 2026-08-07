@@ -4,7 +4,6 @@
   class="light-style layout-navbar-fixed layout-menu-fixed layout-compact"
   dir="{{ LaravelLocalization::getCurrentLocaleDirection() }}"
   data-theme="theme-default"
-  data-admin-nav-layout="sidebar"
   data-assets-path="{!! asset('assets') !!}/"
   data-template="vertical-menu-template">
 <head>
@@ -42,6 +41,8 @@
     <link rel="stylesheet" href="{!! asset('assets/vendor/libs/node-waves/node-waves.css') !!}" />
     <link rel="stylesheet" href="{!! asset('assets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css') !!}" />
     <link rel="stylesheet" href="{!! asset('assets/vendor/libs/typeahead-js/typeahead.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/vendor/libs/datatables-bs5/datatables.bootstrap5.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/vendor/libs/datatables-responsive-bs5/responsive.bootstrap5.css') !!}" />
 
     <script>
         const currentLocale = "{{ app()->getLocale() }}";
@@ -55,18 +56,25 @@
     <script src="{!! asset('assets/vendor/js/template-customizer.js') !!}"></script>
     <script src="{!! asset('assets/js/config.js') !!}"></script>
 
+    {{-- Apply nav layout + card style before paint (same keys/defaults as Admin; dock is default) --}}
     <script>
       (function () {
         try {
-          var style = localStorage.getItem('admin-card-style');
-          document.documentElement.setAttribute(
-            'data-admin-card-style',
-            style === 'glass' ? 'glass' : 'classic'
-          );
+          var mode = localStorage.getItem('admin-nav-layout');
+          if (mode !== 'sidebar' && mode !== 'dock') {
+            mode = 'dock';
+          }
+          document.documentElement.setAttribute('data-admin-nav-layout', mode);
+
+          var cardStyle = localStorage.getItem('admin-card-style');
+          if (cardStyle !== 'glass' && cardStyle !== 'classic') {
+            cardStyle = 'classic';
+          }
+          document.documentElement.setAttribute('data-admin-card-style', cardStyle);
         } catch (e) {
+          document.documentElement.setAttribute('data-admin-nav-layout', 'dock');
           document.documentElement.setAttribute('data-admin-card-style', 'classic');
         }
-        document.documentElement.setAttribute('data-admin-nav-layout', 'sidebar');
       })();
     </script>
 
@@ -76,8 +84,10 @@
         .required-fl { color: red; font-weight: 500 }
     </style>
     @include('admin.partials.branding-styles')
-    <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}" />
-    <link rel="stylesheet" href="{!! asset('assets/css/admin-appearance.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-dock-nav.css') !!}?v=20260807i" />
+    <link rel="stylesheet" href="{!! asset('assets/css/admin-appearance.css') !!}?v=20260807e" />
+    <link rel="stylesheet" href="{!! asset('assets/css/currency-icons.css') !!}" />
+    <link rel="stylesheet" href="{!! asset('assets/css/vendor-order-details.css') !!}?v=20260807h" />
     @yield('css')
 </head>
 <body>
@@ -99,6 +109,11 @@
         <div class="drag-target"></div>
     </div>
 
+    @include('vendor.layouts.partials.dock-nav.index')
+    @include('admin.layouts.partials.appearance-modal')
+    @include('partials.notifications-modal')
+    @include('vendor.layouts.partials.order-details-modal')
+
     <form id="logout-form" action="{{ route('vendor.auth.logout') }}" method="POST" style="display: none;">
         @csrf
     </form>
@@ -114,6 +129,7 @@
     <script src="{!! asset('assets/vendor/libs/sweetalert2/sweetalert2.js') !!}"></script>
     <script src="{!! asset('assets/admin/app-assets/vendors/js/extensions/toastr.min.js') !!}"></script>
     <script src="{!! asset('assets/admin/app-assets/js/scripts/extensions/toastr.js') !!}"></script>
+    <script src="{!! asset('assets/vendor/libs/datatables-bs5/datatables-bootstrap5.js') !!}"></script>
     <script>
         if (typeof toastr !== 'undefined') {
             toastr.options = Object.assign({}, toastr.options || {}, {
@@ -135,6 +151,44 @@
         }
     </script>
     @include('admin.partials.errors')
+    <script src="{!! asset('assets/js/admin-nav-layout.js') !!}"></script>
+    <script src="{!! asset('assets/js/admin-appearance.js') !!}"></script>
+    <script src="{!! asset('assets/js/admin-dock-nav.js') !!}?v=20260807d"></script>
+    <script src="{!! asset('assets/js/vendor-order-modal.js') !!}?v=20260807g"></script>
+
+    @auth('vendor')
+    @php($notificationsDropdown = notificationsDropdownConfig('vendor'))
+    @if ($notificationsDropdown)
+    <script>
+    window.__notificationsNewLabel = @json(__('general.new_notification'));
+    window.__notificationsI18n = {
+      markAsRead: @json(__('general.mark_as_read')),
+      noUnread: @json(__('general.no_unread_notifications')),
+      noRead: @json(__('general.no_read_notifications')),
+      seeAll: @json(__('general.see_all')),
+    };
+    </script>
+    @if (config('broadcasting.default') === 'pusher' && filled(config('broadcasting.connections.pusher.key')))
+    <script src="https://js.pusher.com/8.4.0/pusher.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/laravel-echo@1.16.1/dist/echo.iife.js"></script>
+    <script>
+    window.__notificationsBroadcast = {
+      key: @json(config('broadcasting.connections.pusher.key')),
+      cluster: @json(config('broadcasting.connections.pusher.options.cluster')),
+    };
+    window.Echo = new Echo({
+      broadcaster: 'pusher',
+      key: window.__notificationsBroadcast.key,
+      cluster: window.__notificationsBroadcast.cluster || 'mt1',
+      forceTLS: true,
+      authEndpoint: @json($notificationsDropdown['broadcastAuthUrl']),
+      auth: { headers: { 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').content } }
+    });
+    </script>
+    @endif
+    <script src="{{ asset('assets/js/admin-notifications.js') }}?v=20260807f"></script>
+    @endif
+    @endauth
     @stack('footer-js')
     @yield('footer-js')
 </body>

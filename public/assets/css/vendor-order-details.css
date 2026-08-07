@@ -1,0 +1,300 @@
+.vendor-order-modal__body {
+  overflow-x: hidden;
+  padding: 1.5rem 1.75rem 2.5rem;
+}
+
+@media (min-width: 992px) {
+  .vendor-order-modal__body {
+    padding: 1.75rem 2.25rem 2.75rem;
+  }
+}
+
+.vendor-order-modal__row {
+  --bs-gutter-x: 1.5rem;
+}
+
+.vendor-order-datetime {
+  direction: ltr;
+  unicode-bidi: isolate;
+  display: inline-block;
+  text-align: start;
+  white-space: nowrap;
+}
+
+[dir="rtl"] .vendor-order-datetime,
+html[dir="rtl"] .vendor-order-datetime,
+html[lang="ar"] .vendor-order-datetime {
+  direction: ltr;
+  unicode-bidi: isolate;
+  text-align: left;
+}
+
+.vendor-order-money .currency-icon,
+.vendor-order-money .currency-icon--text,
+.vendor-order-summary .currency-icon,
+.vendor-order-summary .currency-icon--text {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.vendor-order-money svg.currency-icon {
+  width: 1rem;
+  height: 1rem;
+  flex: 0 0 auto;
+}
+
+.vendor-order-detail__notes {
+  margin-top: 1rem;
+  padding: 0.9rem 1rem;
+  border: 1px solid rgba(75, 70, 92, 0.08);
+  border-radius: 0.75rem;
+  background: rgba(75, 70, 92, 0.03);
+}
+
+.vendor-order-detail__grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.75rem;
+  margin-top: 1.25rem;
+}
+
+.vendor-order-detail__grid--triple {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+@media (max-width: 767.98px) {
+  .vendor-order-detail__grid,
+  .vendor-order-detail__grid--triple {
+    grid-template-columns: 1fr;
+  }
+}
+
+.vendor-order-modal .min-w-0,
+.vendor-order-detail .min-w-0 {
+  min-width: 0;
+}
+
+.vendor-order-detail__hero {
+  padding-bottom: 1rem;
+  border-bottom: 1px solid rgba(75, 70, 92, 0.08);
+}
+
+.vendor-order-detail__thumb {
+  width: 3.25rem;
+  height: 3.25rem;
+  border-radius: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--bs-primary-rgb), 0.08);
+  color: var(--bs-primary);
+  font-size: 1.5rem;
+  flex: 0 0 auto;
+}
+
+.vendor-order-detail__meta {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid rgba(75, 70, 92, 0.08);
+  border-radius: 0.75rem;
+  background: rgba(255, 255, 255, 0.55);
+  height: 100%;
+  min-width: 0;
+}
+
+.vendor-order-detail__meta > i {
+  font-size: 1.25rem;
+  color: var(--bs-primary);
+  flex: 0 0 auto;
+}
+
+.vendor-order-detail__section {
+  margin-top: 1.25rem;
+  margin-bottom: 0.5rem;
+  padding: 1rem;
+  border: 1px solid rgba(75, 70, 92, 0.08);
+  border-radius: 0.75rem;
+}
+
+.vendor-order-detail__info {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.85rem 1rem;
+  border-radius: 0.75rem;
+  background: rgba(75, 70, 92, 0.03);
+  border: 1px solid rgba(75, 70, 92, 0.06);
+  min-width: 0;
+}
+
+.vendor-order-detail__info-icon {
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.55rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  color: var(--bs-primary);
+  flex: 0 0 auto;
+}
+
+.vendor-order-detail__info-icon--lang {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.7rem;
+  background: #fff;
+  color: #111;
+  font-size: 1.35rem;
+  box-shadow: 0 0 0 1px rgba(47, 43, 61, 0.08);
+}
+
+.vendor-order-addon-list {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.vendor-order-addon-badge {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: #2f2b3d !important;
+  color: #fff !important;
+  font-weight: 500;
+  font-size: 0.8125rem;
+  line-height: 1.2;
+  padding: 0.45rem 0.75rem;
+  border-radius: 0.5rem;
+  white-space: nowrap;
+}
+
+.vendor-order-summary {
+  background: linear-gradient(180deg, rgba(var(--bs-primary-rgb), 0.04), rgba(255, 255, 255, 0.9));
+}
+
+.vendor-order-summary .card-body {
+  min-width: 0;
+}
+
+.vendor-order-docs {
+  display: grid;
+  gap: 0.85rem;
+}
+
+.vendor-order-doc {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.15rem;
+  border: 1px solid rgba(75, 70, 92, 0.08);
+  border-radius: 0.9rem;
+  background: #fff;
+}
+
+.vendor-order-doc__main {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  min-width: 0;
+}
+
+.vendor-order-doc__icon {
+  width: 2.75rem;
+  height: 2.75rem;
+  border-radius: 0.75rem;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(var(--bs-primary-rgb), 0.08);
+  color: var(--bs-primary);
+  font-size: 1.25rem;
+  flex: 0 0 auto;
+}
+
+.vendor-order-doc__name {
+  font-weight: 600;
+  margin-bottom: 0.15rem;
+  word-break: break-word;
+}
+
+.vendor-order-doc__meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.35rem;
+  color: #8592a3;
+  font-size: 0.8125rem;
+  line-height: 1.4;
+}
+
+.vendor-order-doc__meta-sep {
+  opacity: 0.7;
+  line-height: 1;
+}
+
+.vendor-order-doc__price,
+.vendor-order-doc__price > .d-inline-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1;
+}
+
+.vendor-order-doc__price .currency-icon,
+.vendor-order-doc__price .currency-icon--text {
+  width: 0.95em;
+  height: 0.95em;
+  vertical-align: middle;
+}
+
+.vendor-order-addon-check {
+  display: inline-flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  line-height: 1.4;
+}
+
+.vendor-order-addon-check__sep {
+  opacity: 0.7;
+  line-height: 1;
+  color: #8592a3;
+}
+
+.vendor-order-addon-check__price,
+.vendor-order-addon-check__price > .d-inline-flex {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  line-height: 1;
+  color: #8592a3;
+}
+
+.vendor-order-addon-check__price .currency-icon,
+.vendor-order-addon-check__price .currency-icon--text {
+  width: 0.95em;
+  height: 0.95em;
+  vertical-align: middle;
+}
+
+.vendor-order-doc__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  flex: 0 0 auto;
+}
+
+html[data-admin-card-style='glass'] .vendor-order-detail__meta,
+html[data-admin-card-style='glass'] .vendor-order-detail__section,
+html[data-admin-card-style='glass'] .vendor-order-doc {
+  backdrop-filter: blur(10px);
+  background: rgba(255, 255, 255, 0.45);
+}

@@ -16,6 +16,15 @@
             'active' => request()->routeIs('admin.site-settings.*'),
         ];
     }
+    if (auth('admin')->user()?->can('platform_settings.view')) {
+        $settingsChildren[] = [
+            'id' => 'platform-settings',
+            'label' => __('general.menu_platform_settings'),
+            'icon' => 'ti ti-settings-check',
+            'url' => route('admin.platform-settings.index'),
+            'active' => request()->routeIs('admin.platform-settings.*'),
+        ];
+    }
     if (auth('admin')->user()?->can('languages.view')) {
         $settingsChildren[] = [
             'id' => 'languages',
@@ -127,6 +136,28 @@
             'children' => [],
         ],
         [
+            'id' => 'plans',
+            'label' => __('general.menu_plans'),
+            'icon' => 'ti ti-packages',
+            'route' => 'admin.plans.index',
+            'url' => route('admin.plans.index'),
+            'active' => request()->routeIs('admin.plans.*'),
+            'permission' => 'plans.view',
+            'priority' => 5,
+            'children' => [],
+        ],
+        [
+            'id' => 'orders',
+            'label' => __('general.menu_orders'),
+            'icon' => 'ti ti-shopping-cart',
+            'route' => 'admin.orders.index',
+            'url' => route('admin.orders.index'),
+            'active' => request()->routeIs('admin.orders.*'),
+            'permission' => 'orders.view',
+            'priority' => 6,
+            'children' => [],
+        ],
+        [
             'id' => 'vendors',
             'label' => __('general.menu_vendors'),
             'icon' => 'ti ti-building-store',
@@ -154,7 +185,7 @@
             'icon' => 'ti ti-settings',
             'route' => null,
             'url' => null,
-            'active' => request()->routeIs('admin.site-settings.*', 'admin.languages.*', 'admin.currencies.*', 'admin.document-types.*', 'admin.add-ons.*', 'admin.delivery-speeds.*'),
+            'active' => request()->routeIs('admin.site-settings.*', 'admin.platform-settings.*', 'admin.languages.*', 'admin.currencies.*', 'admin.document-types.*', 'admin.add-ons.*', 'admin.delivery-speeds.*'),
             'permission' => null,
             'priority' => 8,
             'children' => $settingsChildren,
@@ -224,6 +255,70 @@
             <div class="admin-dock__actions">
                 <div class="admin-dock__divider" aria-hidden="true"></div>
 
+                @auth('admin')
+                @php($notificationsDropdown = notificationsDropdownConfig('admin'))
+                @if ($notificationsDropdown)
+                <div
+                    class="admin-dock__notifications"
+                    data-dock-notifications-wrap
+                    data-notifications-root
+                    data-notifications-index-url="{{ $notificationsDropdown['notificationsIndexUrl'] }}"
+                    data-notifications-mark-all-url="{{ $notificationsDropdown['notificationsMarkAllUrl'] }}"
+                    data-notifications-mark-read-url-template="{{ $notificationsDropdown['notificationsMarkReadUrlTemplate'] }}"
+                    data-notifications-destroy-url-template="{{ $notificationsDropdown['notificationsDestroyUrlTemplate'] }}"
+                    data-broadcast-auth-url="{{ $notificationsDropdown['broadcastAuthUrl'] }}"
+                    data-broadcast-channel="{{ $notificationsDropdown['broadcastChannel'] }}"
+                >
+                    <button
+                        type="button"
+                        class="admin-dock__btn"
+                        data-dock-toggle="notifications"
+                        data-dock-tip="{{ __('general.notifications') }}"
+                        aria-haspopup="true"
+                        aria-expanded="false"
+                        aria-controls="dockNotificationsMenu"
+                        aria-label="{{ __('general.notifications') }}">
+                        <span class="admin-dock__icon">
+                            <i class="ti ti-bell"></i>
+                            <span class="badge bg-danger rounded-pill badge-notifications d-none" data-notifications-badge>0</span>
+                        </span>
+                        <span class="admin-dock__label">{{ __('general.notifications') }}</span>
+                    </button>
+                    <div class="admin-dock__dropdown admin-dock__dropdown--notifications" id="dockNotificationsMenu" data-dock-panel="notifications" hidden>
+                        <div class="admin-dock__notifications-header d-flex align-items-center px-3 py-2 border-bottom">
+                            <h6 class="text-body mb-0 me-auto">{{ __('general.notifications') }}</h6>
+                            <div class="d-flex align-items-center gap-2">
+                                <a
+                                    href="javascript:void(0)"
+                                    class="small text-primary text-nowrap"
+                                    data-notifications-see-all
+                                >{{ __('general.see_all') }}</a>
+                                <a
+                                    href="javascript:void(0)"
+                                    class="text-body"
+                                    data-notifications-refresh
+                                    title="{{ __('general.refresh') }}"
+                                ><i class="ti ti-refresh fs-4"></i></a>
+                                <a
+                                    href="javascript:void(0)"
+                                    class="text-body"
+                                    data-notifications-mark-all
+                                    title="{{ __('general.mark_all_as_read') }}"
+                                ><i class="ti ti-mail-opened fs-4"></i></a>
+                            </div>
+                        </div>
+                        <div class="dropdown-notifications-list scrollable-container admin-dock__notifications-list">
+                            <ul class="list-group list-group-flush" data-notifications-list>
+                                <li class="list-group-item text-center text-muted py-4" data-notifications-empty>
+                                    {{ __('general.no_unread_notifications') }}
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="admin-dock__divider" aria-hidden="true"></div>
+                @endif
+                @endauth
                 {{-- Language switcher --}}
                 <div class="admin-dock__locale" data-dock-locale-wrap>
                     <button
@@ -342,6 +437,50 @@
         </a>
 
         <div class="admin-dock__mobile-actions">
+            @auth('admin')
+            @php($notificationsDropdownMobile = notificationsDropdownConfig('admin'))
+            @if ($notificationsDropdownMobile)
+            <div
+                class="admin-dock__mobile-notifications position-relative"
+                data-notifications-root
+                data-notifications-index-url="{{ $notificationsDropdownMobile['notificationsIndexUrl'] }}"
+                data-notifications-mark-all-url="{{ $notificationsDropdownMobile['notificationsMarkAllUrl'] }}"
+                data-notifications-mark-read-url-template="{{ $notificationsDropdownMobile['notificationsMarkReadUrlTemplate'] }}"
+                data-notifications-destroy-url-template="{{ $notificationsDropdownMobile['notificationsDestroyUrlTemplate'] }}"
+                data-broadcast-auth-url="{{ $notificationsDropdownMobile['broadcastAuthUrl'] }}"
+                data-broadcast-channel="{{ $notificationsDropdownMobile['broadcastChannel'] }}"
+            >
+                <button
+                    type="button"
+                    class="admin-dock__mobile-locale-btn btn position-relative"
+                    data-dock-toggle="notifications-mobile"
+                    aria-haspopup="true"
+                    aria-expanded="false"
+                    aria-controls="dockNotificationsMenuMobile"
+                    aria-label="{{ __('general.notifications') }}">
+                    <i class="ti ti-bell"></i>
+                    <span class="badge bg-danger rounded-pill badge-notifications d-none" data-notifications-badge>0</span>
+                </button>
+                <div class="admin-dock__dropdown admin-dock__dropdown--notifications" id="dockNotificationsMenuMobile" data-dock-panel="notifications-mobile" hidden>
+                    <div class="admin-dock__notifications-header d-flex align-items-center px-3 py-2 border-bottom">
+                        <h6 class="text-body mb-0 me-auto">{{ __('general.notifications') }}</h6>
+                        <div class="d-flex align-items-center gap-2">
+                            <a href="javascript:void(0)" class="small text-primary text-nowrap" data-notifications-see-all>{{ __('general.see_all') }}</a>
+                            <a href="javascript:void(0)" class="text-body" data-notifications-refresh title="{{ __('general.refresh') }}"><i class="ti ti-refresh fs-4"></i></a>
+                            <a href="javascript:void(0)" class="text-body" data-notifications-mark-all title="{{ __('general.mark_all_as_read') }}"><i class="ti ti-mail-opened fs-4"></i></a>
+                        </div>
+                    </div>
+                    <div class="dropdown-notifications-list scrollable-container admin-dock__notifications-list">
+                        <ul class="list-group list-group-flush" data-notifications-list>
+                            <li class="list-group-item text-center text-muted py-4" data-notifications-empty>
+                                {{ __('general.no_unread_notifications') }}
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            @endif
+            @endauth
             <button
                 type="button"
                 class="admin-dock__mobile-locale-btn btn"

@@ -273,10 +273,6 @@ html[data-admin-card-style="glass"] .swal2-popup .swal2-html-container {
 }
 
 /* ---------- Appearance modal layout ---------- */
-#adminAppearanceModal .modal-body {
-  overflow-x: hidden;
-}
-
 #adminAppearanceModal .admin-appearance-dock-row {
   display: flex;
   align-items: center;
@@ -290,23 +286,31 @@ html[data-admin-card-style="glass"] .swal2-popup .swal2-html-container {
 }
 
 #adminAppearanceModal .admin-appearance-dock-toggle {
-  position: relative;
   flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
   width: 2.5rem;
   min-width: 2.5rem;
-  height: 1.35rem;
 }
 
 #adminAppearanceModal .admin-appearance-dock-toggle .switch {
-  position: absolute;
-  inset: 0 auto auto 0;
+  position: relative;
+  display: block;
   width: 2.5rem;
+  min-width: 2.5rem;
   min-height: 1.35rem;
   margin: 0 !important;
 }
 
-[dir="rtl"] #adminAppearanceModal .admin-appearance-dock-toggle .switch {
-  inset: 0 0 auto auto;
+#adminAppearanceModal .admin-appearance-dock-toggle .switch-toggle-slider {
+  left: 0;
+  right: auto;
+}
+
+[dir="rtl"] #adminAppearanceModal .admin-appearance-dock-toggle .switch-toggle-slider {
+  left: auto;
+  right: 0;
 }
 
 #adminAppearanceModal .admin-appearance-style-row {

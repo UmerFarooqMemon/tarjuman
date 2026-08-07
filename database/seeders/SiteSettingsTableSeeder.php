@@ -33,6 +33,14 @@ class SiteSettingsTableSeeder extends Seeder
             'contact_phone' => '',
             'address' => 'Dubai, UAE',
             'currency' => 'AED',
+            'order_payment_mode' => 'later',
+            'order_assignment_mode' => 'open',
+            'order_source_retention_days' => 90,
+            'order_delivery_retention_days' => 1095,
+            'vendor_document_download_allowed' => false,
+            'vendor_payout_schedule' => 'weekly',
+            'platform_fee_percent' => 10,
+            'platform_fee_fixed' => 0,
             'logo' => $logo,
             'logo_ar' => $logoAr,
             'favicon' => $favicon,
@@ -55,22 +63,25 @@ class SiteSettingsTableSeeder extends Seeder
             'primary_button_color' => '#227241',
             'primary_button_color_end' => '#227241',
             'primary_button_color_angle' => 135,
-            'secondary_button_color' => '#FFFFFF',
-            'secondary_button_color_end' => '#FFFFFF',
+            'secondary_button_color' => '#CCCCCC',
+            'secondary_button_color_end' => '#CCCCCC',
             'secondary_button_color_angle' => 135,
             'primary_button_text_color' => '#FFFFFF',
-            'secondary_button_text_color' => '#000000',
+            'secondary_button_text_color' => '#666666',
             'primary_button_border_color' => '#227241',
-            'secondary_button_border_color' => '#000000',
+            'secondary_button_border_color' => '#CCCCCC',
             'footer_bg_color' => '#000000',
-            'footer_heading_color' => '#fff',
-            'footer_link_color' => '#fff',
-            'footer_link_hover_color' => '#cccccc',
+            'footer_heading_color' => '#FFFFFF',
+            'footer_link_color' => '#FFFFFF',
+            'footer_link_hover_color' => '#CCCCCC',
             'created_at' => now(),
             'updated_at' => now(),
         ]);
 
         CatalogCache::flushSiteSettings();
+
+        // Always re-seed trust badge galleries with site settings.
+        $this->call(SiteSettingsGalleriesSeeder::class);
     }
 
     /**

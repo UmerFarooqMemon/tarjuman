@@ -211,16 +211,38 @@
     return li;
   }
 
+  function makeMorePlainAppearanceAction(label) {
+    var li = document.createElement('li');
+    var btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'admin-dock__dropdown-item';
+    btn.setAttribute('role', 'menuitem');
+    btn.setAttribute('data-open-admin-appearance', '');
+    btn.textContent = label;
+    li.appendChild(btn);
+    return li;
+  }
+
   function appendMorePlainEntries(item, list) {
     var childItems = qsAll('[data-dock-panel] .admin-dock__dropdown-item', item);
     if (childItems.length) {
       childItems.forEach(function (child) {
         var label = (child.textContent || '').replace(/\s+/g, ' ').trim();
+        if (!label) {
+          return;
+        }
+
+        if (child.hasAttribute('data-open-admin-appearance')) {
+          list.appendChild(makeMorePlainAppearanceAction(label));
+          return;
+        }
+
         var layout = child.getAttribute('data-set-admin-nav-layout');
         if (layout) {
           list.appendChild(makeMorePlainAction(label, layout, child.classList.contains('is-active')));
           return;
         }
+
         var href = child.getAttribute('href');
         if (href) {
           list.appendChild(
@@ -589,4 +611,21 @@
 
   // Init
   collapseOverflow();
+
+  window.AdminDock = window.AdminDock || {};
+  window.AdminDock.closePanels = function () {
+    closeAllPanels();
+  };
+  window.AdminDock.repositionOpenPanel = function () {
+    if (!openPanelId) {
+      return;
+    }
+    var panel = document.querySelector('[data-dock-panel="' + openPanelId + '"]');
+    var toggle = document.querySelector('[data-dock-toggle="' + openPanelId + '"][aria-expanded="true"]')
+      || document.querySelector('[data-dock-toggle="' + openPanelId + '"]');
+    if (!panel || !toggle || panel.hidden) {
+      return;
+    }
+    positionPanel(toggle, panel);
+  };
 })();
