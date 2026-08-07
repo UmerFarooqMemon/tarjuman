@@ -37,12 +37,12 @@ Route::group([
             'as' => 'auth.logout',
         ]);
 
-        Route::get('dashboard', [
-            'uses' => 'DashboardController@index',
-            'as' => 'dashboard.index',
-        ]);
-
         Route::middleware('auth:vendor')->group(function () {
+            Route::get('dashboard', [
+                'uses' => 'DashboardController@index',
+                'as' => 'dashboard.index',
+            ]);
+
             Route::get('orders', 'OrdersController@index')->name('orders.index');
             Route::get('orders/data', 'OrdersController@indexData')->name('orders.data');
             Route::get('orders/discover', 'OrdersController@discover')->name('orders.discover');

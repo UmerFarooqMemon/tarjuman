@@ -45,12 +45,27 @@ class LoginController extends Controller
 
             $request->session()->regenerate();
 
-            return redirect()->intended(route('vendor.dashboard.index'));
+            return redirect()->to($this->vendorHome($request));
         }
 
         throw ValidationException::withMessages([
             'email' => [__('These credentials do not match our records.')],
         ]);
+    }
+
+    /**
+     * Prefer a prior vendor URL; never follow an admin (or other) intended URL.
+     */
+    protected function vendorHome(Request $request): string
+    {
+        $intended = $request->session()->pull('url.intended');
+        $path = is_string($intended) ? (parse_url($intended, PHP_URL_PATH) ?: '') : '';
+
+        if ($path !== '' && preg_match('#(^|/)vendor(/|$)#', $path)) {
+            return $intended;
+        }
+
+        return route('vendor.dashboard.index');
     }
 
     /**
